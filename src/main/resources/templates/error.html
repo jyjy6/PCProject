@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${status}">Error</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+<h1 th:text="${status}">Error</h1>
+<p th:text="${message}">An unexpected error occurred.</p>
+<p th:text="${error}"></p>
+<p th:text="${path}"></p>
+<p th:text="${exception}"></p>
+
+<a href="/list" th:text="'Go to Home'">Go to Home</a>
+</body>
+</html>
