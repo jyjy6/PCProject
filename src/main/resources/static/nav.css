@@ -9,6 +9,7 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
+    padding-top:4rem;
 }
 .navbar {
     background-color: rgba(30, 39, 46, 0.95);
@@ -21,6 +22,10 @@ body {
     font-size: 1.8rem;
     color: var(--primary-color);
     letter-spacing: -1px;
+}
+/* 버튼 스타일 */
+.nav-popup-btn {
+    position: relative; /* 팝업 위치를 버튼 아래에 맞추기 위한 상대 위치 설정 */
 }
 .nav-link {
     font-size: 1.1rem;
@@ -44,7 +49,7 @@ body {
     background-color: var(--primary-color);
     color: var(--bg-color);
 }
-@media (max-width: 991.98px) {
+@media (max-width: 791.98px) {
     .navbar-nav {
         background-color: rgba(30, 39, 46, 0.95);
         padding: 1rem;
@@ -52,4 +57,54 @@ body {
         box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
     }
 }
+.nav-popup-btn {
+    background-color: #00a8ff;
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    position: relative;
+}
+
+/* 팝업창 스타일 */
+.nav-popup {
+    display: none; /* 처음엔 보이지 않도록 설정 */
+    position: absolute;
+    top: 43px; /* 버튼 아래에 위치하도록 조정 */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ffffff;
+    color: #333;
+    border-radius: 10px;
+    padding: 1rem;
+    width: 200px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+    z-index: 9999; /* 팝업이 다른 요소들 위에 나타나도록 z-index 설정 */
+    opacity: 0; /* 초기 투명도 */
+    transition: opacity 0.5s ease; /* 투명도 변화 애니메이션 */
+
+}
+
+/* 팝업창의 말풍선 삼각형 */
+.nav-popup::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 10px;
+    border-style: solid;
+    border-color: transparent transparent #ffffff transparent;
+}
+
+/* 팝업창 활성화 */
+.show-popup {
+    display: block; /* 표시 */
+    opacity: 1; /* 완전 불투명 */
+}
+
+
+
 /* NavbarEnd ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/

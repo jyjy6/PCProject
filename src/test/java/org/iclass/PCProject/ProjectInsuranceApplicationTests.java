@@ -1,4 +1,4 @@
-package org.iclass.ProjectInsurance;
+package org.iclass.PCProject;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

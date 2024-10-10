@@ -1,4 +1,4 @@
-package org.iclass.ProjectInsurance.test;
+package org.iclass.PCProject.test;
 
 
 import org.springframework.stereotype.Controller;
@@ -9,7 +9,7 @@ public class TestController {
 
     @GetMapping("/test")
     public String test(){
-        return "test.html";
+        return "jung/test.html";
     }
     @GetMapping("/")
     public String index(){
