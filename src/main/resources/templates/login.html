@@ -80,7 +80,7 @@
         <div class="col-md-6">
             <div class="login-card">
                 <h2 class="login-title">SpringMall 로그인</h2>
-                <form th:action="@{/login}" method="post" id="loginForm">
+                <form>
                     <div class="mb-3">
                         <input type="text" class="form-control" id="id" name="username" placeholder="아이디" required>
                     </div>
@@ -92,7 +92,7 @@
                         <label class="form-check-label" for="remember-me">아이디 저장</label>
                     </div>
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">로그인</button>
+                        <button onclick="loginJWT()" class="btn btn-primary">로그인</button>
                     </div>
                 </form>
                 <div class="mt-3 text-center">
@@ -135,7 +135,19 @@
         // 여기에 로그인 처리 로직 추가
         console.log(`로그인 시도: ${id}, 비밀번호: ${password}`);
     });
+
 });
+
+function loginJWT(){
+fetch('/login/jwt', {
+  method : 'POST',
+  headers : {'Content-Type': 'application/json'},
+  body : JSON.stringify({
+    username : document.querySelector('#username').value,
+    password : document.querySelector('#password').value
+  })
+}).then(r => r.text()).then((r)=>{ console.log(r) })
+}
 
 </script>
 
