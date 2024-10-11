@@ -25,13 +25,14 @@ public class Member {
     @Column(nullable = false)
     private String password;
 
-    @Column(unique = true, nullable = false)
     private String email;
 
     @Column(unique = true, nullable = false)
     private String displayName;
 
     private String phone;
+
+    private String address;
 
     // 아이디 생성 날짜
     @CreationTimestamp

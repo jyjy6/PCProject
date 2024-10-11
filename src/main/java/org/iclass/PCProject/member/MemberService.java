@@ -23,7 +23,6 @@ public class MemberService {
         if (member.getPassword() == null || member.getPassword().isEmpty()) {
             throw new RuntimeException("Password cannot be empty"); // 비밀번호가 없으면 예외 처리
         }
-        // 비밀번호 암호화
         member.setPassword(passwordEncoder.encode(member.getPassword()));
 
         // 사용자 저장

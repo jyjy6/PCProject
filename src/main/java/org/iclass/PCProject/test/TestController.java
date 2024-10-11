@@ -15,9 +15,5 @@ public class TestController {
     public String index(){
         return "jung/test.html";
     }
-    @GetMapping("/login")
-    public String login(){
-        return "jung/login.html";
-    }
 
 }

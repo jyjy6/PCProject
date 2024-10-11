@@ -17,7 +17,7 @@ public class MemberController {
 
 
     @PostMapping("/sign-up")
-    public ResponseEntity<String> registerUser(@ModelAttribute Member member) {
+    public ResponseEntity<String> registerUser(@RequestBody Member member) {
         try {
             memberService.registerUser(member);
             return new ResponseEntity<>("User registered successfully", HttpStatus.CREATED);
@@ -25,14 +25,31 @@ public class MemberController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
     @GetMapping("/sign-up")
-    public String signUpPage(Model model) {
-        // 새로운 Member 객체 생성
-        model.addAttribute("member", new Member());
-        // 회원가입 폼 페이지로 이동
+    public String signUpPage() {
         return "jung/signup";
     }
+    @GetMapping("/api/member/check-username")
+    public ResponseEntity<Boolean> checkUsername(@RequestParam("username") String username) {
+        boolean exists = memberRepository.existsByUsername(username);
+        return ResponseEntity.ok(exists);
+    }
+
+    @GetMapping("/api/member/check-displayName")
+    public ResponseEntity<Boolean> checkDisplayName(@RequestParam("displayName") String displayName) {
+        boolean exists = memberRepository.existsByDisplayName(displayName);
+        return ResponseEntity.ok(exists);
+    }
+
+
+    @GetMapping("/login")
+    public String login(){
+        return "jung/login.html";
+    }
+
+
+
+
 
 
 }
