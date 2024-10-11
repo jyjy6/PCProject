@@ -1,5 +1,6 @@
 package org.iclass.PCProject.security;
 
+
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -11,10 +12,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
+    private final CustomUserDetailsService userDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -23,12 +26,37 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .anyRequest().permitAll() // 나머지 요청도 허용
                 )
+                .formLogin(form -> form
+                    .loginPage("/login")
+                    .loginProcessingUrl("/login") // 로그인 요청을 처리할 URL
+                    .successHandler((request, response, authentication) -> {
+                        // 로그인 성공 처리
+                        response.setStatus(HttpServletResponse.SC_OK);
+                        response.getWriter().write("로그인 성공");
+                    })
+                    .failureHandler((request, response, exception) -> {
+                        // 로그인 실패 처리
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        response.getWriter().write("로그인 실패: " + exception.getMessage());
+                        request.getSession(false);
+                    })
+                    .permitAll() // 로그인 페이지는 인증 없이 접근 가능
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout") // 로그아웃 요청을 처리할 URL
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "POST")) // POST 요청을 사용
+                        .invalidateHttpSession(true) // 세션 무효화
+                        .deleteCookies("JSESSIONID") // 쿠키 삭제
+                        .permitAll()
+                )
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션을 사용하지 않음
-                );
+                        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                        .sessionFixation().migrateSession()
+                        .maximumSessions(1)
+                        .maxSessionsPreventsLogin(false)
+                ).userDetailsService(userDetailsService); // CustomUserDetailsService 사용
 
-        // JWT 인증 필터를 여기에 추가해야 함 (추후 구현 필요)
-//sdafasdfasdfasdfsd
+
         return http.build();
     }
 
