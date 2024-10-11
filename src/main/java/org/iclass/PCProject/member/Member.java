@@ -43,7 +43,7 @@ public class Member {
     @Column(updatable = true)
     private LocalDateTime updatedAt;
 
-    private String role = "USER";
+    private String role = "ROLE_USER";
 
 
 }

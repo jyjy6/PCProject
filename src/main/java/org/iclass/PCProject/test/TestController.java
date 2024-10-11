@@ -13,7 +13,7 @@ public class TestController {
     }
     @GetMapping("/")
     public String index(){
-        return "index.html";
+        return "jung/test.html";
     }
     @GetMapping("/login")
     public String login(){

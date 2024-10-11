@@ -82,7 +82,7 @@
                 <h2 class="login-title">SpringMall 로그인</h2>
                 <form th:action="@{/login}" method="post" id="loginForm">
                     <div class="mb-3">
-                        <input type="text" class="form-control" id="id" name="username" placeholder="아이디" required>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="아이디" required>
                     </div>
                     <div class="mb-3">
                         <input type="password" class="form-control" id="password" name="password" placeholder="비밀번호" required>
@@ -108,34 +108,33 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-    const idInput = document.getElementById('id');
-    const rememberMeCheckbox = document.getElementById('remember-me');
+     const idInput = document.getElementById('username');
+     const rememberMeCheckbox = document.getElementById('remember-me');
 
-    // 페이지 로드 시 저장된 아이디가 있으면 입력란에 표시
-    const savedId = localStorage.getItem('savedId');
-    if (savedId) {
-        idInput.value = savedId; // 저장된 아이디로 초기화
-        rememberMeCheckbox.checked = true; // 체크박스 체크
-    }
+     const savedId = localStorage.getItem('savedId');
+     if (savedId) {
+         idInput.value = savedId;
+         rememberMeCheckbox.checked = true;
+     }
 
-    // 폼 제출 이벤트 처리
-    document.getElementById('loginForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // 기본 제출 동작 방지
+     // 폼 제출 이벤트 처리
+     document.getElementById('loginForm').addEventListener('submit', function(event) {
 
-        const id = idInput.value;
-        const password = document.getElementById('password').value;
 
-        // 아이디 저장 체크가 되어 있으면 localStorage에 저장
-        if (rememberMeCheckbox.checked) {
-            localStorage.setItem('savedId', id);
-        } else {
-            localStorage.removeItem('savedId'); // 체크가 해제되면 저장된 아이디 삭제
-        }
+         const id = idInput.value;
+         const password = document.getElementById('password').value;
 
-        // 여기에 로그인 처리 로직 추가
-        console.log(`로그인 시도: ${id}, 비밀번호: ${password}`);
-    });
-});
+         if (rememberMeCheckbox.checked) {
+             localStorage.setItem('savedId', id);
+         } else {
+             localStorage.removeItem('savedId');
+         }
+
+         // 여기서 폼을 실제로 제출합니다.
+         this.submit(); // 폼 제출
+     });
+ });
+
 
 </script>
 

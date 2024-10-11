@@ -28,11 +28,12 @@ public class SecurityConfig {
                 )
                 .formLogin(form -> form
                     .loginPage("/login")
-                    .loginProcessingUrl("/login") // 로그인 요청을 처리할 URL
+                    .loginProcessingUrl("/login")
                     .successHandler((request, response, authentication) -> {
                         // 로그인 성공 처리
                         response.setStatus(HttpServletResponse.SC_OK);
                         response.getWriter().write("로그인 성공");
+                        response.sendRedirect("/test");
                     })
                     .failureHandler((request, response, exception) -> {
                         // 로그인 실패 처리
