@@ -47,14 +47,14 @@
 
                         <div class="form-group">
                             <label for="displayName">닉네임</label>
-                            <input type="text" id="displayName" name="displayName" class="form-control" />
+                            <input type="text" id="displayName" name="displayName" class="form-control" placeholder="닉네임을 입력해주세요"/>
                             <button type="button" onclick="checkDisplayName()" class="btn btn-primary btn-block">닉네임 확인</button>
                             <div id="displayNameFeedback"></div>
                         </div>
 
                         <div class="form-group">
                             <label for="phone">전화번호</label>
-                            <input type="text" id="phone" name="phone" class="form-control" />
+                            <input type="text" id="phone" name="phone" class="form-control" placeholder="'-' 없이 11자리"/>
                         </div>
 
                         <div class="form-group">
@@ -143,6 +143,8 @@
         }).open();
     }
 
+
+
     // 폼 제출 이벤트 처리
     function handleSubmit(event) {
         if(!idCheck||!nickCheck){
@@ -188,6 +190,23 @@
         });
     }
 </script>
+<script>
+    document.getElementById('phone').addEventListener('input', function (event) {
+        const input = event.target;
+        let value = input.value;
+
+        // 숫자 이외의 문자는 제거
+        value = value.replace(/[^0-9]/g, '');
+
+        // 숫자 11자리까지만 입력 허용
+        if (value.length > 11) {
+            value = value.slice(0, 11);  // 11자 초과 시 잘라내기
+        }
+
+        input.value = value;
+    });
+</script>
+
 
 </body>
 </html>
