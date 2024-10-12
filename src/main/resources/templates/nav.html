@@ -4,62 +4,88 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- 기본 CSS -->
+    <link rel="stylesheet" href="/nav.css">
     <!-- 부트스트랩 CSS (최신 버전) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/nav.css">
+    <!-- 부트스트랩 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <title>SpringInsurance</title>
 
 </head>
 <body>
 
-                <!-- 네비게이션 바 ↓쓰고싶은 HTML파일 위에 복붙-->
+                <!-- 네비게이션 바 ↓쓰고싶은 HTML파일 위에 복붙,
+                기본 CSS파일, 부트스트랩CSS, 부트스트랩JS 순서대로 링크도 복붙해야함-->
                 <!--  <div th:replace="~{nav :: navbar}"></div>    -->
-
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top" th:fragment="navbar">
-    <div class="container">
-        <a class="navbar-brand" href="/test">SpringMall</a>
-        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto align-items-center">
-                <li class="nav-item">
-                    <a class="nav-link" href="/test">홈</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/products">상품</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/services">서비스</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/about">회사 소개</a>
-                </li>
-                <li class="nav-item" sec:authorize="isAnonymous()">
-                    <a class="btn btn-outline-primary ms-2" href="/login">로그인</a>
-                </li>
-                <li class="nav-item" sec:authorize="isAnonymous()">
-                    <a class="nav-link" href="/sign-up">회원가입</a>
-                </li>
-                <li class="nav-item" sec:authorize="isAuthenticated()">
-                    <a class="nav-link" href="#" onclick="logout()">로그아웃</a>
-                </li>
-                <li>
-                    <button  class="nav-popup-btn" th:onclick="'showPopup()'" sec:authorize="isAuthenticated()">👨‍🦲내 정보
-                        <div class="nav-popup">
-                            <p>환영합니다, <span th:text="${#authentication.principal.displayName}"></span>님</p>
-                            <p>설정</p>
-                        </div>
-                    </button>
-                </li>
-            </ul>
+<div th:fragment="navbar">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" th:fragment="navbar-login-only">
+        <div class="container">
+            <a class="navbar-brand" href="/test">SpringMall</a>
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/test">홈</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/products">상품</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/services">서비스</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <a class="nav-link" href="/mypage">마이페이지</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAnonymous()">
+                        <a class="btn btn-outline-primary ms-2" href="/login">로그인</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAnonymous()">
+                        <a class="nav-link" href="/sign-up">회원가입</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <a class="nav-link" href="#" onclick="logout()">로그아웃</a>
+                    </li>
+                    <li>
+                        <button  class="nav-popup-btn" th:onclick="'showPopup()'" sec:authorize="isAnonymous()">👨‍🦲내 정보
+                            <div class="nav-popup">
+                                <p>환영합니다</p>
+<!--                                <p>환영합니다, <span th:text="${#authentication.principal.displayName}"></span>님</p>-->
+                                <p>장바구니</p>
+                                <p>주문내역</p>
+                                <p>회원정보수정</p>
+                                <p>상담내역</p>
+                            </div>
+                        </button>
+                    </li>
+                </ul>
+            </div>
         </div>
+    </nav>
+
+    <!-- 기존 네비게이션 바 -->
+<!--    <div class="main-navbar">-->
+<!--        <a href="#home">Home</a>-->
+<!--        <a href="#services">Services</a>-->
+<!--        <a href="#about">About</a>-->
+<!--        <a href="#contact">Contact</a>-->
+<!--    </div>-->
+
+    <!-- 가로형 메뉴바 -->
+    <div class="menu-bar">
+        <a href="#menu1">삼성</a>
+        <a href="#menu2">LG</a>
+        <a href="#menu3">HP</a>
+        <a href="#menu4">ASUS</a>
+        <a href="#menu5">LENOVO</a>
     </div>
-</nav>
+</div>
 
 
 
-<!-- 부트스트랩 JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
 </body>
 </html>
