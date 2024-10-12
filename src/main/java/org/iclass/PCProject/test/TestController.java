@@ -9,11 +9,8 @@ public class TestController {
 
     @GetMapping("/test")
     public String test(){
-        return "jung/test.html";
+        return "jung/home.html";
     }
-    @GetMapping("/")
-    public String index(){
-        return "jung/test.html";
-    }
+
 
 }

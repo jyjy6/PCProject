@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class MemberController {
     private final MemberService memberService;
-    private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
 
@@ -26,20 +25,14 @@ public class MemberController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+    @GetMapping("/")
+    public String index(){
+        return "home";
+    }
+
     @GetMapping("/sign-up")
     public String signUpPage() {
         return "jung/signup";
-    }
-    @GetMapping("/api/member/check-username")
-    public ResponseEntity<Boolean> checkUsername(@RequestParam("username") String username) {
-        boolean exists = memberRepository.existsByUsername(username);
-        return ResponseEntity.ok(exists);
-    }
-
-    @GetMapping("/api/member/check-displayName")
-    public ResponseEntity<Boolean> checkDisplayName(@RequestParam("displayName") String displayName) {
-        boolean exists = memberRepository.existsByDisplayName(displayName);
-        return ResponseEntity.ok(exists);
     }
 
     @GetMapping("/login")

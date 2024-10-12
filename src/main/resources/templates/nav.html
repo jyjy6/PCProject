@@ -21,7 +21,7 @@
 <div th:fragment="navbar">
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top" th:fragment="navbar-login-only">
         <div class="container">
-            <a class="navbar-brand" href="/test">SpringMall</a>
+            <a class="navbar-brand" href="/">SpringMall</a>
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -46,13 +46,14 @@
                         <a class="nav-link" href="/sign-up">회원가입</a>
                     </li>
                     <li class="nav-item" sec:authorize="isAuthenticated()">
-                        <a class="nav-link" href="#" onclick="logout()">로그아웃</a>
+                        <a class="nav-link" onclick="logout()" style="cursor:pointer;">로그아웃</a>
                     </li>
                     <li>
-                        <button  class="nav-popup-btn" th:onclick="'showPopup()'" sec:authorize="isAnonymous()">👨‍🦲내 정보
+                        <button  class="nav-popup-btn" th:onclick="'showPopup()'" sec:authorize="isAuthenticated()">👨‍🦲내 정보
                             <div class="nav-popup">
-                                <p>환영합니다</p>
-<!--                                <p>환영합니다, <span th:text="${#authentication.principal.displayName}"></span>님</p>-->
+                                <div sec:authorize="isAuthenticated()">
+                                    <p>환영합니다,<span th:text="${#authentication.principal.displayName}"></span>님</p>
+                                </div>
                                 <p>장바구니</p>
                                 <p>주문내역</p>
                                 <p>회원정보수정</p>
@@ -63,6 +64,16 @@
                 </ul>
             </div>
         </div>
+        <script>
+            function logout() {
+                var form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/logout';
+                document.body.appendChild(form);
+
+                form.submit();
+            }
+        </script>
     </nav>
 
     <!-- 기존 네비게이션 바 -->
@@ -82,7 +93,6 @@
         <a href="#menu5">LENOVO</a>
     </div>
 </div>
-
 
 
 

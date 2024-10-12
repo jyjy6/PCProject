@@ -33,7 +33,7 @@ public class SecurityConfig {
                         // 로그인 성공 처리
                         response.setStatus(HttpServletResponse.SC_OK);
                         response.getWriter().write("로그인 성공");
-                        response.sendRedirect("/test");
+                        response.sendRedirect("/");
                     })
                     .failureHandler((request, response, exception) -> {
                         // 로그인 실패 처리

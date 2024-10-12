@@ -170,7 +170,7 @@
             address: document.getElementById('address').value
         };
 
-        fetch('/sign-up', {
+        fetch('http://localhost:8080/api/member/sign-up', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
