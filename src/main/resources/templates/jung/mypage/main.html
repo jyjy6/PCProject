@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+
+
+    </style>
+</head>
+<body>
+<!--주문현황-->
+    <div class="mypage-order-condition" th:fragment="content">
+        <h4>주문현황</h4>
+        <div class="order-status-container">
+            <div class="order-status">
+                <div class="status-icon-wrapper">
+                    <img src="https://image5.compuzone.co.kr/img/images/mypage21/orderS2.png" alt="주문완료" class="status-icon">
+                    <span class="badge">0</span>
+                </div>
+                <p>주문완료</p>
+            </div>
+            <div class="order-status">
+                <div class="status-icon-wrapper">
+                    <img src="https://image5.compuzone.co.kr/img/images/mypage21/orderS3.png" alt="결제완료" class="status-icon">
+                    <span class="badge">0</span>
+                </div>
+                <p>결제완료</p>
+            </div>
+            <div class="order-status">
+                <div class="status-icon-wrapper">
+                    <img src="https://image5.compuzone.co.kr/img/images/mypage21/orderS5.png" alt="배송중" class="status-icon">
+                    <span class="badge">0</span>
+                </div>
+                <p>배송중</p>
+            </div>
+            <div class="order-status">
+                <div class="status-icon-wrapper">
+                    <img src="https://image5.compuzone.co.kr/img/images/mypage21/orderS7.png" alt="배송완료" class="status-icon">
+                    <span class="badge">0</span>
+                </div>
+                <p>배송완료</p>
+            </div>
+            <div class="order-status">
+                <div class="status-icon-wrapper">
+                    <img src="https://image5.compuzone.co.kr/img/images/mypage21/orderS3.png" alt="주문취소" class="status-icon">
+                    <span class="badge">0</span>
+                </div>
+                <p>주문취소</p>
+            </div>
+        </div>
+        <!--주문현황 끝-->
+
+        <!--자주 찾는 메뉴-->
+        <h4 style="margin-top:50px;">자주찾는메뉴</h4>
+        <div class="mypage-additional-info">
+            <div class="info-card">
+                <div class="info-content">
+                    <h4>상담내역</h4>
+                    <p>0건</p>
+                </div>
+                <button class="btn btn-primary">보기</button>
+            </div>
+            <div class="info-card">
+                <div class="info-content">
+                    <h4>구매후기</h4>
+                    <p>0건</p>
+                </div>
+                <button class="btn btn-primary">보기</button>
+            </div>
+            <div class="info-card">
+                <div class="info-content">
+                    <h4>회원 정보 수정</h4>
+                </div>
+                <button class="btn btn-primary">수정</button>
+            </div>
+        </div>
+
+</body>
+</html>

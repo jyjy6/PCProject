@@ -42,18 +42,16 @@ public class MemberController {
         return ResponseEntity.ok(exists);
     }
 
-
     @GetMapping("/login")
     public String login(){
         return "jung/login.html";
     }
 
-    @GetMapping("/mypage")
-    public String myPage(Authentication auth){
-        return "jung/mypage.html";
+    @GetMapping("/mypage/{id}")
+    public String myPage(@PathVariable("id") String id, Model model) {
+        model.addAttribute("id", id);
+        return "jung/mypage/mypage"; // 주 템플릿 경로
     }
-
-
 
 
 
