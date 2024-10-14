@@ -12,11 +12,12 @@
 <body>
 
 <div th:replace="~{nav :: navbar}"></div>
+
 <div style="padding-left:3%; padding-right:3%;">
-    <h2 style="margin:4% 0 2% 4%;">My 컴퓨존</h2>
+    <h2 style="margin:4% 0 2% 4%;"><a href="/mypage/main" style="text-decoration:none; color:inherit; font-weight:bold;"> My 컴퓨존 </a></h2>
     <div class="mypage-head-main-menu">
         <div class="mypage-head-main-menu-contents">
-            <h4>asdflkasjdfalsdkf님</h4>
+            <h4 th:text="${#authentication.principal.username} + '님'"></h4>
             <h4>일반</h4>
         </div>
         <div class="mypage-head-main-menu-contents">
@@ -132,10 +133,6 @@
 
 
 
-
-
-
-
     </div>
     </div>
 
@@ -163,6 +160,10 @@
         width: 50%;
         text-align: left;
         padding: 0 5%;
+
+    }
+    .mypage-head-main-menu-contents h4{
+        font-size : 1.4rem;
     }
 
     .mypage-head-main-menu-contents:nth-last-of-type(1) {
@@ -211,6 +212,11 @@
         .mypage-order-condition{
         width:100%;
         }
+        .mypage-head-main-menu-contents h4{
+        font-size : 0.9rem;
+        font-weight:bold;
+        }
+
     }
     /*아코디언 끝*/
 
