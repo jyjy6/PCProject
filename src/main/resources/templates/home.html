@@ -3,16 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-
-
     <link rel="stylesheet" href="/nav.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f8f8;
+        }
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
+        .product-list {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .product-item {
+            width: 18%;
+            background-color: #f2f2f2;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .product-item img {
+            width: 100%;
+            height: auto;
+        }
+        .product-details {
+            padding: 10px;
+        }
+        .product-title {
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        .product-price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+    </style>
+
 </head>
 <body>
     <div th:replace="~{nav :: navbar}"></div>
-    <h1>홈페이지입니다.</h1>
+    <div class="container">
+        <h2>추천상품</h2>
 
-
+        <div class="product-list">
+<!--            <div class="product-item" th:each="dto :${productList.list}">-->
+            <div class="product-item">
+                <img src="#" alt="레노버 아이디어패드">
+                <div class="product-details">
+                    <div class="product-title"><a href="detail">[레노버] 아이디어패드 Slim1</a></div>
+                    <div class="product-price">569,000원</div>
+                </div>
+            </div>
+            <div class="product-item">
+                <img src="#" alt="델 인스피론">
+                <div class="product-details">
+                    <div class="product-title">[Dell] 인스피론 DN3535</div>
+                    <div class="product-price">700,000원</div>
+                </div>
+            </div>
+            <div class="product-item">
+                <img src="#" alt="HP 엘리트북">
+                <div class="product-details">
+                    <div class="product-title">[HP] 엘리트북 노트북 865 G10</div>
+                    <div class="product-price">1,229,000원</div>
+                </div>
+            </div>
+            <div class="product-item">
+                <img src="#" alt="LG 그램">
+                <div class="product-details">
+                    <div class="product-title">[LG전자] LG 그램</div>
+                    <div class="product-price">2,499,000원</div>
+                </div>
+            </div>
+            <div class="product-item">
+                <img src="#" alt="삼성 갤럭시북">
+                <div class="product-details">
+                    <div class="product-title">[삼성전자] 삼성 갤럭시북</div>
+                    <div class="product-price">999,000원</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
     <script src="nav.js"></script>

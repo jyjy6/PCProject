@@ -25,10 +25,10 @@ public class MemberController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-    @GetMapping("/")
-    public String index(){
-        return "home";
-    }
+//    @GetMapping("/")
+//    public String index(){
+//        return "home";
+//    }
 
     @GetMapping("/sign-up")
     public String signUpPage() {
