@@ -77,6 +77,7 @@
                 // 주문 상태별로 모달 내용 업데이트
                 $('.order-status').on('click', function() {
                     const status = $(this).data('status');
+                    $('.modal-title').text(`${status}`);
                     $('#orderStatusMessage').text(`${status}에 대한 상세정보를 보여줍니다.`);
                     $('#orderModal').modal('show'); // 모달 열기
                 });
