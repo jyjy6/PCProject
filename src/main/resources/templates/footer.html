@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+<th:block th:fragment="footer">
+    <footer class="bg-white text-dark pt-5 pb-4 " style="margin-top:100px;">
+        <div class="container text-md-left">
+            <div class="row text-md-left">
+                <!-- 고객센터 섹션 -->
+                <div class="col-md-3">
+                    <h5 class="text-uppercase mb-4 font-weight-bold">고객센터</h5>
+                    <p>상담시간: 09:00 ~ 18:00</p>
+                    <p>전화: 1234-5678</p>
+                    <p>이메일: support@yourshop.com</p>
+                </div>
+
+                <!-- 회사 정보 섹션 -->
+                <div class="col-md-3">
+                    <h5 class="text-uppercase mb-4 font-weight-bold">회사 정보</h5>
+                    <p><a href="/about" class="text-dark">회사소개</a></p>
+                    <p><a href="/terms" class="text-dark">이용약관</a></p>
+                    <p><a href="/privacy" class="text-dark">개인정보처리방침</a></p>
+                </div>
+
+                <!-- 고객지원 섹션 -->
+                <div class="col-md-3">
+                    <h5 class="text-uppercase mb-4 font-weight-bold">고객지원</h5>
+                    <p><a href="/mypage/cart" class="text-dark">장바구니</a></p>
+                    <p><a href="/mypage/orders" class="text-dark">주문내역</a></p>
+                    <p><a href="/faq" class="text-dark">자주 묻는 질문</a></p>
+                </div>
+
+                <!-- SNS 링크 섹션 -->
+                <div class="col-md-3">
+                    <h5 class="text-uppercase mb-4 font-weight-bold">팔로우</h5>
+                    <a href="#" class="text-dark me-3"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-dark me-3"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-dark me-3"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 푸터 하단 -->
+        <div class="text-center py-3 mt-3" style="border-top: 1px solid rgba(0, 0, 0, 0.1);">
+            © 2024 YourShop. All Rights Reserved.
+        </div>
+    </footer>
+</th:block>
+
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+</body>
+</html>
