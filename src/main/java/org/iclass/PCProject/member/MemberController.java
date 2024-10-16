@@ -47,14 +47,6 @@ public class MemberController {
 //        PathVariable을 통해 데이터 바인딩해서
 //        <div th:replace="~{jung/mypage/__${id}__ :: content}"></div> 이 값을 유동적으로 바꿈
         model.addAttribute("id", id);
-
-        // 더미 데이터 생성
-        List<CartItem> cartItems = new ArrayList<>();
-        cartItems.add(new CartItem("아이템 1", 1000, 1, "M", "빨강", "https://via.placeholder.com/250"));
-        cartItems.add(new CartItem("아이템 2", 2000, 2, "L", "파랑", "https://via.placeholder.com/250"));
-        cartItems.add(new CartItem("아이템 3", 3000, 1, "S", "초록", "https://via.placeholder.com/250"));
-
-        model.addAttribute("cartItems", cartItems);
         return "jung/mypage/mypage"; // 주 템플릿 경로
     }
 

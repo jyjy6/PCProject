@@ -10,37 +10,38 @@
 <body>
 <!--주문현황-->
     <div class="mypage-order-condition" th:fragment="content">
+        <!-- 주문 현황 시작 -->
         <h4>주문현황</h4>
         <div class="order-status-container">
-            <div class="order-status">
+            <div class="order-status" data-status="주문완료">
                 <div class="status-icon-wrapper">
                     <img src="https://image5.compuzone.co.kr/img/images/mypage21/orderS2.png" alt="주문완료" class="status-icon">
                     <span class="badge">0</span>
                 </div>
                 <p>주문완료</p>
             </div>
-            <div class="order-status">
+            <div class="order-status" data-status="결제완료">
                 <div class="status-icon-wrapper">
                     <img src="https://image5.compuzone.co.kr/img/images/mypage21/orderS3.png" alt="결제완료" class="status-icon">
                     <span class="badge">0</span>
                 </div>
                 <p>결제완료</p>
             </div>
-            <div class="order-status">
+            <div class="order-status" data-status="배송중">
                 <div class="status-icon-wrapper">
                     <img src="https://image5.compuzone.co.kr/img/images/mypage21/orderS5.png" alt="배송중" class="status-icon">
                     <span class="badge">0</span>
                 </div>
                 <p>배송중</p>
             </div>
-            <div class="order-status">
+            <div class="order-status" data-status="배송완료">
                 <div class="status-icon-wrapper">
                     <img src="https://image5.compuzone.co.kr/img/images/mypage21/orderS7.png" alt="배송완료" class="status-icon">
                     <span class="badge">0</span>
                 </div>
                 <p>배송완료</p>
             </div>
-            <div class="order-status">
+            <div class="order-status" data-status="주문취소">
                 <div class="status-icon-wrapper">
                     <img src="https://image5.compuzone.co.kr/img/images/mypage21/orderS3.png" alt="주문취소" class="status-icon">
                     <span class="badge">0</span>
@@ -48,9 +49,39 @@
                 <p>주문취소</p>
             </div>
         </div>
-        <!--주문현황 끝-->
+        <!-- 주문 현황 끝 -->
 
-<!--     여기에 주문현황     -->
+        <!-- 모달 구조 -->
+        <div class="modal" id="orderModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">주문 상태</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p id="orderStatusMessage"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 모달 끝 -->
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+        <script>
+            $(document).ready(function() {
+                // 주문 상태별로 모달 내용 업데이트
+                $('.order-status').on('click', function() {
+                    const status = $(this).data('status');
+                    $('#orderStatusMessage').text(`${status}에 대한 상세정보를 보여줍니다.`);
+                    $('#orderModal').modal('show'); // 모달 열기
+                });
+            });
+        </script>
 
         <!--자주 찾는 메뉴-->
         <h4 style="margin-top:50px;">자주찾는메뉴</h4>
