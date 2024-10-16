@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -42,17 +44,24 @@ public class MemberController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/mypage/{id}")
     public String myPage(@PathVariable("id") String id, Model model) {
-
 //        PathVariable을 통해 데이터 바인딩해서
 //        <div th:replace="~{jung/mypage/__${id}__ :: content}"></div> 이 값을 유동적으로 바꿈
         model.addAttribute("id", id);
+
+        // 더미 데이터 생성
+        List<CartItem> cartItems = new ArrayList<>();
+        cartItems.add(new CartItem("아이템 1", 1000, 1, "M", "빨강", "https://via.placeholder.com/250"));
+        cartItems.add(new CartItem("아이템 2", 2000, 2, "L", "파랑", "https://via.placeholder.com/250"));
+        cartItems.add(new CartItem("아이템 3", 3000, 1, "S", "초록", "https://via.placeholder.com/250"));
+
+        model.addAttribute("cartItems", cartItems);
         return "jung/mypage/mypage"; // 주 템플릿 경로
     }
 
     @GetMapping("/member/modify")
     public String modify(Authentication auth,
                          Model model){
-        Member member = memberService.memberInfo(auth);
+        MemberDTO member = memberService.memberInfo(auth);
         model.addAttribute("member",member);
         return "jung/modify.html";
     }
@@ -63,7 +72,15 @@ public class MemberController {
                            Model model){
         var username = ((CustomUserDetails)auth.getPrincipal()).getUsername();
         model.addAttribute("username", username);
-        return "jung/mypage/memberValidatePage";
+        return "jung/memberValidatePage";
+    }
+
+    @GetMapping("/member/withdraw")
+    public String withdraw(Authentication auth,
+                           Model model){
+        var username = ((CustomUserDetails)auth.getPrincipal()).getUsername();
+        model.addAttribute("username", username);
+        return "jung/memberWithdrawPage";
     }
 
 

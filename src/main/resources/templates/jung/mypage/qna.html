@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <th:block th:fragment="content">
+        <div class="qna-main-container">
+            <h2>내 상담내역 <i class="fas fa-comments"></i></h2>
+
+            <div class="qna-item card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">상담 제목</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">상담 일자: 2024-10-16</h6>
+                    <p class="card-text">상담 내용: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla accumsan...</p>
+                    <p class="card-text"><strong>상태:</strong> 진행 중</p>
+                    <a href="#" class="btn btn-primary">상세보기</a>
+                </div>
+            </div>
+        </div>
+
+
+        <style>
+            .qna-main-container {
+                margin-left: 30px;
+                width:75%;
+
+            }
+            .qna-item {
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                margin-top:20px;
+            }
+        </style>
+    </th:block>
+
+
+
+
+</body>
+</html>

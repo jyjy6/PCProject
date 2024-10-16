@@ -50,6 +50,21 @@ public class MemberRestAPIController {
         }
     }
 
+    @DeleteMapping("/withdraw")
+    public ResponseEntity<String> deleteUser(@RequestBody Map<String, String> requestBody,
+                                             Authentication auth) {
+        String username = requestBody.get("username"); // JSON에서 username 추출
+
+        try {
+            memberService.deleteMember(username, auth);
+            return new ResponseEntity<>("User delete successfully", HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+
     @PostMapping("/validate")
     public ResponseEntity<String> validatePassword(@RequestBody Map<String, String> requestBody) {
         return memberService.validatePw(requestBody);

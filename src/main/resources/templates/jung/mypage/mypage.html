@@ -17,20 +17,26 @@
     <h2 style="margin:4% 0 2% 4%;"><a href="/mypage/main" style="text-decoration:none; color:inherit; font-weight:bold;"> My 컴퓨존 </a></h2>
     <div class="mypage-head-main-menu">
         <div class="mypage-head-main-menu-contents">
-            <h4 th:text="${#authentication.principal.username} + '님'"></h4>
+            <h4 th:text="${#authentication.principal.displayName}+'('+${#authentication.principal.username}+')'+'님'"></h4>
             <h4>일반</h4>
         </div>
         <div class="mypage-head-main-menu-contents">
-            <h4>쿠폰</h4>
+            <a href="/mypage/orders">
+                <h4>구매내역</h4>
+                <h4>0개</h4>
+            </a>
+        </div>
+        <div class="mypage-head-main-menu-contents">
+            <a href="/mypage/cart">
+            <h4>장바구니</h4>
             <h4>1개</h4>
+            </a>
         </div>
         <div class="mypage-head-main-menu-contents">
-            <h4>적립금</h4>
-            <h4>40원</h4>
-        </div>
-        <div class="mypage-head-main-menu-contents">
-            <h4>상담내역</h4>
-            <h4>0건</h4>
+            <a href="/mypage/qna">
+                <h4>상담내역</h4>
+                <h4>0건</h4>
+            </a>
         </div>
     </div>
 
@@ -85,7 +91,7 @@
                     <div class="accordion-body">
                         <ul>
                             <li>즐겨찾기</li>
-                            <li>장바구니</li>
+                            <li><a href="/mypage/cart">장바구니</a></li>
                         </ul>
                     </div>
                 </div>

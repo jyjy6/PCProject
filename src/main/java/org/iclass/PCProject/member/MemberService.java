@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
 @Service
@@ -56,18 +57,34 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    public Member memberInfo(Authentication auth){
+    public MemberDTO memberInfo(Authentication auth){
         var userId = ((CustomUserDetails)auth.getPrincipal()).getId();
         Member member = memberRepository.findById(userId).orElseThrow(()->new RuntimeException("그런 아이디 없음"));
-        return member;
+
+        MemberDTO userInfo = MemberDTO.builder()
+                .id(member.getId())
+                .username(member.getUsername())
+                .displayName(member.getDisplayName())
+                .email(member.getEmail())
+                .phone(member.getPhone())
+                .createdAt(member.getCreatedAt())
+                .updatedAt(member.getUpdatedAt())
+                .role(member.getRole())
+                .gender(member.getGender())
+                .age(member.getAge())
+                .address(member.getAddress())
+                .address2(member.getAddress2())
+                .build();
+
+        return userInfo;
     }
 
     public ResponseEntity<String> validatePw(@RequestBody Map<String, String> requestBody){
-        String id = requestBody.get("id"); // id 추출
-        String pw = requestBody.get("pw"); // pw 추출
+        String id = requestBody.get("username"); // id 추출
+        String pw = requestBody.get("password"); // pw 추출
 
         var targetMember = memberRepository.findByUsername(id)
-                .orElseThrow(() -> new RuntimeException("Value not found!"));
+                .orElseThrow(() -> new NoSuchElementException("Value not found!"));
 
         var correctPassword = targetMember.getPassword();
 
@@ -78,6 +95,22 @@ public class MemberService {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid password");
         }
 
+    }
+
+    public ResponseEntity<String> deleteMember(String username, Authentication auth) {
+        // 인증된 사용자 이름 가져오기
+        String authUsername = ((CustomUserDetails)auth.getPrincipal()).getUsername();
+        // 인증된 사용자 이름으로 회원 조회
+        Member member = memberRepository.findByUsername(authUsername)
+                .orElseThrow(() -> new NoSuchElementException("해당 아이디가 존재하지 않습니다."));
+        // 요청된 사용자 이름과 조회된 사용자 이름이 다르면 예외 반환
+        if (!username.equals(member.getUsername())) {
+            throw new IllegalArgumentException("아이디가 다릅니다.");
+        }
+        // 회원 삭제
+        memberRepository.delete(member);
+        // 성공적으로 삭제되었음을 알리는 응답 반환
+        return new ResponseEntity<>("회원이 성공적으로 삭제되었습니다.", HttpStatus.OK);
     }
 
 
