@@ -1,8 +1,10 @@
-package org.iclass.PCProject.product;
+package org.iclass.PCProject.product.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 
@@ -14,10 +16,14 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int seq;
+
+    @Column(nullable = false)
     private String code;
 
     @Column(nullable = false)
@@ -35,12 +41,13 @@ public class Product {
     @Column(nullable = false)
     private String thumb;
 
+    @CreatedDate
     @Column(nullable = false)
     private LocalDate regDate;
 
     @Column(nullable = false)
     private int stock;
 
-    private boolean status;
+    private char status;
 
 }

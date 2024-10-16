@@ -1,11 +1,13 @@
-package org.iclass.PCProject.product;
+package org.iclass.PCProject.product.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Builder
 @Getter
@@ -15,15 +17,21 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class ProductDetail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String code;
+    private int seq;
+
+    @Column(nullable = false)
+    private int pSeq;
 
     @Column(nullable = false)
     private String fileName;
 
+    @CreatedDate
+    @LastModifiedDate
     @Column(nullable = false)
     private LocalDate regDate;
 
