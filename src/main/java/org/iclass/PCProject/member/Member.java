@@ -50,5 +50,7 @@ public class Member {
 
     private String role = "ROLE_USER";
 
+    private String name;
+
 
 }

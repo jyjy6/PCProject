@@ -40,6 +40,11 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="username">이름</label>
+                            <input type="text" id="name" name="name" class="form-control" placeholder="실명을 입력해주세요." required />
+                        </div>
+
+                        <div class="form-group">
                             <label for="password">비밀번호</label>
                             <input type="password" id="password" name="password" class="form-control" placeholder="비밀번호를 입력해주세요." required />
                         </div>
@@ -175,6 +180,7 @@ function handleSubmit(event) {
 
     // AJAX 요청
     const formData = {
+        name: document.getElementById('name').value,
         username: document.getElementById('username').value,
         password: document.getElementById('password').value,
         email: document.getElementById('email').value,
