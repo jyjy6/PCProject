@@ -2,6 +2,7 @@ package org.iclass.PCProject.security;
 
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.iclass.PCProject.member.Member;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
+
 
 
 @RequiredArgsConstructor
@@ -24,9 +26,6 @@ public class CustomUserDetails implements UserDetails {
         return Collections.singletonList(new SimpleGrantedAuthority(member.getRole()));
     }
 
-    public String getDisplayName(){
-        return member.getDisplayName();
-    }
 
     @Override
     public String getPassword() {
@@ -41,6 +40,9 @@ public class CustomUserDetails implements UserDetails {
     public Long getId(){
         return member.getId();
     }
+
+    public String getDisplayName() { return member.getDisplayName(); }
+
 
     @Override
     public boolean isAccountNonExpired() {

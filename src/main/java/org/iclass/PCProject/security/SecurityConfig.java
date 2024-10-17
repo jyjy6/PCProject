@@ -38,7 +38,8 @@ public class SecurityConfig {
                     .failureHandler((request, response, exception) -> {
                         // 로그인 실패 처리
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                        response.getWriter().write("로그인 실패: " + exception.getMessage());
+                        response.setContentType("text/plain;charset=UTF-8");
+                        response.getWriter().write(exception.getMessage());
                         request.getSession(false);
                     })
                     .permitAll() // 로그인 페이지는 인증 없이 접근 가능

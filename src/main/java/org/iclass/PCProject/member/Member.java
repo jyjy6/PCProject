@@ -33,11 +33,16 @@ public class Member {
     private String phone;
 
     private String address;
+    //상세주소
+    private String address2;
 
+    private String gender;
+    private Integer age;
     // 아이디 생성 날짜
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
+
 
     // 계정 정보 마지막 수정 날짜.
     @UpdateTimestamp
@@ -45,6 +50,8 @@ public class Member {
     private LocalDateTime updatedAt;
 
     private String role = "ROLE_USER";
+
+    private String name;
 
 
 }
