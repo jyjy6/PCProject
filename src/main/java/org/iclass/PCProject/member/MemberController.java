@@ -24,10 +24,22 @@ public class MemberController {
 
 
 
+
+    @PostMapping("/sign-up")
+    public ResponseEntity<String> registerUser(@RequestBody Member member) {
+        try {
+            memberService.registerUser(member);
+            return new ResponseEntity<>("User registered successfully", HttpStatus.CREATED);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
     @GetMapping("/")
     public String index(){
         return "home";
     }
+
 
     @GetMapping("/sign-up")
     public String signUpPage() {

@@ -3,38 +3,207 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-
-
     <link rel="stylesheet" href="/nav.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f8f8;
+        }
+        .category a, .recommended-item a, .detail a {
+            text-decoration: none;
+            color: #222;
+        }
+        .prod-container {
+            max-width: 1600px;
+            margin: auto;
+        }
+        .category {
+            position: fixed;
+            top: 130px;
+            width: 180px;
+            height: 350px;
+            border: 1px solid #ddd;
+            margin: 30px;
+            padding: 30px;
+        }
+        .category h3 {
+            margin-bottom: 20px;
+        }
+        .category p {
+            padding-left: 15px;
+        }
+        .recommended h2 {
+            margin-left: 250px;
+        }
+        .recommended-list {
+            display: flex;
+            width: 80%;
+            margin-left: 232px;
+            /*margin-right: 110px;*/
+            justify-content: space-between;
+            flex-wrap: wrap;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .recommended-item {
+            width: 18%;
+            background-color: #f2f2f2;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .recommended-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .recommended-details {
+            padding: 10px;
+        }
+        .recommended-title {
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        .recommended-code {
+            font-size: 12px;
+            margin: 5px 0;
+        }
+        .recommended-retail .discount-rate {
+            font-size: 12px;
+            font-weight: 700;
+            color: #e74c3c;
+        }
+        .recommended-retail .retail-price {
+            font-size: 12px;
+            text-decoration: line-through;
+        }
+        .recommended-price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        .product-list {
+            display: inline-flex;
+            width: 81%;
+            justify-content: left;
+            flex-wrap: wrap;
+            margin-left: 220px;
+        }
+        .detail {
+            display: inline-block;
+            position: relative;
+            width: 24%;
+            height: 450px;
+            margin-top: 20px;
+            margin-left: 1%;
+            border: 1px solid #ddd;
+        }
+        .detail img {
+            width: 100%;
+            height: 200px;
+            margin-top: 10px;
+            object-fit: contain;
+        }
+        .detail .title {
+            padding-top: 20px;
+            padding-bottom: 10px;
+            margin: 1.5em 0 -10% 10%;
+            font-size: 1.1em;
+            color: #777;
+        }
+        .detail .code {
+            padding-top: 20px;
+            padding-bottom: 10px;
+            margin-left: 10%;
+            bottom: 60px;
+            font-size: 0.9em;
+            color: #ddd;
+        }
+        .retail {
+            margin-left: 10%;
+            text-align: left;
+        }
+        .retail .discount-rate {
+            color: #e74c3c;
+            font-weight: 700;
+            font-size: 1.2em;
+        }
+        .retail .retail-price {
+            text-decoration: line-through;
+        }
+        .detail .price {
+            float: left;
+            margin: 0.5em 10%;
+            bottom: 20px;
+            color: #ddd;
+            font-weight: 700;
+            font-size: 1.8em;
+        }
+        .remote {
+            clear: both;
+            position: fixed;
+            height: 450px;
+            padding: 10px;
+            top: 50%;
+            right: 3%;
+            border: 1px solid #ddd;
+            background-color: #fff;
+        }
+    </style>
+
 </head>
 <body>
     <div th:replace="~{nav :: navbar}"></div>
-    <h1>홈페이지입니다.</h1>
-    ㅇ
-    ㅇ
-    ㅇ
-    ㅇ
-    ㅇ
-    ㅇ
-    ㅇ
-    ㅇ
-    ㅇ
-    <p>ㅇ</p>
-    <p>ㅇ</p><p>ㅇ</p><p>ㅇ</p>
-    <p>ㅇ</p><p>ㅇ</p>
-    <p>ㅇ</p>
-    <p>ㅇ</p>
-    <p>ㅇ</p>
-    <p>ㅇ</p>
-    <p>ㅇ</p>
-    <p>ㅇ</p>
-    <p>ㅇ</p><p>ㅇ</p>
-    <p>ㅇ</p>
-    <p>ㅇ</p>
-
-
-
+    <div class="prod-container">
+        <aside class="category">
+            <h3>카테고리</h3>
+            <p><a href="/" class="all">전체보기</a></p>
+            <p><a href="삼성" class="samsung">삼성</a></p>
+            <p><a href="lg" class="lg">LG</a></p>
+            <p><a href="hp" class="hp">HP</a></p>
+            <p><a href="asus" class="asus">ASUS</a></p>
+            <p><a href="acer" class="acer">ACER</a></p>
+        </aside>
+        <article>
+            <section class="recommended">
+                <h2>추천상품</h2>
+                <div class="recommended-list">
+                    <div class="recommended-item" th:each="rProducts : ${recommendedProducts}">
+                        <a th:href="|@{product_detail}/${rProducts.seq}|"><img th:src="|@{images}/${rProducts.thumb}|"></a>
+                        <div class="recommended-details">
+                            <p class="recommended-title"><a th:href="|@{product_detail}/${rProducts.seq}|">[[${rProducts.vendor}]] [[${rProducts.name}]]</a></p>
+                            <p class="recommended-code"><a th:href="|@{product_detail}/${rProducts.seq}|">[[${rProducts.code}]]</a></p>
+                            <div class="recommended-retail">
+                                <span class="discount-rate">[[${rProducts.discount}]]%</span> <span class="retail-price">[[${rProducts.price}]]원</span>
+                            </div>
+                            <p class="recommended-price">[[${#numbers.formatInteger(rProducts.price-(rProducts.price*(rProducts.discount*0.01)), 0,'COMMA')}]]원</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="product-list">
+                <div class="detail" th:each="products : ${allProducts}">
+                    <a th:href="|@{product_detail}/${products.seq}|"><img th:src="|@{images}/${products.thumb}|"></a>
+                    <p class="title"><a th:href="|@{product_detail}/${products.seq}|">[[${products.vendor}]] [[${products.name}]]</a></p>
+                    <p class="code"><a th:href="|@{product_detail}/${products.seq}|">[[${products.code}]]</a></p>
+                    <div class="retail">
+                        <span class="discount-rate">[[${products.discount}]]%</span> <span class="retail-price">[[${products.price}]]원</span>
+                    </div>
+                    <p class="price"><a href="detail">[[${#numbers.formatInteger(products.price-(products.price*(products.discount*0.01)), 0,'COMMA')}]]원</a></p>
+                </div>
+            </section>
+        </article>
+        <aside class="remote">
+            <p>최근 본 상품</p>
+        </aside>
+    </div>
 
 
 
