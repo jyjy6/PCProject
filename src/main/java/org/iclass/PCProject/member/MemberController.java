@@ -60,16 +60,26 @@ public class MemberController {
                          @RequestParam(value = "page", defaultValue = "0") Integer page,
                          Model model,
                          Authentication auth) {
-//        PathVariable을 통해 데이터 바인딩해서
-//        <div th:replace="~{jung/mypage/__${id}__ :: content}"></div> 이 값을 유동적으로 바꿈
+        // 이 코드는 PathVariable을 통해 데이터 바인딩해서
+//         <div th:replace="~{jung/mypage/__${id}__ :: content}"></div> 이 값을 유동적으로 바꿈
         model.addAttribute("id", id);
 
+
+        //유저 id를 auth정보에서 추출
+        String username = ((CustomUserDetails) auth.getPrincipal()).getUsername();
+
+        if(auth!=null) {
+            //상담한 개수가 몇개인지 바인딩. 추후 상담완료된건(answer가 null이 아닌 컬럼은 제외 고려)
+            var qnaLength = qnaRepository.findAllByQuestioner(username).size();
+            model.addAttribute("qnaLength", qnaLength);
+        }
         //qna페이지로 이동 시 해당 유저의 질문들을 바인딩(3개만)
         if (id.equals("qna") && auth != null) {
-            String username = ((CustomUserDetails) auth.getPrincipal()).getUsername();
             var qnaList = qnaRepository.findTop3ByQuestionerOrderByRegDateDesc(username);
             model.addAttribute("qnaList", qnaList);
         }
+
+
         return "jung/mypage/mypage"; // 주 템플릿 경로
     }
 
