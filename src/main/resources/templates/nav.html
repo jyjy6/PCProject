@@ -13,6 +13,8 @@
 
 <th:block th:fragment="navbar">
 <link rel="stylesheet" href="/nav.css">
+<!--  Font Awesome  -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <!-- 부트스트랩 CSS (최신 버전) -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <!-- 부트스트랩 JS -->
@@ -54,10 +56,9 @@
                                 <div sec:authorize="isAuthenticated()">
                                     <p>환영합니다,<span th:text="${#authentication.principal.displayName}"></span>님</p>
                                 </div>
-                                <p>장바구니</p>
-                                <p>주문내역</p>
-                                <p>회원정보수정</p>
-                                <p>상담내역</p>
+                                <p><a href="/mypage/orders"><i class="fas fa-list-alt"></i> 주문내역</a></p>
+                                <p><a href="/member/modify"><i class="fas fa-user-edit"></i> 회원정보수정</a></p>
+                                <p><a href="/mypage/qna"> <i class="fas fa-comments"></i> 상담내역</a></p>
                             </div>
                         </button>
                     </li>
@@ -73,6 +74,37 @@
 
                 form.submit();
             }
+            function showPopup() {
+            const popup = document.querySelector('.nav-popup');
+            if (popup.classList.contains('show-popup')) {
+                popup.style.opacity = '0';
+                setTimeout(() => {
+                    popup.classList.remove('show-popup');
+                }, 300);
+            } else {
+                popup.classList.add('show-popup');
+                setTimeout(() => {
+                    popup.style.opacity = '1';
+                }, 10);
+            }
+        }
+
+        function logout() {
+            fetch('/logout', {
+                method: 'POST',
+                headers: {
+
+                },
+                credentials: 'include' // 쿠키를 포함
+            }).then(response => {
+                if (response.ok) {
+                    window.location.href = '/login'; // 로그인 페이지로 리디렉션
+                } else {
+                    alert('로그아웃 실패');
+                }
+            });
+        }
+
         </script>
     </nav>
 
@@ -87,12 +119,17 @@
 
     <!-- 가로형 메뉴바 -->
     <div class="menu-bar">
-        <a href="삼성">삼성</a>
-        <a href="lg">LG</a>
-        <a href="hp">HP</a>
-        <a href="asus">ASUS</a>
-        <a href="acer">ACER</a>
+        <a href="#menu1">삼성</a>
+        <a href="#menu2">LG</a>
+        <a href="#menu3">HP</a>
+        <a href="#menu4">ASUS</a>
+        <a href="#menu5">ACER</a>
     </div>
+    <form action="" method="GET" class="search-form-mobile">
+        <div class="search-form-mobile-wrapper">
+            <input type="text"><button class="btn btn-primary">검색</button>
+        </div>
+    </form>
 </div>
 
 
