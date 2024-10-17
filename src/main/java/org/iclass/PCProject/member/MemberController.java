@@ -1,7 +1,12 @@
 package org.iclass.PCProject.member;
 
 import lombok.RequiredArgsConstructor;
+import org.iclass.PCProject.qna.QNA;
+import org.iclass.PCProject.qna.QNARepository;
 import org.iclass.PCProject.security.CustomUserDetails;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,6 +26,7 @@ public class MemberController {
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
+    private final QNARepository qnaRepository;
 
 
 
@@ -49,12 +55,21 @@ public class MemberController {
     }
 
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/mypage/{id}")
-    public String myPage(@PathVariable("id") String id, Model model) {
+    public String myPage(@PathVariable("id") String id,
+                         @RequestParam(value = "page", defaultValue = "0") Integer page,
+                         Model model,
+                         Authentication auth) {
 //        PathVariable을 통해 데이터 바인딩해서
 //        <div th:replace="~{jung/mypage/__${id}__ :: content}"></div> 이 값을 유동적으로 바꿈
         model.addAttribute("id", id);
+
+        //qna페이지로 이동 시 해당 유저의 질문들을 바인딩(3개만)
+        if (id.equals("qna") && auth != null) {
+            String username = ((CustomUserDetails) auth.getPrincipal()).getUsername();
+            var qnaList = qnaRepository.findTop3ByQuestionerOrderByRegDateDesc(username);
+            model.addAttribute("qnaList", qnaList);
+        }
         return "jung/mypage/mypage"; // 주 템플릿 경로
     }
 

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    /*아코디언*/
+    .accordion {
+        position: relative;
+        flex-shrink: 0; /* 아코디언이 줄어들지 않도록 설정 */
+        width: 250px;
+        background-color: #f8f9fa;
+        margin: 10px 0;
+
+    }
+
+    .accordion-button {
+        font-size: 16px;
+    }
+
+    .accordion-body ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+
+    .accordion-body ul li {
+        padding: 5px 0;
+    }
+    @media screen and (max-width:700px) {
+        .accordion{
+            width:100% !important;
+            display:block;
+        }
+        .mypage-main-container{
+            display:block;
+        }
+        .mypage-order-condition{
+            width:100%;
+        }
+        .mypage-head-main-menu-contents h4{
+            font-size : 0.9rem;
+            font-weight:bold;
+        }
+
+    }
+    /*아코디언 끝*/
+
+    .qna-detail-contents{
+        padding: 20px;
+    }
+
+    .qna-main-container {
+        box-sizing: border-box;
+        width: 80%;
+        margin: 0 auto;
+        margin-top: 50px;
+        display: flex;
+        justify-content: center; /* 카드가 가운데 정렬되도록 */
+    }
+
+    .qna-detail-contents {
+        width: 100%; /* 카드가 qna-main-container의 전체 너비를 차지 */
+        max-width: 800px; /* 카드의 최대 너비 설정 */
+        margin: 0 auto; /* 가운데 정렬 */
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+    }
+
+    .qna-detail-section {
+        margin-top: 20px;
+    }
+
+    .qna-detail-contents .badge {
+        font-size: 1rem;
+        padding: 5px 10px;
+    }
+
+    .qna-detail-content,
+    .qna-answer-content {
+        padding: 10px 0;
+    }
+
+    .qna-detail-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 30px;
+    }
+
+    .qna-detail-actions a {
+        width: 48%; /* 버튼 크기 동일하게 */
+        text-align: center;
+    }
+
+
+
+</style>
+<body>
+
+<div th:replace="~{nav :: navbar}"></div>
+
+<div class="qna-main-container">
+    <div th:replace="~{jung/mypage/mypage :: accordion}"></div>
+    <div class="qna-detail-contents card shadow-sm">
+        <div class="card-body">
+            <h2 class="card-title">Q&A 상세 <i class="fas fa-info-circle"></i></h2>
+
+            <div class="qna-detail-section mt-4">
+                <!-- 상담 제목 -->
+                <h5 class="mb-3"><strong>상담 제목:</strong> 배송 관련 문의</h5>
+
+                <!-- 상담 일자 -->
+                <p><strong>상담 일자:</strong> 2024-10-16</p>
+
+                <!-- 상담 상태 -->
+                <p><strong>상태:</strong> <span class="badge bg-warning">진행 중</span></p>
+
+                <!-- 상담 내용 -->
+                <div class="qna-detail-content mt-4">
+                    <h6><strong>상담 내용</strong></h6>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla accumsan, metus ultrices eleifend gravida...</p>
+                </div>
+
+                <!-- 답변 내용 (optional) -->
+                <div class="qna-answer-content mt-4">
+                    <h6><strong>관리자 답변</strong> <small class="text-muted">(2024-10-17)</small></h6>
+                    <p>고객님의 문의에 대해 답변 드립니다. 배송은 예정대로 2024년 10월 20일에 도착할 예정입니다. 감사합니다.</p>
+                </div>
+
+                <!-- 버튼 -->
+                <div class="qna-detail-actions mt-4">
+                    <a href="#" class="btn btn-secondary">목록으로 돌아가기</a>
+                    <a href="#" class="btn btn-danger">상담 취소</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+</body>
+</html>
