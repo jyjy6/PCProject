@@ -146,6 +146,16 @@
             font-weight: 700;
             font-size: 1.8em;
         }
+        @keyframes blink-effect { 50% { opacity: 0; } }
+        .detail .stock-status {
+            display: inline-block;
+            margin: 7% 0 0 0;
+            border: 1px solid #e74c3c;
+            border-radius: 5px;
+            color: #e74c3c;
+            font-weight: 700;
+            animation: blink-effect 2s step-end infinite;
+        }
         .remote {
             clear: both;
             position: fixed;
@@ -175,28 +185,29 @@
             <section class="recommended">
                 <h2>추천상품</h2>
                 <div class="recommended-list">
-                    <div class="recommended-item" th:each="rProducts : ${recommendedProducts}">
-                        <a th:href="|@{product_detail}/${rProducts.seq}|"><img th:src="|@{images}/${rProducts.thumb}|"></a>
+                    <div class="recommended-item" th:each="rProduct : ${recommendedProducts}">
+                        <a th:href="|@{product_detail}/${rProduct.seq}|"><img th:src="|@{images}/${rProduct.thumb}|"></a>
                         <div class="recommended-details">
-                            <p class="recommended-title"><a th:href="|@{product_detail}/${rProducts.seq}|">[[${rProducts.vendor}]] [[${rProducts.name}]]</a></p>
-                            <p class="recommended-code"><a th:href="|@{product_detail}/${rProducts.seq}|">[[${rProducts.code}]]</a></p>
+                            <p class="recommended-title"><a th:href="|@{product_detail}/${rProduct.seq}|">[[${rProduct.vendor}]] [[${rProduct.name}]]</a></p>
+                            <p class="recommended-code"><a th:href="|@{product_detail}/${rProduct.seq}|">[[${rProduct.code}]]</a></p>
                             <div class="recommended-retail">
-                                <span class="discount-rate">[[${rProducts.discount}]]%</span> <span class="retail-price">[[${rProducts.price}]]원</span>
+                                <span class="discount-rate">[[${rProduct.discount}]]%</span> <span class="retail-price">[[${rProduct.price}]]원</span>
                             </div>
-                            <p class="recommended-price">[[${#numbers.formatInteger(rProducts.price-(rProducts.price*(rProducts.discount*0.01)), 0,'COMMA')}]]원</p>
+                            <p class="recommended-price"><a th:href="|@{product_detail}/${rProduct.seq}|">[[${#numbers.formatInteger(rProduct.price-(rProduct.price*(rProduct.discount*0.01)), 0,'COMMA')}]]원</a></p>
                         </div>
                     </div>
                 </div>
             </section>
             <section class="product-list">
-                <div class="detail" th:each="products : ${allProducts}">
-                    <a th:href="|@{product_detail}/${products.seq}|"><img th:src="|@{images}/${products.thumb}|"></a>
-                    <p class="title"><a th:href="|@{product_detail}/${products.seq}|">[[${products.vendor}]] [[${products.name}]]</a></p>
-                    <p class="code"><a th:href="|@{product_detail}/${products.seq}|">[[${products.code}]]</a></p>
+                <div class="detail" th:each="product : ${allProducts}">
+                    <a th:href="|@{product_detail}/${product.seq}|"><img th:src="|@{images}/${product.thumb}|"></a>
+                    <p class="title"><a th:href="|@{product_detail}/${product.seq}|">[[${product.vendor}]] [[${product.name}]]</a></p>
+                    <p class="code"><a th:href="|@{product_detail}/${product.seq}|">[[${product.code}]]</a></p>
                     <div class="retail">
-                        <span class="discount-rate">[[${products.discount}]]%</span> <span class="retail-price">[[${products.price}]]원</span>
+                        <span class="discount-rate">[[${product.discount}]]%</span> <span class="retail-price">[[${product.price}]]원</span>
                     </div>
-                    <p class="price"><a href="detail">[[${#numbers.formatInteger(products.price-(products.price*(products.discount*0.01)), 0,'COMMA')}]]원</a></p>
+                    <p class="price"><a href="detail">[[${#numbers.formatInteger(product.price-(product.price*(product.discount*0.01)), 0,'COMMA')}]]원</a></p>
+                    <span class="stock-status" th:if="${product.stock == 0}">품절</span>
                 </div>
             </section>
         </article>
