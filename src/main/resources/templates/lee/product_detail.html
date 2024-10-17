@@ -7,5 +7,9 @@
 <body>
     <div th:replace="~{nav :: navbar}"></div>
     <h1>상품 디테일 페이지</h1>
+    <p>[[${product}]]</p>
+    <div class="container">
+        <h3>[[${product.vendor}]] [[${product.name}]] [[${product}]]</h3>
+    </div>
 </body>
 </html>

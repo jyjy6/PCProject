@@ -25,7 +25,7 @@
             position: fixed;
             top: 130px;
             width: 180px;
-            height: 300px;
+            height: 350px;
             border: 1px solid #ddd;
             margin: 30px;
             padding: 30px;
@@ -61,7 +61,8 @@
         }
         .recommended-item img {
             width: 100%;
-            height: auto;
+            height: 200px;
+            object-fit: cover;
         }
         .recommended-details {
             padding: 10px;
@@ -69,6 +70,19 @@
         .recommended-title {
             font-size: 14px;
             margin: 5px 0;
+        }
+        .recommended-code {
+            font-size: 12px;
+            margin: 5px 0;
+        }
+        .recommended-retail .discount-rate {
+            font-size: 12px;
+            font-weight: 700;
+            color: #e74c3c;
+        }
+        .recommended-retail .retail-price {
+            font-size: 12px;
+            text-decoration: line-through;
         }
         .recommended-price {
             font-size: 16px;
@@ -87,22 +101,31 @@
             display: inline-block;
             position: relative;
             width: 24%;
-            height: 500px;
+            height: 450px;
             margin-top: 20px;
             margin-left: 1%;
             border: 1px solid #ddd;
         }
         .detail img {
-            width: 90%;
-            margin: 5% 5% 0%;
+            width: 100%;
+            height: 200px;
+            margin-top: 10px;
+            object-fit: contain;
         }
         .detail .title {
             padding-top: 20px;
             padding-bottom: 10px;
-            margin: 1.5em 10% 0px;
-            bottom: 60px;
+            margin: 1.5em 0 -10% 10%;
             font-size: 1.1em;
             color: #777;
+        }
+        .detail .code {
+            padding-top: 20px;
+            padding-bottom: 10px;
+            margin-left: 10%;
+            bottom: 60px;
+            font-size: 0.9em;
+            color: #ddd;
         }
         .retail {
             margin-left: 10%;
@@ -142,141 +165,40 @@
     <div class="prod-container">
         <aside class="category">
             <h3>카테고리</h3>
-            <p><a href="#menu1">삼성</a></p>
-            <p><a href="#menu2">LG</a></p>
-            <p><a href="#menu3">HP</a></p>
-            <p><a href="#menu4">ASUS</a></p>
-            <p><a href="#menu5">ACER</a></p>
+            <p><a href="/" class="all">전체보기</a></p>
+            <p><a href="삼성" class="samsung">삼성</a></p>
+            <p><a href="lg" class="lg">LG</a></p>
+            <p><a href="hp" class="hp">HP</a></p>
+            <p><a href="asus" class="asus">ASUS</a></p>
+            <p><a href="acer" class="acer">ACER</a></p>
         </aside>
         <article>
             <section class="recommended">
                 <h2>추천상품</h2>
                 <div class="recommended-list">
-                    <!--    <div class="recommended-item" th:each="dto :${productList.list}">-->
-                    <div class="recommended-item">
-                        <a href="detail"><img th:src="@{images/삼성/삼성 갤럭시 크롬북2/삼성 갤럭시 크롬북2.jpeg}"></a>
+                    <div class="recommended-item" th:each="rProducts : ${recommendedProducts}">
+                        <a th:href="|@{product_detail}/${rProducts.seq}|"><img th:src="|@{images}/${rProducts.thumb}|"></a>
                         <div class="recommended-details">
-                            <p class="recommended-title"><a href="detail">[레노버] 아이디어패드 Slim1</a></p>
-                            <p class="recommended-price">569,000원</p>
+                            <p class="recommended-title"><a th:href="|@{product_detail}/${rProducts.seq}|">[[${rProducts.vendor}]] [[${rProducts.name}]]</a></p>
+                            <p class="recommended-code"><a th:href="|@{product_detail}/${rProducts.seq}|">[[${rProducts.code}]]</a></p>
+                            <div class="recommended-retail">
+                                <span class="discount-rate">[[${rProducts.discount}]]%</span> <span class="retail-price">[[${rProducts.price}]]원</span>
+                            </div>
+                            <p class="recommended-price">[[${#numbers.formatInteger(rProducts.price-(rProducts.price*(rProducts.discount*0.01)), 0,'COMMA')}]]원</p>
                         </div>
                     </div>
                 </div>
             </section>
             <section class="product-list">
-                <div class="detail">
-                    <a href="detail"><img th:src="@{images/삼성/삼성 갤럭시 크롬북2/삼성 갤럭시 크롬북2.jpeg}"></a>
-                    <p class="title"><a href="detail">[레노버] 아이디어패드 Slim1</a></p>
+                <div class="detail" th:each="products : ${allProducts}">
+                    <a th:href="|@{product_detail}/${products.seq}|"><img th:src="|@{images}/${products.thumb}|"></a>
+                    <p class="title"><a th:href="|@{product_detail}/${products.seq}|">[[${products.vendor}]] [[${products.name}]]</a></p>
+                    <p class="code"><a th:href="|@{product_detail}/${products.seq}|">[[${products.code}]]</a></p>
                     <div class="retail">
-                        <span class="discount-rate">8%</span> <span class="retail-price">679,000원</span>
+                        <span class="discount-rate">[[${products.discount}]]%</span> <span class="retail-price">[[${products.price}]]원</span>
                     </div>
-                    <p class="price"><a href="detail">619,000원</a></p>
+                    <p class="price"><a href="detail">[[${#numbers.formatInteger(products.price-(products.price*(products.discount*0.01)), 0,'COMMA')}]]원</a></p>
                 </div>
-
-                <div class="detail">
-                    <img th:src="@{images/삼성/삼성 갤럭시 크롬북2/삼성 갤럭시 크롬북2.jpeg}">
-                    <p class="title"><a href="detail">[레노버] 아이디어패드 Slim1</a></p>
-                    <div class="retail">
-                        <span class="discount-rate">8%</span> <span class="retail-price">679,000원</span>
-                    </div>
-                    <p class="price"><a href="detail">619,000원</a></p>
-                </div>
-                <div class="detail">
-                    <img th:src="@{images/삼성/삼성 갤럭시 크롬북2/삼성 갤럭시 크롬북2.jpeg}">
-                    <p class="title"><a href="detail">[레노버] 아이디어패드 Slim1</a></p>
-                    <div class="retail">
-                        <span class="discount-rate">8%</span> <span class="retail-price">679,000원</span>
-                    </div>
-                    <p class="price"><a href="detail">619,000원</a></p>
-                </div>
-                <div class="detail">
-                    <img th:src="@{images/삼성/삼성 갤럭시 크롬북2/삼성 갤럭시 크롬북2.jpeg}">
-                    <p class="title"><a href="detail">[레노버] 아이디어패드 Slim1</a></p>
-                    <div class="retail">
-                        <span class="discount-rate">8%</span> <span class="retail-price">679,000원</span>
-                    </div>
-                    <p class="price"><a href="detail">619,000원</a></p>
-                </div>
-                <div class="detail">
-                    <img th:src="@{images/삼성/삼성 갤럭시 크롬북2/삼성 갤럭시 크롬북2.jpeg}">
-                    <p class="title"><a href="detail">[레노버] 아이디어패드 Slim1</a></p>
-                    <div class="retail">
-                        <span class="discount-rate">8%</span> <span class="retail-price">679,000원</span>
-                    </div>
-                    <p class="price"><a href="detail">619,000원</a></p>
-                </div>
-                <div class="detail">
-                    <img th:src="@{images/삼성/삼성 갤럭시 크롬북2/삼성 갤럭시 크롬북2.jpeg}">
-                    <p class="title"><a href="detail">[레노버] 아이디어패드 Slim1</a></p>
-                    <div class="retail">
-                        <span class="discount-rate">8%</span> <span class="retail-price">679,000원</span>
-                    </div>
-                    <p class="price"><a href="detail">619,000원</a></p>
-                </div>
-                <div class="detail">
-                    <img th:src="@{images/삼성/삼성 갤럭시 크롬북2/삼성 갤럭시 크롬북2.jpeg}">
-                    <p class="title"><a href="detail">[레노버] 아이디어패드 Slim1</a></p>
-                    <div class="retail">
-                        <span class="discount-rate">8%</span> <span class="retail-price">679,000원</span>
-                    </div>
-                    <p class="price"><a href="detail">619,000원</a></p>
-                </div>
-                <div class="detail">
-                    <img th:src="@{images/삼성/삼성 갤럭시 크롬북2/삼성 갤럭시 크롬북2.jpeg}">
-                    <p class="title"><a href="detail">[레노버] 아이디어패드 Slim1</a></p>
-                    <div class="retail">
-                        <span class="discount-rate">8%</span> <span class="retail-price">679,000원</span>
-                    </div>
-                    <p class="price"><a href="detail">619,000원</a></p>
-                </div>
-                <div class="detail">
-                    <img th:src="@{images/삼성/삼성 갤럭시 크롬북2/삼성 갤럭시 크롬북2.jpeg}">
-                    <p class="title"><a href="detail">[레노버] 아이디어패드 Slim1</a></p>
-                    <div class="retail">
-                        <span class="discount-rate">8%</span> <span class="retail-price">679,000원</span>
-                    </div>
-                    <p class="price"><a href="detail">619,000원</a></p>
-                </div>
-                <div class="detail">
-                    <img th:src="@{images/삼성/삼성 갤럭시 크롬북2/삼성 갤럭시 크롬북2.jpeg}">
-                    <p class="title"><a href="detail">[레노버] 아이디어패드 Slim1</a></p>
-                    <div class="retail">
-                        <span class="discount-rate">8%</span> <span class="retail-price">679,000원</span>
-                    </div>
-                    <p class="price"><a href="detail">619,000원</a></p>
-                </div>
-                <div class="detail">
-                    <img th:src="@{images/삼성/삼성 갤럭시 크롬북2/삼성 갤럭시 크롬북2.jpeg}">
-                    <p class="title"><a href="detail">[레노버] 아이디어패드 Slim1</a></p>
-                    <div class="retail">
-                        <span class="discount-rate">8%</span> <span class="retail-price">679,000원</span>
-                    </div>
-                    <p class="price"><a href="detail">619,000원</a></p>
-                </div>
-                <div class="detail">
-                    <img th:src="@{images/삼성/삼성 갤럭시 크롬북2/삼성 갤럭시 크롬북2.jpeg}">
-                    <p class="title"><a href="detail">[레노버] 아이디어패드 Slim1</a></p>
-                    <div class="retail">
-                        <span class="discount-rate">8%</span> <span class="retail-price">679,000원</span>
-                    </div>
-                    <p class="price"><a href="detail">619,000원</a></p>
-                </div>
-                <div class="detail">
-                    <img th:src="@{images/삼성/삼성 갤럭시 크롬북2/삼성 갤럭시 크롬북2.jpeg}">
-                    <p class="title"><a href="detail">[레노버] 아이디어패드 Slim1</a></p>
-                    <div class="retail">
-                        <span class="discount-rate">8%</span> <span class="retail-price">679,000원</span>
-                    </div>
-                    <p class="price"><a href="detail">619,000원</a></p>
-                </div>
-                <div class="detail">
-                    <img th:src="@{images/삼성/삼성 갤럭시 크롬북2/삼성 갤럭시 크롬북2.jpeg}">
-                    <p class="title"><a href="detail">[레노버] 아이디어패드 Slim1</a></p>
-                    <div class="retail">
-                        <span class="discount-rate">8%</span> <span class="retail-price">679,000원</span>
-                    </div>
-                    <p class="price"><a href="detail">619,000원</a></p>
-                </div>
-
             </section>
         </article>
         <aside class="remote">
