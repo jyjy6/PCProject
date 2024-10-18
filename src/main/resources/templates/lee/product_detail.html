@@ -71,22 +71,24 @@
                 <p class="p1 price_name">배송비</p>
                 <p class="p2 price_val">무료배송</p>
             </div>
-            <div class="qty_price_res">
-                <p class="product_title">[[${product.vendor}]] [[${product.name}]] [[${product.code}]]</p>
-                <span class="qty_ctrl">
-                    <button type="button" class="decreasing_qty">-</button>
-                    <input type="number" class="qty_number">
-                    <button type="button" class="increasing_qty">+</button>
-                    <span class="final_price"></span>
-                </span>
-            </div>
-            <div class="total_price">
-                <span class="product_total_price"></span>
-            </div>
-            <div class="purchase_btns">
-                <button type="button" class="cart_btn">장바구니 담기</button>
-                <button type="submit" class="purchase_btn">바로 구매</button>
-            </div>
+            <form action="shoppingInfo" method="post">
+                <div class="qty_price_res">
+                    <p class="product_title">[[${product.vendor}]] [[${product.name}]] [[${product.code}]]</p>
+                    <span class="qty_ctrl">
+                        <button type="button" class="decreasing_btn">-</button>
+                        <input type="text" class="qty_number" value="1">
+                        <button type="button" class="increasing_btn">+</button>
+                        <span class="final_price"></span>
+                    </span>
+                </div>
+                <div class="total_price">
+                    <span class="product_total_price"></span>
+                </div>
+                <div class="purchase_btns">
+                    <button type="button" class="cart_btn">장바구니 담기</button>
+                    <button type="submit" class="purchase_btn">바로 구매</button>
+                </div>
+            </form>
         </div>
         <div class="detail_nav">
             <p class="product_spec">상세정보</p>
@@ -97,6 +99,23 @@
             <img th:src="|@{../images}/${detailImg.getFileName()}|">
         </div>
     </div>
-    <script th:inline="javascript"></script>
+    <script th:inline="javascript">
+        const qtyInput = document.querySelector('.qty_number')
+        const decreasingBtn = document.querySelector('.decreasing_btn')
+        const increasingBtn = document.querySelector('.increasing_btn')
+
+        decreasingBtn.addEventListener('click', () => {
+            if(qtyInput.value > 1) --qtyInput.value
+            else if(qtyInput.value <= 1) {
+                alert('최소 주문 수량은 1개입니다.')
+            }
+        })
+
+        increasingBtn.addEventListener('click', () => {
+            ++qtyInput.value
+            console.log(qtyInput.value)
+        })
+
+    </script>
 </body>
 </html>
