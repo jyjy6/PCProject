@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>r</title>
+  <style>
+    .qna-form-container{
+      width: 50%;
+      margin: 0 auto;
+      transform: translateY(30%);
+    }
+
+    .qna-btn-box{
+      margin-top: 20px;
+      display:flex;
+      justify-content: center;
+      gap: 20px;
+    }
+  </style>
+</head>
+
+<body>
+<div th:replace="~{nav :: navbar}"></div>
+<div class="qna-form-container">
+  <form id="qnaForm">
+    <div class="form-group">
+      <label for="title">제목:</label>
+      <input type="text" id="title" name="title" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+      <label for="vendor">제조사:</label>
+      <input type="text" id="vendor" name="vendor" class="form-control" required>
+    </div>
+
+    <div class="form-group">
+      <label for="code">상품 코드:</label>
+      <input type="text" id="code" name="code" class="form-control" required>
+    </div>
+
+    <div class="form-group" style="display:none">
+      <label for="questioner">질문자 이름:</label>
+      <input type="text" id="questioner" name="questioner" class="form-control" disabled
+             th:value="${#authentication.principal != null ? #authentication.principal.username : 'Guest'}"
+             required>
+    </div>
+
+    <div class="form-group">
+      <label for="content">문의 내용:</label>
+      <textarea id="content" name="content" rows="5" class="form-control" required></textarea>
+    </div>
+
+    <div class="qna-btn-box">
+      <button type="submit" class="btn btn-primary">문의 등록</button>
+      <a href="/mypage/qna" class="btn btn-dark">문의내역으로</a>
+    </div>
+  </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  document.getElementById('qnaForm').addEventListener('submit', function(event) {
+    event.preventDefault();  // 폼의 기본 제출 동작을 막음
+
+    const qnaData = {
+      title: document.getElementById('title').value,
+      vendor: document.getElementById('vendor').value,
+      code: document.getElementById('code').value,
+      questioner: document.getElementById('questioner').value,
+      content: document.getElementById('content').value
+    };
+
+    axios.post('/api/qna/add', qnaData)
+            .then(function(response) {
+              alert('문의가 성공적으로 등록되었습니다!');
+              // 필요한 경우 폼 초기화
+              window.location.href='/mypage/qna'
+            })
+            .catch(function(error) {
+              console.error('문의 등록 중 오류가 발생했습니다:', error);
+              alert('오류가 발생했습니다. 다시 시도해 주세요.');
+            });
+  });
+</script>
+
+
+</body>
+</html>
