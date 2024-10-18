@@ -3,8 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>detail</title>
-
-
     <script src="https://example.com/fontawesome/v6.6.0/js/all.js" data-auto-a11y="true"></script>
     <style>
         .container {
@@ -48,6 +46,14 @@
             margin: 3% auto;
             padding: 2%;
             background-color: #eee;
+        }
+        .quantity_box {
+            padding: 0;
+            list-style-type: none;
+        }
+        .quantity_li {
+            display: inline-block;
+            margin: 0;
         }
         .qty_ctrl * {
             width: 30px;
@@ -103,7 +109,6 @@
             text-align: center;
         }
     </style>
-
 </head>
 <body>
     <div th:replace="~{nav :: navbar}"></div>
@@ -139,9 +144,11 @@
                 <div class="qty_price_box">
                     <p class="product_title">[[${product.vendor}]] [[${product.name}]] [[${product.code}]]</p>
                     <span class="qty_ctrl">
-                        <button type="button" class="decreasing_btn fa-solid fa-minus"></button>
-                        <input type="text" class="qty_number" value="1" name="qty_number">
-                        <button type="button" class="increasing_btn fa-solid fa-plus"></button>
+                        <ul class="quantity_box">
+                            <li class="quantity_li"><button type="button" class="decreasing_btn fa-solid fa-minus"></button></li>
+                            <li class="quantity_li"><input type="text" class="qty_number" value="1" name="qty_number"></li>
+                            <li class="quantity_li"><button type="button" class="increasing_btn fa-solid fa-plus"></button></li>
+                        </ul>
                         <p class="final_price"></p>
                     </span>
                 </div>
