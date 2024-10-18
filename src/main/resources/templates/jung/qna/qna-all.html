@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
@@ -39,7 +40,6 @@
     <a href="/qna/all"><button class="btn btn-primary"> 모든질문</button></a>
     <a href="/qna/all/unanswered"><button class="btn btn-danger"> 상담중 질문</button></a>
     <a href="/qna/all/answered"><button class="btn btn-success"> 상담종료 질문</button></a>
-
     <div th:each="qna : ${qnaList}">
       <div class="qna-item card mb-3">
         <div class="card-body">

@@ -23,8 +23,15 @@ public interface QNARepository extends JpaRepository<QNA, Long> {
     Page<QNA> findAllByQuestionerAndAnswerIsNotNull(String username, Pageable pageable);
 
 
+    Page<QNA> findAll(Pageable pageable);
+    // Answer가 null인 행만 가져오는 메서드
+    Page<QNA> findByAnswerIsNull(Pageable pageable);
+    // Answer가 null이 아닌 행만 가져오는 메서드
+    Page<QNA> findByAnswerIsNotNull(Pageable pageable);
+
+
+
     //최근꺼 딱 3개만 가져오게
     List<QNA> findTop3ByQuestionerOrderByRegDateDesc(String username);
-
     Optional<QNA> findBySeq(Long detail);
 }

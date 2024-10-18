@@ -81,17 +81,31 @@
     .qna-detail-content,
     .qna-answer-content {
         padding: 10px 0;
+
     }
 
     .qna-detail-actions {
-        display: flex;
-        justify-content: space-between;
+        display:flex;
+        justify-content: center;
         margin-top: 30px;
+
+
     }
 
     .qna-detail-actions a {
         width: 48%; /* 버튼 크기 동일하게 */
         text-align: center;
+    }
+    .qna-detail-content,
+    .qna-answer-content span{
+        white-space: pre-wrap; /* 줄 바꿈과 공백을 유지 */
+    }
+    .qna-detail-content p,
+    .qna-answer-content{
+        border: 1px solid lightgray;
+    }
+    .qna-ans-form{
+        margin-top:20px;
     }
 
 
@@ -106,9 +120,10 @@
     <div class="qna-detail-contents card shadow-sm">
         <div class="card-body">
             <h2 class="card-title">[[ '문의번호 : ' + ${detail.seq} ]] <i class="fas fa-info-circle"></i></h2>
-            <div class="qna-detail-section mt-4">
+            <div class="qna-detail-section mt-2">
                 <!-- 상담 제목 -->
                 <h5 class="mb-3"><strong>문의 제목:</strong> <span th:text="${detail.title}"></span></h5>
+                <h5 class="mb-3"><strong>질문자:</strong> <span th:text="${detail.questioner}"></span></h5>
                 <!--브랜드-->
                 <p th:if="${detail.vendor != null}"><strong>[['브랜드 : ' +${detail.vendor}]]</strong></p>
                 <!-- 상품코드 -->
@@ -138,16 +153,62 @@
                     <p th:if="${detail.answer == null}">답변 대기중입니다.</p>
                 </div>
 
-                <!-- 버튼 -->
-                <div class="qna-detail-actions mt-4">
+                <form th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" class="qna-ans-form">
+                    <input type="hidden" name="seq" th:value="${detail.seq}"> <!-- seq를 hidden으로 설정 -->
+                    <input type="hidden" name="answerUser" th:value="${#authentication.principal.displayName}">
+                    <textarea name="answer" cols="94" rows="10" placeholder="답변을 입력하세요"></textarea>
+                </form>
+                <button type="button" class="btn btn-primary"
+                        th:onclick="'submitAnswer(' + ${detail.seq} + ')'">답변하기</button>
+
+
+
+                <!-- 일반유저버튼 -->
+                <div class="qna-detail-actions mt-4" style="margin:0 auto" th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
                     <a th:href="@{/qna/all}" class="btn btn-secondary">목록으로 돌아가기</a>
-                    <a th:href="@{/qna/cancel/{id}(id=${detail.seq})}" class="btn btn-danger">상담 취소</a>
+<!--                    상담취소는 넣을까 말까 고민하다 뺌-->
+<!--                    <a th:href="@{/qna/cancel/{id}(id=${detail.seq})}" class="btn btn-danger">상담 취소</a>-->
                 </div>
-            </div>
+
+                <!-- 운영자버튼 -->
+                <div class="qna-detail-actions mt-4" style="margin:0 auto" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+                    <a th:href="@{/qna/admin-all}" class="btn btn-secondary">목록으로 돌아가기</a>
+                </div>
+
+
+
+            </adiv>
         </div>
     </div>
 
 </div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    function submitAnswer(seq) {
+        const answerUser = document.querySelector('input[name="answerUser"]').value;
+        const answer = document.querySelector('textarea[name="answer"]').value;
+
+        // Axios PUT 요청
+        axios.put(`/api/qna/answer`, {
+            seq: seq,
+            answerUser: answerUser,
+            answer: answer
+        })
+            .then(response => {
+                // 성공적으로 응답을 받았을 경우
+                console.log("답변이 성공적으로 등록되었습니다.", response.data);
+                // 추가적인 로직 (예: 페이지 새로 고침, 알림 등)
+                window.location.reload();
+            })
+            .catch(error => {
+                // 오류가 발생했을 경우
+                console.error("답변 등록 중 오류가 발생했습니다.", error);
+            });
+    }
+
+</script>
 
 
 

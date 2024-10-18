@@ -5,6 +5,7 @@ import org.iclass.PCProject.security.CustomUserDetails;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -89,5 +90,55 @@ public class QNAController {
         model.addAttribute("detail", qnaDetail);
         return "jung/qna/qna-detail";
     }
+
+
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping({"/admin-all", "/admin-all/{condition}"})
+    public String adminAllQNA(@PathVariable(required = false) String condition,
+                         @RequestParam(value = "page", defaultValue = "1") int page,
+                         @RequestParam(defaultValue = "3") int size,
+                         Model model,
+                         Authentication auth) {
+        if (condition == null) {
+            condition = "";
+        }
+        int adjustedPage = page - 1;
+        String username = ((CustomUserDetails) auth.getPrincipal()).getUsername();
+
+        //페이지네이션
+        Page<QNA> result;
+        // condition 값에 따라 result 결정
+        switch (condition.toLowerCase()) {
+            case "unanswered":
+                // Answer가 null인 항목만 가져옴
+                result = qnaService.adminGetPageFindByAnswerIsNull(adjustedPage, size);
+                break;
+            case "answered":
+                // Answer가 null이 아닌 항목만 가져옴
+                result = qnaService.adminGetPageFindByAnswerIsNotNull(adjustedPage, size);
+                break;
+            default:
+                // 기본적으로 모든 항목 가져옴
+                result = qnaService.adminGetPageFindAll(adjustedPage, size);
+                break;
+        }
+
+        int totalPages = result.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
+        model.addAttribute("qnaList", result.getContent());
+        model.addAttribute("currentPage", page); // 사용자가 입력한 페이지 번호 유지
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalItems", result.getTotalElements());
+        model.addAttribute("size", size);
+        return "jung/qna/qna-admin-all";
+    }
+
+
 
 }
