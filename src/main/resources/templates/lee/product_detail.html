@@ -47,26 +47,22 @@
             padding: 2%;
             background-color: #eee;
         }
-        .quantity_box {
-            padding: 0;
-            list-style-type: none;
+        .qty_ctrl {
+            display: flex;
         }
-        .quantity_li {
-            display: inline-block;
-            margin: 0;
-        }
-        .qty_ctrl * {
+        .qty_ctrl button {
             width: 30px;
             height: 30px;
+            margin: 0 1%;
+            padding-bottom: 2px;
         }
-        .qty_number {
+        .qty_ctrl .qty_number {
             width: 40px;
+            height: 30px;
             border-top: 2px solid #545454;
             border-right: 2px solid #000;
             border-bottom: 2px solid #000;
             border-left: 2px solid #545454;
-        }
-        .qty_ctrl .qty_number {
             text-align: center;
         }
         .total_price {
@@ -144,11 +140,9 @@
                 <div class="qty_price_box">
                     <p class="product_title">[[${product.vendor}]] [[${product.name}]] [[${product.code}]]</p>
                     <span class="qty_ctrl">
-                        <ul class="quantity_box">
-                            <li class="quantity_li"><button type="button" class="decreasing_btn fa-solid fa-minus"></button></li>
-                            <li class="quantity_li"><input type="text" class="qty_number" value="1" name="qty_number"></li>
-                            <li class="quantity_li"><button type="button" class="increasing_btn fa-solid fa-plus"></button></li>
-                        </ul>
+                        <button type="button" class="decreasing_btn fa-solid fa-minus"></button>
+                        <input type="text" class="qty_number" value="1" name="qty_number">
+                        <button type="button" class="increasing_btn fa-solid fa-plus"></button>
                         <p class="final_price"></p>
                     </span>
                 </div>
