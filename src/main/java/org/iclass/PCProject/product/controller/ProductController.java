@@ -37,5 +37,4 @@ public class ProductController {
 
         return "lee/product_detail";
     }
-
 }
