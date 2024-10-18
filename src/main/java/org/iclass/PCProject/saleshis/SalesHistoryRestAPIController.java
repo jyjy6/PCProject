@@ -32,7 +32,6 @@ public class SalesHistoryRestAPIController {
   @GetMapping("/sales")
   public ResponseEntity<?> statSales() {
     List<SalesHistoryStatDto> list = svc.getSalesHistoryStat();
-
     return ResponseEntity.ok(list);
   }
   @GetMapping("/users")
