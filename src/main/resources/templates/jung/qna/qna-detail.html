@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<style>
+    /*아코디언*/
+    .accordion {
+        position: relative;
+        flex-shrink: 0; /* 아코디언이 줄어들지 않도록 설정 */
+        width: 250px;
+        background-color: #f8f9fa;
+        margin: 10px 0;
+
+    }
+
+    .accordion-button {
+        font-size: 16px;
+    }
+
+    .accordion-body ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+
+    .accordion-body ul li {
+        padding: 5px 0;
+    }
+    @media screen and (max-width:700px) {
+        .accordion{
+            width:100% !important;
+            display:block;
+        }
+        .mypage-main-container{
+            display:block;
+        }
+        .mypage-order-condition{
+            width:100%;
+        }
+        .mypage-head-main-menu-contents h4{
+            font-size : 0.9rem;
+            font-weight:bold;
+        }
+
+    }
+    /*아코디언 끝*/
+
+    .qna-detail-contents{
+        padding: 20px;
+    }
+
+    .qna-main-container {
+        box-sizing: border-box;
+        width: 80%;
+        margin: 0 auto;
+        margin-top: 50px;
+        display: flex;
+        justify-content: center; /* 카드가 가운데 정렬되도록 */
+    }
+
+    .qna-detail-contents {
+        width: 100%; /* 카드가 qna-main-container의 전체 너비를 차지 */
+        max-width: 800px; /* 카드의 최대 너비 설정 */
+        margin: 0 auto; /* 가운데 정렬 */
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+    }
+
+    .qna-detail-section {
+        margin-top: 20px;
+    }
+
+    .qna-detail-contents .badge {
+        font-size: 1rem;
+        padding: 5px 10px;
+    }
+
+    .qna-detail-content,
+    .qna-answer-content {
+        padding: 10px 0;
+
+    }
+
+    .qna-detail-actions {
+        display:flex;
+        justify-content: center;
+        margin-top: 30px;
+
+
+    }
+
+    .qna-detail-actions a {
+        width: 48%; /* 버튼 크기 동일하게 */
+        text-align: center;
+    }
+    .qna-detail-content,
+    .qna-answer-content span{
+        white-space: pre-wrap; /* 줄 바꿈과 공백을 유지 */
+    }
+    .qna-detail-content p,
+    .qna-answer-content{
+        border: 1px solid lightgray;
+    }
+    .qna-ans-form{
+        margin-top:20px;
+    }
+
+
+
+</style>
+<body>
+
+<div th:replace="~{nav :: navbar}"></div>
+
+<div class="qna-main-container">
+    <div th:replace="~{jung/mypage/mypage :: accordion}"></div>
+    <div class="qna-detail-contents card shadow-sm">
+        <div class="card-body">
+            <h2 class="card-title">[[ '문의번호 : ' + ${detail.seq} ]] <i class="fas fa-info-circle"></i></h2>
+            <div class="qna-detail-section mt-2">
+                <!-- 상담 제목 -->
+                <h5 class="mb-3"><strong>문의 제목:</strong> <span th:text="${detail.title}"></span></h5>
+                <h5 class="mb-3"><strong>질문자:</strong> <span th:text="${detail.questioner}"></span></h5>
+                <!--브랜드-->
+                <p th:if="${detail.vendor != null}"><strong>[['브랜드 : ' +${detail.vendor}]]</strong></p>
+                <!-- 상품코드 -->
+                <p th:if="${detail.code != null}"><strong>[['상품코드 : ' +${detail.code}]]</strong></p>
+                <!-- 상담 일자 -->
+                <p><strong>문의날짜:</strong> <span th:text="${#temporals.format(detail.regDate, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+                <!-- 상담 상태 -->
+                <p><strong>상태:</strong>
+                    <span th:class="${detail.answer == null ? 'badge bg-warning' : 'badge bg-success'}"
+                          th:text="${detail.answer == null ? '진행 중' : '답변 완료'}"></span>
+                </p>
+
+                <!-- 상담 내용 -->
+                <div class="qna-detail-content mt-4">
+                    <h6><strong>상담 내용</strong></h6>
+                    <p th:text="${detail.content}"></p>
+                </div>
+
+                <!-- 답변 내용 -->
+                <div class="qna-answer-content mt-4">
+                    <h6><strong>관리자 답변</strong></h6>
+                    <p th:if="${detail.answer != null}">
+                        <small class="text-muted" th:text="'답변일자: ' + ${#temporals.format(detail.regDate.plusDays(1), 'yyyy-MM-dd')}"></small>
+                        <br>
+                        <span th:text="${detail.answer}"></span>
+                    </p>
+                    <p th:if="${detail.answer == null}">답변 대기중입니다.</p>
+                </div>
+
+                <form th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" class="qna-ans-form">
+                    <input type="hidden" name="seq" th:value="${detail.seq}"> <!-- seq를 hidden으로 설정 -->
+                    <input type="hidden" name="answerUser" th:value="${#authentication.principal.displayName}">
+                    <textarea name="answer" cols="94" rows="10" placeholder="답변을 입력하세요"></textarea>
+                </form>
+                <button type="button" class="btn btn-primary"
+                        th:onclick="'submitAnswer(' + ${detail.seq} + ')'">답변하기</button>
+
+
+
+                <!-- 일반유저버튼 -->
+                <div class="qna-detail-actions mt-4" style="margin:0 auto" th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}">
+                    <a th:href="@{/qna/all}" class="btn btn-secondary">목록으로 돌아가기</a>
+<!--                    상담취소는 넣을까 말까 고민하다 뺌-->
+<!--                    <a th:href="@{/qna/cancel/{id}(id=${detail.seq})}" class="btn btn-danger">상담 취소</a>-->
+                </div>
+
+                <!-- 운영자버튼 -->
+                <div class="qna-detail-actions mt-4" style="margin:0 auto" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+                    <a th:href="@{/qna/admin-all}" class="btn btn-secondary">목록으로 돌아가기</a>
+                </div>
+
+
+
+            </adiv>
+        </div>
+    </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    function submitAnswer(seq) {
+        const answerUser = document.querySelector('input[name="answerUser"]').value;
+        const answer = document.querySelector('textarea[name="answer"]').value;
+
+        // Axios PUT 요청
+        axios.put(`/api/qna/answer`, {
+            seq: seq,
+            answerUser: answerUser,
+            answer: answer
+        })
+            .then(response => {
+                // 성공적으로 응답을 받았을 경우
+                console.log("답변이 성공적으로 등록되었습니다.", response.data);
+                // 추가적인 로직 (예: 페이지 새로 고침, 알림 등)
+                window.location.reload();
+            })
+            .catch(error => {
+                // 오류가 발생했을 경우
+                console.error("답변 등록 중 오류가 발생했습니다.", error);
+            });
+    }
+
+</script>
+
+
+
+
+
+</body>
+</html>
