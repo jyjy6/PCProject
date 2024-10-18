@@ -99,7 +99,25 @@
         }
         .detail_nav {
             clear: both;
-            display: inline-block;
+            display: flex;
+            width: 100%;
+            margin: 0 auto;
+            border: 1px dashed #0f0;
+            justify-content: center;
+            align-items: center;
+        }
+        .detail_nav p {
+            width: 200px;
+            padding: 30px;
+            border: 1px dotted #f00;
+            text-align: center;
+            font-size: 1.5em;
+            letter-spacing: 5px;
+            font-weight: 700;
+        }
+        .detail_nav a {
+            text-decoration: none;
+            color: #000;
         }
         .detail_imgs {
             text-align: center;
@@ -158,9 +176,9 @@
             </form>
         </div>
         <div class="detail_nav">
-            <p class="product_spec"><a href="">상세정보</a></p>
-            <p class="product_spec">상품평</p>
-            <p class="product_spec">Q&A</p>
+            <p>상세정보</p>
+            <p>상품평</p>
+            <p><a href="../qna/add">Q&A</a></p>
         </div>
         <div class="detail_imgs" th:each="detailImg : ${detailImgs}">
             <img th:src="|@{../images}/${detailImg.getFileName()}|">
