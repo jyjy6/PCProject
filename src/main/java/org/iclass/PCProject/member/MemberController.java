@@ -41,8 +41,6 @@ public class MemberController {
         }
     }
 
-
-
     @GetMapping("/sign-up")
     public String signUpPage() {
         return "jung/signup";

@@ -3,13 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <title>detail</title>
+
+
+    <script src="https://example.com/fontawesome/v6.6.0/js/all.js" data-auto-a11y="true"></script>
+    <style>
+        .container {
+            width: 100%;
+            margin: 0 auto;
+        }
+        .product_info_top {
+            margin-top: 30px;
+            padding-left: 3%;
+            font-size: 1.8em;
+            font-weight: 700;
+        }
+        .product_thumbnail {
+            float: left;
+            width: 50%;
+            margin-left: 3%;
+        }
+        .product_info_right {
+            display: inline-block;
+            float: right;
+            margin-right: 3%;
+            width: 40%;
+        }
+        .product_code {
+            text-align: right;
+            font-size: 0.9em;
+        }
+        .p1, .p2 {
+            display: inline-block;
+            width: 150px;
+            margin: 2% 0;
+            padding-left: 3%;
+            font-weight: 700;
+        }
+        .p2 {
+            font-size: 1.2em;
+         }
+        .qty_price_box {
+            width: 100%;
+            height: 100px;
+            margin: 3% auto;
+            padding: 2%;
+            background-color: #eee;
+        }
+        .qty_ctrl * {
+            width: 30px;
+            height: 30px;
+        }
+        .qty_number {
+            width: 40px;
+            border-top: 2px solid #545454;
+            border-right: 2px solid #000;
+            border-bottom: 2px solid #000;
+            border-left: 2px solid #545454;
+        }
+        .qty_ctrl .qty_number {
+            text-align: center;
+        }
+        .total_price {
+            display: inline-block;
+            width: 100%;
+            margin: 5% auto;
+            margin-right: 0;
+            text-align: right;
+        }
+        .total_price .product_total_price {
+            margin-left: 5%;
+            font-weight: 700;
+            font-size: 2em;
+            color: #e74c3c;
+        }
+        .purchase_btns {
+            margin-bottom: 5%;
+            text-align: right;
+        }
+        .purchase_btns * {
+            width: 49%;
+            height: 50px;
+            margin: 0;
+            border-radius: 5px;
+            font-weight: 700;
+            font-size: 1.2em;
+        }
+        .purchase_btns .cart_btn {
+            background-color: #fff;
+        }
+        .purchase_btns .purchase_btn {
+            background-color: #000;
+            color: #fff;
+        }
+        .detail_nav {
+            clear: both;
+            display: inline-block;
+        }
+        .detail_imgs {
+            text-align: center;
+        }
+    </style>
+
 </head>
 <body>
     <div th:replace="~{nav :: navbar}"></div>
-    <h1>상품 디테일 페이지</h1>
-    <p>[[${product}]]</p>
     <div class="container">
-        <h3>[[${product.vendor}]] [[${product.name}]] [[${product}]]</h3>
+        <p>[[${product}]]</p>
+        <div class="product_info_top">
+            <span class>[[${product.vendor}]] [[${product.name}]] [[${product.code}]]</span>
+        </div>
+        <hr>
+        <img class="product_thumbnail" th:src="|@{../images}/${product.thumb}|">
+        <div class="product_info_right">
+            <p class="product_code">상품번호 [[${product.seq}]]</p>
+            <div>
+                <p class="p1 price_name">판매가</p>
+                <p class="p2 price_val"></p>
+            </div>
+            <hr>
+            <div>
+                <p class="p1 product_comment">상품평</p>
+                <p class="p2 comment_val">#</p>
+            </div>
+            <hr>
+            <div>
+                <p class="p1 product_delivery_info">배송정보</p>
+                <p class="p2 delivery_info">기본 택배 발송</p>
+            </div>
+            <hr>
+            <div>
+                <p class="p1 price_name">배송비</p>
+                <p class="p2 price_val">무료배송</p>
+            </div>
+            <hr>
+            <form action="shoppingInfo" method="post">
+                <div class="qty_price_box">
+                    <p class="product_title">[[${product.vendor}]] [[${product.name}]] [[${product.code}]]</p>
+                    <span class="qty_ctrl">
+                        <button type="button" class="decreasing_btn fa-solid fa-minus"></button>
+                        <input type="text" class="qty_number" value="1" name="qty_number">
+                        <button type="button" class="increasing_btn fa-solid fa-plus"></button>
+                        <p class="final_price"></p>
+                    </span>
+                </div>
+                <hr>
+                <div class="total_price">
+                    <span class="total_price_info">총 합계 금액</span>
+                    <span class="product_total_price"></span>
+                </div>
+                <div class="purchase_btns">
+                    <button type="submit" class="cart_btn fa-solid fa-cart-shopping"></button>
+                    <button type="submit" class="purchase_btn">구매하기</button>
+                </div>
+            </form>
+        </div>
+        <div class="detail_nav">
+            <p class="product_spec"><a href="">상세정보</a></p>
+            <p class="product_spec">상품평</p>
+            <p class="product_spec">Q&A</p>
+        </div>
+        <div class="detail_imgs" th:each="detailImg : ${detailImgs}">
+            <img th:src="|@{../images}/${detailImg.getFileName()}|">
+        </div>
     </div>
+    <script th:inline="javascript">
+        const qtyInput = document.querySelector('.qty_number')
+        const decreasingBtn = document.querySelector('.decreasing_btn')
+        const increasingBtn = document.querySelector('.increasing_btn')
+        const priceVal = document.querySelector('.price_val')
+        const totPrice = document.querySelector('.product_total_price')
+
+        const price = [[${product.price-(product.price*(product.discount*0.01))}]]
+
+        priceVal.textContent = price.toLocaleString('ko-KR') + '원'
+        totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
+
+        decreasingBtn.addEventListener('click', () => {
+            if(qtyInput.value > 1) {
+                --qtyInput.value
+                totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
+            }
+            else if(qtyInput.value <= 1) {
+                alert('최소 주문 수량은 1개입니다.')
+            }
+        })
+
+        increasingBtn.addEventListener('click', () => {
+            ++qtyInput.value
+            totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
+        })
+    </script>
 </body>
 </html>
