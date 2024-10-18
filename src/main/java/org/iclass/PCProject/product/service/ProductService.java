@@ -5,7 +5,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.iclass.PCProject.product.dto.ProductDTO;
 import org.iclass.PCProject.product.entity.Product;
-import org.iclass.PCProject.product.repository.ProductDetailRepository;
 import org.iclass.PCProject.product.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +21,8 @@ public class ProductService {
         List<Product> list = productRepository.findAll();
         Collections.shuffle(list);
         List<Product> recommendedList = new ArrayList<>();
+
+
         for(int i=0; i<5; i++) {                            // 추천 상품 목록에 담을 5개 상품
             if(list.get(i).getStock() == 0) {       // stock(재고 수량)이 0이면 recommendedList에 해당 상품을 담지 않습니다.
                 --i;
@@ -34,7 +35,7 @@ public class ProductService {
 
     public List<ProductDTO> getAllProductsList() {
         List<Product> list = productRepository.findAll();
-        Collections.shuffle(list);                              // shuffle 하지 않으면 항상 seq 순으로 상품이 전시됩니다.
+        Collections.shuffle(list);
         return list.stream().map(ProductDTO::toDto).collect(Collectors.toList());
     }
 
