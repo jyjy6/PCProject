@@ -159,6 +159,7 @@
                     <textarea name="answer" cols="94" rows="10" placeholder="답변을 입력하세요"></textarea>
                 </form>
                 <button type="button" class="btn btn-primary"
+                        th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"
                         th:onclick="'submitAnswer(' + ${detail.seq} + ')'">답변하기</button>
 
 
