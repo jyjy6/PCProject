@@ -56,19 +56,19 @@
         <div class="product_info_right">
             <p class="product_code">상품번호: [[${product.seq}]]</p>
             <div>
-                <p class="p1 price_name">판매가 </p>
+                <p class="p1 price_name">판매가</p>
                 <p class="p2 price_val">[[${#numbers.formatInteger(product.price-(product.price*(product.discount*0.01)), 0,'COMMA')}]]원</p>
             </div>
             <div>
-                <p class="p1 product_comment">상품평 </p>
+                <p class="p1 product_comment">상품평</p>
                 <p class="p2 comment_val">#</p>
             </div>
             <div>
-                <p class="p1 product_delivery_info">배송정보 </p>
+                <p class="p1 product_delivery_info">배송정보</p>
                 <p class="p2 delivery_info">기본 택배 발송</p>
             </div>
             <div>
-                <p class="p1 price_name">배송비 </p>
+                <p class="p1 price_name">배송비</p>
                 <p class="p2 price_val">무료배송</p>
             </div>
             <div class="qty_price_res">
@@ -87,6 +87,11 @@
                 <button type="button" class="cart_btn">장바구니 담기</button>
                 <button type="submit" class="purchase_btn">바로 구매</button>
             </div>
+        </div>
+        <div class="detail_nav">
+            <p class="product_spec">상세정보</p>
+            <p class="product_spec">상품평</p>
+            <p class="product_spec">Q&A</p>
         </div>
         <div class="detail_imgs" th:each="detailImg : ${detailImgs}">
             <img th:src="|@{../images}/${detailImg.getFileName()}|">

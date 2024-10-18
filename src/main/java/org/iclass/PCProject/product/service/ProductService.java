@@ -1,5 +1,7 @@
 package org.iclass.PCProject.product.service;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.iclass.PCProject.product.dto.ProductDTO;
 import org.iclass.PCProject.product.entity.Product;
@@ -20,7 +22,7 @@ public class ProductService {
         List<Product> list = productRepository.findAll();
         Collections.shuffle(list);
         List<Product> recommendedList = new ArrayList<>();
-for(int i=0; i<5; i++) {                            // 추천 상품 목록에 담을 5개 상품
+        for(int i=0; i<5; i++) {                            // 추천 상품 목록에 담을 5개 상품
             if(list.get(i).getStock() == 0) {       // stock(재고 수량)이 0이면 recommendedList에 해당 상품을 담지 않습니다.
                 --i;
             } else {
@@ -43,7 +45,6 @@ for(int i=0; i<5; i++) {                            // 추천 상품 목록에 �
 
     ProductDTO dto = null;
     public ProductDTO getProductBySeq(int seq) {
-
         Optional<Product> product = productRepository.findById(seq);
         product.ifPresent(p -> {
             Product entity = product.get();
@@ -51,30 +52,4 @@ for(int i=0; i<5; i++) {                            // 추천 상품 목록에 �
         });
         return dto;
     }
-
-//    public List<String> getRecentThumbnailBySeq(int seq) {
-//        LinkedList<String> thumbsList = new LinkedList<>();
-//        Optional<Product> dto = productRepository.findById(seq);
-//        if(thumbsList.contains(dto.get().getThumb())) thumbsList.remove(dto.get().getThumb());
-//        thumbsList.addFirst(dto.get().getThumb());
-//        if(thumbsList.size() > 4) thumbsList.removeLast();
-//        return thumbsList.stream().collect(Collectors.toList());
-//    }
-
-
-/*    private final LinkedList<String> recentProducts = new LinkedList<>();
-
-    public void addProduct(String thumb) {
-        if (recentProducts.contains(thumb)) {
-            recentProducts.remove(thumb);
-        }
-        recentProducts.addFirst(thumb);
-        if (recentProducts.size() > 4) {
-            recentProducts.removeLast();
-        }
-    }
-
-    public List<String> getRecentProducts() {
-        return recentProducts;
-    }*/
 }
