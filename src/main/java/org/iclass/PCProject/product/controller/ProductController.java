@@ -35,6 +35,6 @@ public class ProductController {
         model.addAttribute("product", productService.getProductBySeq(seq));
         model.addAttribute("detailImgs", detailService.getProductDetailImgs(seq));
 
-        return "lee/product_detail";
+        return "lee/product/product_detail";
     }
 }
