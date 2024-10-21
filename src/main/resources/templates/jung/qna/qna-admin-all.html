@@ -39,6 +39,11 @@
   <a href="/qna/admin-all/unanswered"><button class="btn btn-danger"> 상담중 질문</button></a>
   <a href="/qna/admin-all/answered"><button class="btn btn-success"> 상담종료 질문</button></a>
 
+
+  <form action="/qna/admin-all" method="get" class="search-form" style="margin-top: 10px">
+    <input type="text" name="search" placeholder="질문자로 검색" th:value="${search}">
+    <button type="submit" class="btn btn-dark">검색</button>
+  </form>
   <div th:each="qna : ${qnaList}">
     <div class="qna-item card mb-3">
       <div class="card-body">

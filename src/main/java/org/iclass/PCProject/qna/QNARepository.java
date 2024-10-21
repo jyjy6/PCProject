@@ -35,4 +35,6 @@ public interface QNARepository extends JpaRepository<QNA, Long> {
     //최근꺼 딱 3개만 가져오게
     List<QNA> findTop3ByQuestionerOrderByRegDateDesc(String username);
     Optional<QNA> findBySeq(Long detail);
+
+    Page<QNA> findByQuestionerContaining(String search, Pageable pageable);
 }
