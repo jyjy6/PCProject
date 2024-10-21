@@ -67,9 +67,12 @@ public class MemberController {
         String username = ((CustomUserDetails) auth.getPrincipal()).getUsername();
 
         if(auth!=null) {
-            //상담한 개수가 몇개인지 바인딩. 추후 상담완료된건(answer가 null이 아닌 컬럼은 제외 고려)
-            var qnaLength = qnaRepository.findAllByQuestioner(username).size();
+            //상담 진행중인 개수가 몇개인지 바인딩.
+            var qnaLength = qnaRepository.findByQuestionerAndAnswerIsNull(username).size();
             model.addAttribute("qnaLength", qnaLength);
+            //모든 상담의 개수 바인딩
+            var qnaAllLength = qnaRepository.findByQuestioner(username).size();
+            model.addAttribute("qnaAllLength", qnaAllLength);
         }
         //qna페이지로 이동 시 해당 유저의 질문들을 바인딩(3개만)
         if (id.equals("qna") && auth != null) {

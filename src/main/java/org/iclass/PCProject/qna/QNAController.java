@@ -86,42 +86,49 @@ public class QNAController {
     @GetMapping("/{detail}")
     public String qnaDetails(@PathVariable Long detail,
                              Model model) {
-        QNA qnaDetail = qnaRepository.findBySeq(detail).orElseThrow(()-> new NoSuchFieldError("그런 상담번호는 존재하지 않습니다"));
+        QNA qnaDetail = qnaRepository.findBySeq(detail).orElseThrow(() -> new NoSuchFieldError("그런 상담번호는 존재하지 않습니다"));
         model.addAttribute("detail", qnaDetail);
         return "jung/qna/qna-detail";
     }
 
 
-
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping({"/admin-all", "/admin-all/{condition}"})
     public String adminAllQNA(@PathVariable(required = false) String condition,
-                         @RequestParam(value = "page", defaultValue = "1") int page,
-                         @RequestParam(defaultValue = "3") int size,
-                         Model model,
-                         Authentication auth) {
+                              @RequestParam(value = "page", defaultValue = "1") int page,
+                              @RequestParam(defaultValue = "3") int size,
+                              @RequestParam(value = "search", required = false) String search, // 검색어 추가
+                              Model model,
+                              Authentication auth) {
         if (condition == null) {
             condition = "";
         }
         int adjustedPage = page - 1;
-        String username = ((CustomUserDetails) auth.getPrincipal()).getUsername();
 
-        //페이지네이션
+        // 검색어가 없는 경우 빈 문자열로 처리
+        if (search == null) {
+            search = "";
+        }
+
         Page<QNA> result;
-        // condition 값에 따라 result 결정
-        switch (condition.toLowerCase()) {
-            case "unanswered":
-                // Answer가 null인 항목만 가져옴
-                result = qnaService.adminGetPageFindByAnswerIsNull(adjustedPage, size);
-                break;
-            case "answered":
-                // Answer가 null이 아닌 항목만 가져옴
-                result = qnaService.adminGetPageFindByAnswerIsNotNull(adjustedPage, size);
-                break;
-            default:
-                // 기본적으로 모든 항목 가져옴
-                result = qnaService.adminGetPageFindAll(adjustedPage, size);
-                break;
+
+        // condition 값과 검색어에 따라 result 결정
+        if (!search.isEmpty()) {
+            // 검색어가 있을 경우 검색 수행
+            result = qnaService.adminGetPageBySearch(adjustedPage, size, search);
+        } else {
+            // condition 값에 따른 필터링
+            switch (condition.toLowerCase()) {
+                case "unanswered":
+                    result = qnaService.adminGetPageFindByAnswerIsNull(adjustedPage, size);
+                    break;
+                case "answered":
+                    result = qnaService.adminGetPageFindByAnswerIsNotNull(adjustedPage, size);
+                    break;
+                default:
+                    result = qnaService.adminGetPageFindAll(adjustedPage, size);
+                    break;
+            }
         }
 
         int totalPages = result.getTotalPages();
@@ -132,13 +139,11 @@ public class QNAController {
             model.addAttribute("pageNumbers", pageNumbers);
         }
         model.addAttribute("qnaList", result.getContent());
-        model.addAttribute("currentPage", page); // 사용자가 입력한 페이지 번호 유지
+        model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("totalItems", result.getTotalElements());
         model.addAttribute("size", size);
+        model.addAttribute("search", search);  // 검색어 유지
         return "jung/qna/qna-admin-all";
     }
-
-
-
 }

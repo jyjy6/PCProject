@@ -46,6 +46,7 @@ public class QNAService {
     }
 
 
+    //운영자페이지
     // Answer가 null인 항목만 가져오는 메서드
     public Page<QNA> adminGetPageFindByAnswerIsNull(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "regDate"));
@@ -61,6 +62,13 @@ public class QNAService {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "regDate"));
         return qnaRepository.findAll(pageable);
     }
+
+    public Page<QNA> adminGetPageBySearch(int page, int size, String search) {
+        Pageable pageable = PageRequest.of(page, size);
+        // QNA 리스트에서 유저 이름이 search와 일치하는 항목만 검색
+        return qnaRepository.findByQuestionerContaining(search, pageable);
+    }
+
 
 
 }
