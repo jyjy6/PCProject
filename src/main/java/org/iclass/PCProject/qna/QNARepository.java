@@ -15,7 +15,8 @@ import java.util.Optional;
 @Repository
 public interface QNARepository extends JpaRepository<QNA, Long> {
     Page<QNA> findAllByQuestioner(String username, Pageable pageable);
-    List<QNA> findAllByQuestioner(String username);
+    List<QNA> findByQuestionerAndAnswerIsNull(String username);
+    List<QNA> findByQuestioner(String username);
 
     // Answer가 null인 행만 가져오는 메서드
     Page<QNA> findAllByQuestionerAndAnswerIsNull(String username, Pageable pageable);

@@ -40,8 +40,8 @@
         </div>
         <div class="mypage-head-main-menu-contents">
             <a href="/mypage/qna">
-                <h4>상담내역</h4>
-                <h4 th:text="${qnaLength}+'건'"></h4>
+                <h4>내 상담내역</h4>
+                <h4 th:text="${qnaAllLength}+'건'"></h4>
             </a>
         </div>
     </div>
@@ -131,7 +131,7 @@
                 <div id="collapseInfo" class="accordion-collapse collapse" aria-labelledby="headingInfo" data-bs-parent="#accordionSidebar">
                     <div class="accordion-body">
                         <ul>
-                            <li>계정 정보</li>
+                            <li><a href="/member/validate">계정 정보</a></li>
                             <li>알림 설정</li>
                         </ul>
                     </div>
