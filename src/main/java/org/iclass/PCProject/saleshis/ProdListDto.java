@@ -7,11 +7,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SalesHistoryStatDto {
-  Integer idx;
+public class ProdListDto {
   String vendor;
   String code;
-  Integer price;
-  Integer count;
-  Integer total;
 }
