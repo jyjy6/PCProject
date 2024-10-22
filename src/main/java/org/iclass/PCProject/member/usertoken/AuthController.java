@@ -31,8 +31,10 @@ public class AuthController {
 
     @GetMapping("/reset-password")
     public String showResetPasswordPage(@RequestParam String token, Model model) {
-        model.addAttribute("token", token); // 토큰을 모델에 추가
-        return "jung/member/reset-password"; // 비밀번호 재설정 폼을 보여주는 뷰
+        model.addAttribute("token", token); // 토큰을 모델에 추가.
+        // 이 토큰도 전송시 함께 전송해서 DB에 저장된 토큰인지 확인.
+
+        return "jung/member/reset-password";
     }
 
     @PostMapping("/reset-password")
@@ -43,19 +45,16 @@ public class AuthController {
             model.addAttribute("error", "유효하지 않은 토큰입니다."); // 에러 메시지 추가
             return "jung/member/reset-password";
         }
-
         // 이메일로 사용자 찾기
         Member member = memberRepository.findByEmail(userToken.getEmail());
         if (member == null) {
             model.addAttribute("error", "해당 이메일로 사용자를 찾을 수 없습니다."); // 에러 메시지 추가
             return "jung/member/reset-password";
         }
-
         // 비밀번호 업데이트
         String encodedPassword = passwordEncoder.encode(newPassword);
         member.setPassword(encodedPassword);
         memberRepository.save(member);
-
         return "redirect:/login"; // 비밀번호 변경 후 로그인 페이지로 리다이렉트
     }
 

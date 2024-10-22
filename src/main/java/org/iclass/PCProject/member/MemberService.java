@@ -63,6 +63,7 @@ public class MemberService {
 
         MemberDTO userInfo = MemberDTO.builder()
                 .id(member.getId())
+                .name(member.getName())
                 .username(member.getUsername())
                 .displayName(member.getDisplayName())
                 .email(member.getEmail())
