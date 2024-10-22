@@ -2,8 +2,9 @@ package org.iclass.PCProject.product.service;
 
 import lombok.RequiredArgsConstructor;
 import org.iclass.PCProject.product.dto.ProductDTO;
+import org.iclass.PCProject.product.dto.ProductDetailDTO;
 import org.iclass.PCProject.product.entity.Product;
-import org.iclass.PCProject.product.repository.ProductDetailRepository;
+import org.iclass.PCProject.product.entity.ProductDetail;
 import org.iclass.PCProject.product.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,7 @@ public class ProductService {
         return recommendedList.stream().map(ProductDTO::toDto).collect(Collectors.toList());
     }
 
-    public List<ProductDTO> getAllProductsList() {
+    public List<ProductDTO> getAllProducts() {
         List<Product> list = productRepository.findAll();
         Collections.shuffle(list);                              // shuffle 하지 않으면 항상 seq 순으로 상품이 전시됩니다.
         return list.stream().map(ProductDTO::toDto).collect(Collectors.toList());
@@ -43,7 +44,6 @@ public class ProductService {
 
     ProductDTO dto = null;
     public ProductDTO getProductBySeq(int seq) {
-
         Optional<Product> product = productRepository.findById(seq);
         product.ifPresent(p -> {
             Product entity = product.get();
@@ -52,29 +52,4 @@ public class ProductService {
         return dto;
     }
 
-//    public List<String> getRecentThumbnailBySeq(int seq) {
-//        LinkedList<String> thumbsList = new LinkedList<>();
-//        Optional<Product> dto = productRepository.findById(seq);
-//        if(thumbsList.contains(dto.get().getThumb())) thumbsList.remove(dto.get().getThumb());
-//        thumbsList.addFirst(dto.get().getThumb());
-//        if(thumbsList.size() > 4) thumbsList.removeLast();
-//        return thumbsList.stream().collect(Collectors.toList());
-//    }
-
-
-/*    private final LinkedList<String> recentProducts = new LinkedList<>();
-
-    public void addProduct(String thumb) {
-        if (recentProducts.contains(thumb)) {
-            recentProducts.remove(thumb);
-        }
-        recentProducts.addFirst(thumb);
-        if (recentProducts.size() > 4) {
-            recentProducts.removeLast();
-        }
-    }
-
-    public List<String> getRecentProducts() {
-        return recentProducts;
-    }*/
 }
