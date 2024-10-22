@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface ProductDetailRepository extends JpaRepository<ProductDetail, Integer> {
-    List<ProductDetail> findAllBypSeqOrderBySeq(int pSeq);
 
+    List<ProductDetail> findAllBypSeqOrderBySeq(int pSeq);
 }

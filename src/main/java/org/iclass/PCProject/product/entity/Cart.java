@@ -2,8 +2,8 @@ package org.iclass.PCProject.product.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
@@ -12,20 +12,22 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @ToString
-@Slf4j
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@SequenceGenerator(name = "product_seq_generator")
-public class Product {
+@SequenceGenerator(name = "cart_seq_generator")
+public class Cart {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "product_seq_generator")
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "cart_seq_generator")
     private int seq;
 
     @Column(nullable = false)
-    private String code;
+    private String username;
+
+    @Column(nullable = false)
+    private int pSeq;
 
     @Column(nullable = false)
     private String vendor;
@@ -34,21 +36,16 @@ public class Product {
     private String name;
 
     @Column(nullable = false)
+    private String code;
+
+    @Column(nullable = false)
     private int price;
 
     @Column(nullable = false)
-    private int discount;
+    private int quantity;
 
     @Column(nullable = false)
-    private String thumb;
-
     @CreatedDate
-    @Column(nullable = false)
+    @LastModifiedDate
     private LocalDate regDate;
-
-    @Column(nullable = false)
-    private int stock;
-
-    private char status;
-
 }

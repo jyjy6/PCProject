@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>cart</title>
+    <script src="https://example.com/fontawesome/v6.6.0/js/all.js" data-auto-a11y="true"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f6f6f6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        .category {
+            position: fixed;
+            top: 150px;
+            left: 5%;
+            width: 220px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-right: 20px;
+        }
+        .category h3 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .category a {
+            text-decoration: none;
+            color: #333;
+            font-size: 1.1em;
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .category a:hover {
+            background-color: #f4f4f4;
+        }
+        h4 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+        td {
+            font-size: 1.1em;
+        }
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+        }
+        .qty_ctrl {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .qty_ctrl button {
+            width: 35px;
+            height: 35px;
+            background-color: #e9e9e9;
+            border: none;
+            font-size: 1.2em;
+            color: #333;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 0 5px;
+        }
+        .qty_ctrl button:hover {
+            background-color: #cccccc;
+        }
+        .qty_ctrl .qty_number {
+            width: 50px;
+            height: 35px;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1.2em;
+        }
+        .purchase_btns {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        .purchase_btns button {
+            width: 200px;
+            height: 50px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .cart_btn {
+            background-color: #d9d9d9;
+            color: #333;
+        }
+        .cart_btn:hover {
+            background-color: #c4c4c4;
+        }
+        .purchase_btn {
+            background-color: #007bff;
+            color: white;
+        }
+        .purchase_btn:hover {
+            background-color: #0056b3;
+        }
+        .empty_cart {
+            text-align: center;
+            padding: 20px;
+            font-size: 1.2em;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="product_info">
+            <aside class="category">
+                <h3>카테고리</h3>
+                <p><a href="/" class="all">전체보기</a></p>
+                <p><a href="삼성" class="samsung">삼성</a></p>
+                <p><a href="lg" class="lg">LG</a></p>
+                <p><a href="hp" class="hp">HP</a></p>
+                <p><a href="asus" class="asus">ASUS</a></p>
+                <p><a href="acer" class="acer">ACER</a></p>
+            </aside>
+            <h4>[[${items[0].username}]]님의 장바구니</h4>
+            <table>
+                <thead>
+                <tr>
+                    <th><input type="checkbox" id="select-all" onclick="toggleSelectAll(this)"/></th>
+                    <th>상품명</th>
+                    <th>수량</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${items}">
+                    <td>
+                        <input type="checkbox" name="selectedItems" th:value="${item.seq}"/>
+                    </td>
+                    <td th:text="${item.vendor} + ' ' + ${item.name} + ' (' + ${item.code} + ')'"></td>
+                    <td>
+                    <span class="qty_ctrl">
+                        <button type="button" class="decreasing_btn fa-solid fa-minus" onclick="decreaseQuantity(this)">-</button>
+                        <input type="text" class="qty_number" name="qty" th:value="${item.quantity}" readonly>
+                        <button type="button" class="increasing_btn fa-solid fa-plus" onclick="increaseQuantity(this)">+</button>
+                    </span>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(items)}">
+                    <td colspan="3">장바구니에 담긴 상품이 없습니다.</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="purchase_btns">
+                <button type="submit" formaction="@{/cart/delete}" class="cart_btn">선택 항목 삭제</button>
+                <button type="submit" formaction="@{/cart/checkout}" class="purchase_btn">구매하기</button>
+            </div>
+        </div>
+    </div>
+    <script th:inline="javascript">
+        const qtyInput = document.querySelector('.qty_number')
+        const decreasingBtn = document.querySelector('.decreasing_btn')
+        const increasingBtn = document.querySelector('.increasing_btn')
+
+        function toggleSelectAll(selectAllCheckbox) {
+            const checkboxes = document.querySelectorAll('input[name="selectedItems"]');
+            checkboxes.forEach(checkbox => {
+              checkbox.checked = selectAllCheckbox.checked;
+            });
+        }
+
+
+    </script>
+</body>
+</html>

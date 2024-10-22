@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <title>detail</title>
     <script src="https://example.com/fontawesome/v6.6.0/js/all.js" data-auto-a11y="true"></script>
+    <script th:inline="javascript">
+        let message = [[${message}]]
+        if(message != null) alert(message)
+        message = null
+    </script>
     <style>
         .container {
             width: 100%;
@@ -65,6 +70,12 @@
             border-left: 2px solid #545454;
             text-align: center;
         }
+        .a_few_stock {
+            display: none;
+            width: 150px;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
         .total_price {
             display: inline-block;
             width: 100%;
@@ -102,14 +113,12 @@
             display: flex;
             width: 100%;
             margin: 0 auto;
-            border: 1px dashed #0f0;
             justify-content: center;
             align-items: center;
         }
         .detail_nav p {
-            width: 200px;
+            width: 300px;
             padding: 30px;
-            border: 1px dotted #f00;
             text-align: center;
             font-size: 1.5em;
             letter-spacing: 5px;
@@ -127,6 +136,7 @@
 <body>
     <div th:replace="~{nav :: navbar}"></div>
     <div class="container">
+        <h3 th:if="${username != null}">[[${username}]]</h3>
         <div class="product_info_top">
             <span class>[[${product.vendor}]] [[${product.name}]] [[${product.code}]]</span>
         </div>
@@ -154,13 +164,15 @@
                 <p class="p2 price_val">무료배송</p>
             </div>
             <hr>
-            <form action="shoppingInfo" method="post">
+            <form action="/cart" method="POST">
+                <input type="hidden" class="seq" name="seq" th:value="${product.seq}">
                 <div class="qty_price_box">
                     <p class="product_title">[[${product.vendor}]] [[${product.name}]] [[${product.code}]]</p>
                     <span class="qty_ctrl">
                         <button type="button" class="decreasing_btn fa-solid fa-minus"></button>
-                        <input type="text" class="qty_number" value="1" name="qty_number">
+                        <input type="text" class="qty_number" name="qty" th:value="1">
                         <button type="button" class="increasing_btn fa-solid fa-plus"></button>
+                        <span class="a_few_stock">재고 수량: [[${product.stock}]]개</span>
                         <p class="final_price"></p>
                     </span>
                 </div>
@@ -176,13 +188,11 @@
             </form>
         </div>
         <div class="detail_nav">
-            <p>상세정보</p>
-            <p>상품평</p>
+            <p class="detail_spec"><a href="javascript:getDetailSpec()">상세정보</a></p>
+            <p class="product_review"><a href="javascript:review()">상품평</a></p>
             <p><a href="../qna/add">Q&A</a></p>
         </div>
-        <div class="detail_imgs" th:each="detailImg : ${detailImgs}">
-            <img th:src="|@{../images}/${detailImg.getFileName()}|">
-        </div>
+        <div class="detail_area detail_imgs"></div>
     </div>
     <script th:inline="javascript">
         const qtyInput = document.querySelector('.qty_number')
@@ -190,11 +200,14 @@
         const increasingBtn = document.querySelector('.increasing_btn')
         const priceVal = document.querySelector('.price_val')
         const totPrice = document.querySelector('.product_total_price')
+        const stock = document.querySelector('.a_few_stock')
 
         const price = [[${product.price-(product.price*(product.discount*0.01))}]]
 
         priceVal.textContent = price.toLocaleString('ko-KR') + '원'
         totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
+
+        if([[${product.stock}]] <= 5) stock.style.display = 'inline-block'
 
         decreasingBtn.addEventListener('click', () => {
             if(qtyInput.value > 1) {
@@ -203,13 +216,34 @@
             }
             else if(qtyInput.value <= 1) {
                 alert('최소 주문 수량은 1개입니다.')
+                qtyInput.value = 1
             }
         })
 
         increasingBtn.addEventListener('click', () => {
             ++qtyInput.value
+            if(qtyInput.value > [[${product.stock}]]) {
+                alert(`현재 재고가 ${[[${product.stock}]]}개입니다.`)
+                qtyInput.value = [[${product.stock}]]
+            }
+            totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
+        })
+
+        qtyInput.addEventListener('input', () => {
+            if(qtyInput.value > [[${product.stock}]]) {
+                alert(`현재 재고가 ${[[${product.stock}]]}개입니다.`)
+                qtyInput.value = [[${product.stock}]]
+            } else if(qtyInput.value <= 0) {
+                alert('최소 주문 수량은 1개입니다.')
+                qtyInput.value = 1
+            }
             totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
         })
     </script>
+    <script type="text/javascript">
+        const username ='[[${username}]]'
+    </script>
+    <script th:inline="javascript" th:src="@{/js/detail_img.js}"></script>
+    <script th:inline="javascript" th:src="@{/js/product_review.js}"></script>
 </body>
 </html>

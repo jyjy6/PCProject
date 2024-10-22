@@ -1,14 +1,14 @@
 package org.iclass.PCProject.product.repository;
 
 import org.iclass.PCProject.product.entity.Product;
-import org.iclass.PCProject.product.entity.ProductDetail;
+import org.iclass.PCProject.product.entity.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Integer> {
+public interface ReviewRepository extends JpaRepository<Review, Integer> {
 
-    List<Product> findAllByVendor(String vendor);
+    List<Review> findAllBypSeqOrderByRegDateDesc(int pSeq);
 }

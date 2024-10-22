@@ -15,10 +15,8 @@ public class ProductDetailService {
 
     private final ProductDetailRepository detailRepository;
 
-    public List<ProductDetailDTO> getProductDetailImgs(int pSeq) {
+    public List<ProductDetailDTO> getProductDetail(int pSeq) {
         List<ProductDetail> list = detailRepository.findAllBypSeqOrderBySeq(pSeq);
         return list.stream().map(ProductDetailDTO::toDto).collect(Collectors.toList());
-
-
     }
 }
