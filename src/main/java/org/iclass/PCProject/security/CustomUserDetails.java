@@ -28,8 +28,6 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
         return Collections.singletonList(new SimpleGrantedAuthority(member.getRole()));
     }
 
-
-
     @Override
     public String getPassword() {
         return member.getPassword();
@@ -45,7 +43,6 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
     }
 
     public String getDisplayName() { return member.getDisplayName(); }
-
 
     // OAuth2User 구현
     @Override
@@ -72,6 +69,7 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
     public String getName() {
         return member.getUsername();
     }
+
     public CustomUserDetails(Member member) {
         this.member = member;
         this.attributes = null; // OAuth2가 아닌 경우 속성은 null

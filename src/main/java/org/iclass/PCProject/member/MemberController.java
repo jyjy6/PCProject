@@ -1,5 +1,6 @@
 package org.iclass.PCProject.member;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.iclass.PCProject.qna.QNA;
 import org.iclass.PCProject.qna.QNARepository;
@@ -82,17 +83,26 @@ public class MemberController {
             model.addAttribute("qnaList", qnaList);
         }
 
-
         return "jung/mypage/mypage"; // 주 템플릿 경로
     }
 
     @GetMapping("/member/modify")
     public String modify(Authentication auth,
-                         Model model){
+                         HttpSession session,  // HttpSession을 매개변수로 추가
+                         Model model) {
+        // 세션에서 validated 값 가져오기
+        Boolean validated = (Boolean) session.getAttribute("validated");
+
+        // 검증이 되지 않은 경우 리다이렉트
+        if (validated == null || !validated) {
+            return "redirect:/member/validate"; // 검증 페이지로 리다이렉트
+        }
+        // 검증이 된 경우 회원 정보 가져오기
         MemberDTO member = memberService.memberInfo(auth);
-        model.addAttribute("member",member);
+        model.addAttribute("member", member);
         return "jung/modify.html";
     }
+
 
 
     @GetMapping("/member/validate")
