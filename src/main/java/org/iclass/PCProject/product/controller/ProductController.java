@@ -56,9 +56,11 @@ public class ProductController {
     }
 
     @GetMapping("/cart")
-    public String addCart(HttpSession session, Model model) {
-        List<CartDTO> items = (List<CartDTO>) session.getAttribute("items");
-        List<ProductDTO> products = (List<ProductDTO>) session.getAttribute("products");
+    public String addCart(Authentication auth, Model model) {
+
+        String username = memberService.memberInfo(auth).getUsername();
+        List<CartDTO> items = cartService.getItems(username);
+        List<ProductDTO> products = productService.getAllProducts();
         if (items == null) {
             items = new ArrayList<>(); // 기본값
         }
@@ -68,18 +70,14 @@ public class ProductController {
     }
 
     @PostMapping("/cart")
-    public String addCart(@RequestParam("pSeq") int pSeq, @RequestParam("qty") int qty, RedirectAttributes redirectAttributes, HttpSession session, Authentication auth) {
+    public String addCart(@RequestParam("pSeq") int pSeq, @RequestParam("qty") int qty, RedirectAttributes redirectAttributes, Authentication auth) {
 
         if(auth != null) {
             String username = memberService.memberInfo(auth).getUsername();
             cartService.addItem(pSeq, qty, username);
-            List<CartDTO> items = cartService.getItems(username);
-            List<ProductDTO> products = productService.getAllProducts();
+//            List<CartDTO> items = cartService.getItems(username);
+//            List<ProductDTO> products = productService.getAllProducts();
 
-            log.info(":::products: {}:::", products);
-
-            session.setAttribute("products", products);
-            session.setAttribute("items", items);
         } else {
             redirectAttributes.addFlashAttribute("message", "로그인이 필요한 서비스입니다.");
             return "redirect:/product_detail/" + pSeq;
@@ -87,5 +85,4 @@ public class ProductController {
 
         return "redirect:/cart";
     }
-
 }

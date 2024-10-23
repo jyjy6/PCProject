@@ -22,6 +22,7 @@
             width: 100%;
             margin-bottom: 20px;
             border-collapse: collapse;
+            text-align: center;
         }
         th, td {
             padding: 12px;
@@ -34,11 +35,18 @@
             font-size: 1.2em;
             text-align: center;
         }
-        th:nth-child(2), th:nth-child(3) {
-            padding-left: 135px;
+        th:nth-child(2) {
+            width: 60%;
+        }
+        th:nth-child(3), th:nth-child(4) {
+            width: 20%;
         }
         td {
             font-size: 1.1em;
+        }
+        td:nth-child(4) {
+            padding-right: 2%;
+            text-align: right;
         }
         input[type="checkbox"] {
             width: 20px;
@@ -70,6 +78,13 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 1.2em;
+        }
+        .sum_total_price {
+            width: 100%;
+            text-align: right;
+            font-weight: 700;
+            font-size: 1.5em;
+            color: #0056b3;
         }
         .purchase_btns {
             display: flex;
@@ -106,8 +121,7 @@
             color: #999;
         }
         .product_total_price {
-            width: 150px;
-            float: right;
+            width: 200px;
             text-align: right;
         }
     </style>
@@ -123,6 +137,7 @@
                     <th><input type="checkbox" id="select-all" onclick="toggleSelectAll(this)"/></th>
                     <th>상품명</th>
                     <th>수량</th>
+                    <th>제품별 합계 금액</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -136,8 +151,10 @@
                             <button type="button" class="decreasing_btn fa-solid fa-minus"></button>
                             <input type="text" class="qty_number" name="qty" th:value="${item.quantity}">
                             <button type="button" class="increasing_btn fa-solid fa-plus"></button>
-                            <span class="product_total_price"></span>
                         </span>
+                    </td>
+                    <td>
+                        <span class="product_total_price"></span>
                     </td>
                 </tr>
                 <tr th:if="${#lists.isEmpty(items)}">
@@ -145,15 +162,19 @@
                 </tr>
                 </tbody>
             </table>
+            <p class="sum_total_price"></p>
             <div class="purchase_btns">
                 <button type="submit" formaction="@{/cart/delete}" class="cart_btn">선택 항목 삭제</button>
                 <button type="submit" formaction="@{/cart/checkout}" class="purchase_btn">구매하기</button>
             </div>
         </div>
     </div>
+    <script src="js/update_quantity.js"></script>
     <script th:inline="javascript">
         let products = /*[[${products}]]*/ [];
         let items = /*[[${items}]]*/ [];
+        let username = /*[[${items[0].username}]]*/ ''
+        console.log('username', username)
         console.log('products: ', products)
         console.log('items: ', items)
 
@@ -161,6 +182,7 @@
         const decreasingBtns = document.querySelectorAll('.decreasing_btn')
         const increasingBtns = document.querySelectorAll('.increasing_btn')
         const totPrices = document.querySelectorAll('.product_total_price')
+        const sumAllProdsPrices = document.querySelector('.sum_total_price')
         let price = 0
 
         function initializePrices() {
@@ -180,13 +202,15 @@
                     thisQty = product.stock;
                 }
 
-                totPrice.textContent = (price * thisQty).toLocaleString('ko-KR') + '원';
-            });
+                totPrice.textContent = (price * thisQty).toLocaleString('ko-KR') + '원'
+            })
+            calcAllPricesSum()
         }
 
         decreasingBtns.forEach((btn, i) => {
             btn.addEventListener('click', () => {
-                console.log('감소 버튼 동작 확인')
+                sumAllProdsPrices.textContent = ''
+
                 let qtyInput = qtyInputs[i]
                 let totPrice = totPrices[i]
                 let thisQty = qtyInput.value
@@ -203,34 +227,39 @@
                     qtyInput.value = 1
                     totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
                 }
+                updateQty(items[i].pseq, thisQty)
+                calcAllPricesSum()
             })
         })
 
         increasingBtns.forEach((btn, i) => {
             btn.addEventListener('click', () => {
-                console.log('증가 버튼 동작 확인')
+                sumAllProdsPrices.textContent = ''
+
                 let qtyInput = qtyInputs[i]
                 let totPrice = totPrices[i]
-                let thisQty = parseInt(qtyInput.value)
-
-                console.log('qtyInput', qtyInput.value)
+                let thisQty = qtyInput.value
 
                 let product = products.find(p => p.seq === items[i].pseq)
                 ++thisQty
+                qtyInput.value = thisQty
 
-                if(thisQty > product.stock) {
+                if(qtyInput.value > product.stock) {
                     alert(`현재 재고가 ${product.stock}개 입니다.`)
-                    thisQty = product.stock
+                    qtyInput.value = product.stock
                 }
 
-                qtyInput.value = thisQty
                 price = product.price - (product.price * (product.discount * 0.01))
-                totPrice.textContent = (price * thisQty).toLocaleString('ko-KR') + '원'
+                totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
+                updateQty(items[i].pseq, thisQty)
+                calcAllPricesSum()
             })
         })
 
         qtyInputs.forEach((input, i) => {
             input.addEventListener('input', () => {
+                sumAllProdsPrices.textContent = ''
+
                 let qtyInput = qtyInputs[i]
                 let totPrice = totPrices[i]
                 let thisQty = parseInt(input.value)
@@ -240,13 +269,17 @@
 
                 if(thisQty <= 0) {
                     alert('최소 주문 수량은 1개입니다.')
-                    qtyInput.value = 1
-                    totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
+                    thisQty = 1
+                    totPrice.textContent = price.toLocaleString('ko-KR') + '원'
                 } else if(thisQty > product.stock) {
                     alert(`현재 재고가 ${product.stock}개 입니다.`)
-                    qtyInput.value = product.stock
+                    thisQty = product.stock
                 }
-                totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
+
+                qtyInput.value = thisQty
+                totPrice.textContent = (price * thisQty).toLocaleString('ko-KR') + '원'
+                updateQty(items[i].pseq, thisQty)
+                calcAllPricesSum()
             })
         })
 
@@ -255,6 +288,17 @@
             chkBoxes.forEach(chkBox => {
                 chkBox.checked = selectAllChkBox.checked;
             });
+        }
+
+        function calcAllPricesSum() {
+            let totalSum = 0;
+            qtyInputs.forEach((input, i) => {
+                let thisQty = parseInt(input.value);
+                let product = products.find(p => p.seq === items[i].pseq);
+                let price = product.price - (product.price * (product.discount * 0.01));
+                totalSum += price * thisQty;
+            });
+            sumAllProdsPrices.textContent = totalSum.toLocaleString('ko-KR') + '원';
         }
 
         document.addEventListener('DOMContentLoaded', initializePrices);
