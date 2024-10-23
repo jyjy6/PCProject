@@ -131,12 +131,76 @@
         .detail_imgs {
             text-align: center;
         }
+        .out_of_stock {
+            margin-top: 70px;
+            text-align: center;
+            font-weight: 700;
+            color: #e74c3c;
+        }
+        .review-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .review-item {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .username {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #007bff;
+        }
+
+        .content {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 5px;
+            width: 100%;
+            resize: vertical;
+        }
+
+        .regDate, .score {
+            font-size: 0.9em;
+            color: #666;
+            margin-right: 10px;
+        }
+
+        .write_review_btn, .submit_review_btn, .cancel_review_btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+        .write_review_btn:hover, .submit_review_btn:hover, .cancel_review_btn:hover {
+            background-color: #0056b3;
+        }
+
+        .cancel_review_btn {
+            background-color: #dc3545;
+            margin-left: 10px;
+        }
+
+        .cancel_review_btn:hover {
+            background-color: #c82333;
+        }
     </style>
 </head>
 <body>
     <div th:replace="~{nav :: navbar}"></div>
     <div class="container">
-        <h3 th:if="${username != null}">[[${username}]]</h3>
         <div class="product_info_top">
             <span class>[[${product.vendor}]] [[${product.name}]] [[${product.code}]]</span>
         </div>
@@ -165,26 +229,31 @@
             </div>
             <hr>
             <form action="/cart" method="POST">
-                <input type="hidden" class="seq" name="seq" th:value="${product.seq}">
-                <div class="qty_price_box">
-                    <p class="product_title">[[${product.vendor}]] [[${product.name}]] [[${product.code}]]</p>
-                    <span class="qty_ctrl">
-                        <button type="button" class="decreasing_btn fa-solid fa-minus"></button>
-                        <input type="text" class="qty_number" name="qty" th:value="1">
-                        <button type="button" class="increasing_btn fa-solid fa-plus"></button>
-                        <span class="a_few_stock">재고 수량: [[${product.stock}]]개</span>
-                        <p class="final_price"></p>
-                    </span>
-                </div>
-                <hr>
-                <div class="total_price">
-                    <span class="total_price_info">총 합계 금액</span>
-                    <span class="product_total_price"></span>
-                </div>
-                <div class="purchase_btns">
-                    <button type="submit" class="cart_btn fa-solid fa-cart-shopping"></button>
-                    <button type="submit" class="purchase_btn">구매하기</button>
-                </div>
+                <input type="hidden" class="seq" name="pSeq" th:value="${product.seq}">
+                <th:block th:if="${product.stock > 0}">
+                    <div class="qty_price_box">
+                        <p class="product_title">[[${product.vendor}]] [[${product.name}]] [[${product.code}]]</p>
+                        <span class="qty_ctrl">
+                            <button type="button" class="decreasing_btn fa-solid fa-minus"></button>
+                            <input type="text" class="qty_number" name="qty" th:value="1">
+                            <button type="button" class="increasing_btn fa-solid fa-plus"></button>
+                            <span class="a_few_stock">재고 수량: [[${product.stock}]]개</span>
+                            <p class="final_price"></p>
+                        </span>
+                    </div>
+                    <hr>
+                    <div class="total_price">
+                        <span class="total_price_info">총 합계 금액</span>
+                        <span class="product_total_price"></span>
+                    </div>
+                    <div class="purchase_btns">
+                        <button type="submit" class="cart_btn fa-solid fa-cart-shopping"></button>
+                        <button type="submit" class="purchase_btn">구매하기</button>
+                    </div>
+                </th:block>
+                <th:block th:if="${product.stock <= 0}">
+                    <h3 class="out_of_stock">현재 품절로 구매할 수 없습니다.</h3>
+                </th:block>
             </form>
         </div>
         <div class="detail_nav">
