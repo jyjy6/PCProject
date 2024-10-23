@@ -53,17 +53,15 @@ public class ApiProductController {
         return ResponseEntity.ok(reviewService.getReviews(pSeq));
     }
 
-    @PostMapping("/cart/updateQuantity")
-    public ResponseEntity<?> updateProductQuantity(@RequestParam int pSeq, @RequestParam int qty, @RequestParam String username) {
-        Optional<Product> optional = productRepository.findById(pSeq);
-        if(optional.isPresent()) {
-            Product product = optional.get();
-            if(qty > product.getStock()) {
-                return ResponseEntity.ok(Map.of("success", false, "message", "재고 수량이 부족합니다. 현재 남은 재고 수량: " + product.getStock()));
-            }
-            cartService.addItem(pSeq, qty, username);
-            return ResponseEntity.ok(Map.of("success", true, "message", "수량이 업데이트 되었습니다."));
-        }
-        return ResponseEntity.badRequest().build();
+    @PostMapping("/cart/updateQty")
+    public ResponseEntity<?> updateProductQuantity(@RequestBody Map<String, Object> req) {
+        log.info(":::req: {}:::", req);
+        int pSeq = (int) req.get("pSeq");
+        int qty = (int) req.get("qty");
+        String username = req.get("username").toString();
+
+        cartService.updateQuantity(pSeq, qty, username);
+
+        return ResponseEntity.ok().build();
     }
 }
