@@ -3,9 +3,9 @@ package org.iclass.PCProject.product.service;
 import lombok.RequiredArgsConstructor;
 import org.iclass.PCProject.product.dto.ProductDTO;
 import org.iclass.PCProject.product.entity.Product;
-import org.iclass.PCProject.product.repository.ProductDetailRepository;
 import org.iclass.PCProject.product.repository.ProductRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -20,8 +20,8 @@ public class ProductService {
         List<Product> list = productRepository.findAll();
         Collections.shuffle(list);
         List<Product> recommendedList = new ArrayList<>();
-for(int i=0; i<5; i++) {                            // 추천 상품 목록에 담을 5개 상품
-            if(list.get(i).getStock() == 0) {       // stock(재고 수량)이 0이면 recommendedList에 해당 상품을 담지 않습니다.
+        for (int i = 0; i < 5; i++) {                            // 추천 상품 목록에 담을 5개 상품
+            if (list.get(i).getStock() == 0) {       // stock(재고 수량)이 0이면 recommendedList에 해당 상품을 담지 않습니다.
                 --i;
             } else {
                 recommendedList.add(list.get(i));
@@ -31,8 +31,7 @@ for(int i=0; i<5; i++) {                            // 추천 상품 목록에 �
     }
 
     public List<ProductDTO> getAllProductsList() {
-        List<Product> list = productRepository.findAll();
-        Collections.shuffle(list);                              // shuffle 하지 않으면 항상 seq 순으로 상품이 전시됩니다.
+        List<Product> list = productRepository.findAll();         // shuffle 하지 않으면 항상 seq 순으로 상품이 전시됩니다.
         return list.stream().map(ProductDTO::toDto).collect(Collectors.toList());
     }
 
@@ -41,16 +40,26 @@ for(int i=0; i<5; i++) {                            // 추천 상품 목록에 �
         return list.stream().map(ProductDTO::toDto).collect(Collectors.toList());
     }
 
-    ProductDTO dto = null;
-    public ProductDTO getProductBySeq(int seq) {
-
-        Optional<Product> product = productRepository.findById(seq);
-        product.ifPresent(p -> {
-            Product entity = product.get();
-            dto = ProductDTO.toDto(entity);
-        });
-        return dto;
+    public Optional<Product> getProductBySeq(int seq) {
+        return productRepository.findById(seq);
     }
+
+    public void createProduct(ProductDTO productDTO) {
+        productRepository.save(productDTO.toEntity());
+    }
+
+    public void updateProduct(ProductDTO productDTO) {
+        productRepository.save(productDTO.toEntity());
+    }
+
+    @Transactional
+    public void deleteProduct(int seq) {
+        System.out.println("삭제 요청 seq: " + seq); // seq 값을 출력
+        productRepository.deleteById(seq);  // ID로 삭제
+
+    }
+
+}
 
 //    public List<String> getRecentThumbnailBySeq(int seq) {
 //        LinkedList<String> thumbsList = new LinkedList<>();
@@ -77,4 +86,4 @@ for(int i=0; i<5; i++) {                            // 추천 상품 목록에 �
     public List<String> getRecentProducts() {
         return recentProducts;
     }*/
-}
+

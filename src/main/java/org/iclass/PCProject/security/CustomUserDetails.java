@@ -1,11 +1,8 @@
 package org.iclass.PCProject.security;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.iclass.PCProject.member.Member;
+import org.iclass.PCProject.member.entity.Member;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,7 +16,6 @@ import java.util.Collections;
 public class CustomUserDetails implements UserDetails {
 
     private final Member member;
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
