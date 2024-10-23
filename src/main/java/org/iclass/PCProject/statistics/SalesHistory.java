@@ -1,4 +1,4 @@
-package org.iclass.PCProject.saleshis;
+package org.iclass.PCProject.statistics;
 
 import jakarta.persistence.*;
 import lombok.*;

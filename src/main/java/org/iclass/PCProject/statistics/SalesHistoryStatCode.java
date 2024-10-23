@@ -1,8 +1,6 @@
-package org.iclass.PCProject.saleshis;
+package org.iclass.PCProject.statistics;
 
 import lombok.*;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -17,4 +15,5 @@ public class SalesHistoryStatCode {
   private int     price;
   private int     count;
   private int     total;
+  private int     stock;
 }
