@@ -26,7 +26,7 @@ public class CartService {
     }
 
     ProductDTO dto = null;
-    public CartDTO addItem(int seq, int qty, String username) {
+    public void addItem(int seq, int qty, String username) {
         Optional<Product> product = productRepository.findById(seq);
         product.ifPresent(p -> {
             Product entity = product.get();
@@ -42,8 +42,19 @@ public class CartService {
         item.setPrice(dto.getPrice());
         item.setQuantity(qty);
 
-        Cart entity = cartRepository.save(item.toEntity());
+//        cartRepository.save(item.toEntity());
 
-        return CartDTO.toDTO(entity);
+        boolean flag = false;
+        for(Cart c : cartRepository.findAllByUsernameOrderByRegDateDesc(username)) {
+            if(c.getPSeq() == item.getPSeq()) flag = true;
+        }
+
+        if(flag) {
+            int qtyResult = cartRepository.findQuantityBypSeq(seq).getQuantity() + qty;
+            cartRepository.updateQuantityBypSeq(item.getPSeq(), qtyResult);
+        }
+        else if(!flag) {
+            cartRepository.save(item.toEntity());
+        }
     }
 }

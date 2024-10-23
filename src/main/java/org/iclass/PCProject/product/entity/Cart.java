@@ -26,7 +26,7 @@ public class Cart {
     @Column(nullable = false)
     private String username;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private int pSeq;
 
     @Column(nullable = false)
@@ -35,7 +35,7 @@ public class Cart {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String code;
 
     @Column(nullable = false)

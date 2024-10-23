@@ -24,7 +24,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "product_seq_generator")
     private int seq;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String code;
 
     @Column(nullable = false)

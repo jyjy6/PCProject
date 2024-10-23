@@ -20,7 +20,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @Controller
@@ -59,26 +58,31 @@ public class ProductController {
     @GetMapping("/cart")
     public String addCart(HttpSession session, Model model) {
         List<CartDTO> items = (List<CartDTO>) session.getAttribute("items");
+        List<ProductDTO> products = (List<ProductDTO>) session.getAttribute("products");
         if (items == null) {
             items = new ArrayList<>(); // 기본값
         }
+        model.addAttribute("products", products);
         model.addAttribute("items", items);
         return "lee/product/cart";
     }
 
     @PostMapping("/cart")
-    public String addCart(@RequestParam("seq") int seq, @RequestParam("qty") int qty, RedirectAttributes redirectAttributes, HttpSession session, Authentication auth) {
+    public String addCart(@RequestParam("pSeq") int pSeq, @RequestParam("qty") int qty, RedirectAttributes redirectAttributes, HttpSession session, Authentication auth) {
 
         if(auth != null) {
             String username = memberService.memberInfo(auth).getUsername();
-            cartService.addItem(seq, qty, username);
+            cartService.addItem(pSeq, qty, username);
             List<CartDTO> items = cartService.getItems(username);
             List<ProductDTO> products = productService.getAllProducts();
 
+            log.info(":::products: {}:::", products);
+
+            session.setAttribute("products", products);
             session.setAttribute("items", items);
         } else {
             redirectAttributes.addFlashAttribute("message", "로그인이 필요한 서비스입니다.");
-            return "redirect:/product_detail/" + seq;
+            return "redirect:/product_detail/" + pSeq;
         }
 
         return "redirect:/cart";
