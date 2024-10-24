@@ -32,6 +32,7 @@ public class QNA {
     @Column(updatable = false, name="REG_DATE")
     private LocalDateTime regDate;
     private String answer;
+    @Column(name = "ANSWER_USER")
     private String answerUser;
 
 
