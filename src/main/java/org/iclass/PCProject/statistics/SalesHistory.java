@@ -1,4 +1,4 @@
-package org.iclass.PCProject.salesHis;
+package org.iclass.PCProject.statistics;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name="SALES_HISTORY")
 public class SalesHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

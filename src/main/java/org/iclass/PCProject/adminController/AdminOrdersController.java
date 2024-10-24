@@ -2,10 +2,9 @@ package org.iclass.PCProject.adminController;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.iclass.PCProject.product.dto.ProductDTO;
-import org.iclass.PCProject.salesHis.SalesHistoryDto;
-import org.iclass.PCProject.salesHis.SalesHistory;
-import org.iclass.PCProject.salesHis.SalesHistoryService;
+import org.iclass.PCProject.statistics.SalesHistoryService;
+import org.iclass.PCProject.statistics.SalesHistory;
+import org.iclass.PCProject.statistics.SalesHistoryDto;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
