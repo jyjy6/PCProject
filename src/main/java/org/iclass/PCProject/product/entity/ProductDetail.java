@@ -19,21 +19,22 @@ import java.time.LocalDate;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @SequenceGenerator(name = "productdetail_seq_generator")
+@Table(name="PRODUCT_DETAIL")
 public class ProductDetail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "productdetail_seq_generator")
     private int seq;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name="P_SEQ")
     private int pSeq;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name="FILE_NAME")
     private String fileName;
 
     @CreatedDate
     @LastModifiedDate
-    @Column(nullable = false)
+    @Column(nullable = false, name="REG_DATE")
     private LocalDate regDate;
 
 }

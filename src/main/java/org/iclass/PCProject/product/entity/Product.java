@@ -43,7 +43,7 @@ public class Product {
     private String thumb;
 
     @CreatedDate
-    @Column(nullable = false)
+    @Column(nullable = false, name="REG_DATE")
     private LocalDate regDate;
 
     @Column(nullable = false)
