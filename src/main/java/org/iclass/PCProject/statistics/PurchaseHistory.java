@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="PURCHASE_HISTORY")
 public class PurchaseHistory {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
