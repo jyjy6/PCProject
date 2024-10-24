@@ -2,6 +2,7 @@ package org.iclass.PCProject.adminController;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.iclass.PCProject.product.dto.ProductDTO;
 import org.iclass.PCProject.salesHis.SalesHistoryDto;
 import org.iclass.PCProject.salesHis.SalesHistory;
 import org.iclass.PCProject.salesHis.SalesHistoryService;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 
@@ -40,14 +43,37 @@ public class AdminOrdersController {
     @GetMapping("/OrdersModify")
     public String updateOrdersForm(@RequestParam int seq, Model model) {
         SalesHistory order = salesHistoryService.findById(seq);
+        LocalDateTime regdate = order.getRegdate();
+
+        String formattedDate = null;
+        if (regdate != null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+            formattedDate = regdate.format(formatter);
+        }
+
+        model.addAttribute("formattedRegdate", formattedDate);
         model.addAttribute("sales_history", SalesHistoryDto.toDto(order));
         return "kim/adminPage/orders/OrdersModify";
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/adminPage/OrdersModify")
+    /*@PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping("/OrdersModify")
     public String updateOrders(@ModelAttribute SalesHistory salesHistory) {
         salesHistoryService.update(salesHistory);
         return "redirect:/adminPage/OrdersList";
-    }
+    }*/
+
+//    @PostMapping("/OrdersModify")
+//    public String updateOrders(@ModelAttribute SalesHistory salesHistory) {
+//        // LocalDateTime 변환 로직 추가
+//        if (salesHistory.getRegdate() != null) {
+//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+//            LocalDateTime regdate = LocalDateTime.parse(salesHistory.getRegdate(), formatter);
+//            salesHistory.setRegdate(regdate);
+//        }
+//
+//        salesHistoryService.update(salesHistory);
+//        return "redirect:/adminPage/OrdersList";
+//    }
+
 }

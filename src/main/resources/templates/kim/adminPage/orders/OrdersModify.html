@@ -24,7 +24,7 @@
 
     <div>
         <label for="regdate">RegDate:</label>
-        <input type="date" id="regdate" th:field="*{regdate}" required/>
+        <input type="datetime-local" id="regdate" th:field="*{regdate}" th:value="${formattedRegdate}" required/>
     </div>
 
     <div>

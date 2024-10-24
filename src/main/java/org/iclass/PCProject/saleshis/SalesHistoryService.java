@@ -1,6 +1,7 @@
 package org.iclass.PCProject.salesHis;
 
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@ToString
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -54,6 +56,7 @@ public class SalesHistoryService {
   }
 
   public void update(SalesHistory salesHistory) {
+    System.out.println("Updated SalesHistory: " + salesHistory);
     dao.save(salesHistory);
   }
 
