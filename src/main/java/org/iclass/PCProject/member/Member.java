@@ -27,7 +27,7 @@ public class Member {
     @Column(nullable = false)
     private String email;
 
-    @Column(unique = true, nullable = false, name="DISPLAY_NAME")
+    @Column(unique = true, nullable = false)
     private String displayName;
 
     private String phone;
@@ -40,13 +40,13 @@ public class Member {
     private Integer age;
     // 아이디 생성 날짜
     @CreationTimestamp
-    @Column(updatable = false, name="CREATED_AT")
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 
 
     // 계정 정보 마지막 수정 날짜.
     @UpdateTimestamp
-    @Column(updatable = true, name="UPDATED_AT")
+    @Column(updatable = true)
     private LocalDateTime updatedAt;
 
     private String role = "ROLE_USER";
