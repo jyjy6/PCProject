@@ -2,6 +2,7 @@ package org.iclass.PCProject.member;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.iclass.PCProject.product.repository.CartRepository;
 import org.iclass.PCProject.qna.QNA;
 import org.iclass.PCProject.qna.QNARepository;
 import org.iclass.PCProject.security.CustomUserDetails;
@@ -30,7 +31,7 @@ public class MemberController {
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
     private final QNARepository qnaRepository;
-
+    private final CartRepository cartRepository;
 
 
 
@@ -83,6 +84,7 @@ public class MemberController {
             model.addAttribute("qnaList", qnaList);
         }
 
+
         return "jung/mypage/mypage"; // 주 템플릿 경로
     }
 
@@ -127,9 +129,6 @@ public class MemberController {
         model.addAttribute("username", username);
         return "jung/memberWithdrawPage";
     }
-
-
-
 
 
 
