@@ -1,9 +1,6 @@
 package org.iclass.PCProject.security;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.iclass.PCProject.member.Member;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,7 +18,6 @@ public class CustomUserDetails implements UserDetails, OAuth2User {
 
     private final Member member;
     private final Map<String, Object> attributes; // OAuth2User에서 사용하는 속성 값 저장
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
