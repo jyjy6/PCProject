@@ -27,7 +27,7 @@ public class UserToken {
     private String token;
 
     @CreationTimestamp
-    @Column(nullable = false)
+    @Column(nullable = false, name="CREATED_AT")
     private LocalDateTime createdAt;
 
 

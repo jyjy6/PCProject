@@ -29,7 +29,7 @@ public class QNA {
     @Column(nullable = false)
     private String content;
     @CreationTimestamp
-    @Column(updatable = false)
+    @Column(updatable = false, name="REG_DATE")
     private LocalDateTime regDate;
     private String answer;
     private String answerUser;
