@@ -1,4 +1,4 @@
-package org.iclass.PCProject.saleshis;
+package org.iclass.PCProject.salesHis;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

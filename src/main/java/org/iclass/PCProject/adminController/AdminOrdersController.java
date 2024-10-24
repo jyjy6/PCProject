@@ -2,9 +2,9 @@ package org.iclass.PCProject.adminController;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.iclass.PCProject.salesHis.dto.SalesHistoryDTO;
-import org.iclass.PCProject.salesHis.entity.SalesHistory;
-import org.iclass.PCProject.salesHis.service.SalesHistoryService;
+import org.iclass.PCProject.salesHis.SalesHistoryDto;
+import org.iclass.PCProject.salesHis.SalesHistory;
+import org.iclass.PCProject.salesHis.SalesHistoryService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,12 +24,12 @@ public class AdminOrdersController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/OrdersList")
     public String ordersList(Model model, @RequestParam(required = false) String price) {
-        List<SalesHistoryDTO> orders = salesHistoryService.getAllSalesHistoryList();
+        List<SalesHistoryDto> orders = salesHistoryService.getAllSalesHistoryList();
 
         if("asc".equals(price)) {
-            orders.sort(Comparator.comparing(SalesHistoryDTO::getPrice, Comparator.nullsLast(Comparator.naturalOrder())));
+            orders.sort(Comparator.comparing(SalesHistoryDto::getPrice, Comparator.nullsLast(Comparator.naturalOrder())));
         } else if("desc".equals(price)) {
-            orders.sort(Comparator.comparing(SalesHistoryDTO::getPrice, Comparator.nullsLast(Comparator.reverseOrder())));
+            orders.sort(Comparator.comparing(SalesHistoryDto::getPrice, Comparator.nullsLast(Comparator.reverseOrder())));
         }
 
         model.addAttribute("sales_historys", orders);
@@ -38,9 +38,9 @@ public class AdminOrdersController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/OrdersModify")
-    public String updateOrdersForm(@RequestParam Long seq, Model model) {
+    public String updateOrdersForm(@RequestParam int seq, Model model) {
         SalesHistory order = salesHistoryService.findById(seq);
-        model.addAttribute("sales_history", SalesHistoryDTO.toDTO(order));
+        model.addAttribute("sales_history", SalesHistoryDto.toDto(order));
         return "kim/adminPage/orders/OrdersModify";
     }
 
