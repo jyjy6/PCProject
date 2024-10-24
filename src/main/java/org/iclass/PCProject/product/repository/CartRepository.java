@@ -18,6 +18,10 @@ public interface CartRepository extends JpaRepository<Cart, Integer> {
     Cart findQuantityBypSeq(int pSeq);
     @Modifying
     @Transactional
-    @Query("update Cart c set c.quantity = :quantity where c.pSeq = :pSeq")
-    int updateQuantityBypSeq(int pSeq, int quantity);
+    @Query("update Cart c set c.quantity = :quantity where c.username = :username and c.pSeq = :pSeq")
+    int updateQuantityBypSeq(int pSeq, int quantity, String username);
+    @Modifying
+    @Transactional
+    @Query("delete from Cart c where c.username = :username and c.pSeq = :pSeq")
+    int deleteByUsernameAndPSeq(int pSeq, String username);
 }

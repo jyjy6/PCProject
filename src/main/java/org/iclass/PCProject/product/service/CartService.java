@@ -54,22 +54,26 @@ public class CartService {
 
         if(flag) {
             int qtyResult = cartRepository.findQuantityBypSeq(seq).getQuantity() + qty;
-            cartRepository.updateQuantityBypSeq(item.getPSeq(), qtyResult);
+            cartRepository.updateQuantityBypSeq(item.getPSeq(), qtyResult, username);
         }
         else if(!flag) {
             cartRepository.save(item.toEntity());
         }
     }
 
-    public void removeItem(Map<String, Integer> map) {
-
+    public void removeItems(List<Integer> pSeqs, String username) {
+        List<Cart> items = cartRepository.findAllByUsernameOrderByRegDateDesc(username);
+        log.info(":::items: {}", items);
+        for(Integer pSeq : pSeqs) {
+                log.info(":::pSeq: {}:::", pSeq);
+                cartRepository.deleteByUsernameAndPSeq(pSeq, username);
+        }
     }
 
     public void updateQuantity(int pSeq, int qty, String username) {
         List<Cart> items = cartRepository.findAllByUsernameOrderByRegDateDesc(username);
         for(Cart c : items) {
-            if(c.getPSeq() == pSeq) cartRepository.updateQuantityBypSeq(pSeq, qty);
+            if(c.getPSeq() == pSeq) cartRepository.updateQuantityBypSeq(pSeq, qty, username);
         }
-        log.info(":::updateQuantity() 호출 성공!:::");
     }
 }

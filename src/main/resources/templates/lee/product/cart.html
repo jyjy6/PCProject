@@ -140,10 +140,10 @@
                     <th>제품별 합계 금액</th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr th:each="item : ${items}">
+                <tbody class="parent_node">
+                <tr th:each="item : ${items}" class="child_node">
                     <td>
-                        <input type="checkbox" name="selectedItems" th:value="${item.seq}"/>
+                        <input type="checkbox" name="selected_items" class="selected_items" th:value="${item.pSeq}"/>
                     </td>
                     <td th:text="${item.vendor} + ' ' + ${item.name} + ' (' + ${item.code} + ')'"></td>
                     <td>
@@ -164,12 +164,13 @@
             </table>
             <p class="sum_total_price"></p>
             <div class="purchase_btns">
-                <button type="submit" formaction="@{/cart/delete}" class="cart_btn">선택 항목 삭제</button>
-                <button type="submit" formaction="@{/cart/checkout}" class="purchase_btn">구매하기</button>
+                <button type="submit" class="delete_cart_items_btn">선택 항목 삭제</button>
+                <button type="submit" class="purchase_btn">구매하기</button>
             </div>
         </div>
     </div>
     <script src="js/update_quantity.js"></script>
+    <script src="js/delete_cart_items.js"></script>
     <script th:inline="javascript">
         let products = /*[[${products}]]*/ [];
         let items = /*[[${items}]]*/ [];
@@ -183,26 +184,24 @@
         const increasingBtns = document.querySelectorAll('.increasing_btn')
         const totPrices = document.querySelectorAll('.product_total_price')
         const sumAllProdsPrices = document.querySelector('.sum_total_price')
+        const delCartItems = document.querySelector('.delete_cart_items_btn')
         let price = 0
 
-        function initializePrices() {
+        function initPrices() {
             qtyInputs.forEach((input, i) => {
                 let qtyInput = qtyInputs[i];
                 let totPrice = totPrices[i];
-                let thisQty = parseInt(qtyInput.value);
 
                 let product = products.find(p => p.seq === items[i].pseq);
                 price = product.price - (product.price * (product.discount * 0.01))
 
-                if (thisQty <= 0) {
+                if (qtyInput.value <= 0) {
                     qtyInput.value = 1;
-                    thisQty = 1;
-                } else if (thisQty > product.stock) {
+                } else if (qtyInput.value > product.stock) {
                     qtyInput.value = product.stock;
-                    thisQty = product.stock;
                 }
 
-                totPrice.textContent = (price * thisQty).toLocaleString('ko-KR') + '원'
+                totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
             })
             calcAllPricesSum()
         }
@@ -213,21 +212,19 @@
 
                 let qtyInput = qtyInputs[i]
                 let totPrice = totPrices[i]
-                let thisQty = qtyInput.value
 
                 let product = products.find(p => p.seq === items[i].pseq)
                 price = product.price - (product.price * (product.discount * 0.01))
 
-                if(thisQty > 1) {
-                    --thisQty
-                    qtyInput.value = thisQty
-                    totPrice.textContent = (price * thisQty).toLocaleString('ko-KR') + '원'
+                if(qtyInput.value > 1) {
+                    --qtyInput.value
+                    totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
                 } else {
                     alert('최소 주문 수량은 1개입니다.')
                     qtyInput.value = 1
                     totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
                 }
-                updateQty(items[i].pseq, thisQty)
+                updateQty(items[i].pseq, parseInt(qtyInput.value))
                 calcAllPricesSum()
             })
         })
@@ -238,11 +235,9 @@
 
                 let qtyInput = qtyInputs[i]
                 let totPrice = totPrices[i]
-                let thisQty = qtyInput.value
 
                 let product = products.find(p => p.seq === items[i].pseq)
-                ++thisQty
-                qtyInput.value = thisQty
+                ++qtyInput.value
 
                 if(qtyInput.value > product.stock) {
                     alert(`현재 재고가 ${product.stock}개 입니다.`)
@@ -251,7 +246,7 @@
 
                 price = product.price - (product.price * (product.discount * 0.01))
                 totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
-                updateQty(items[i].pseq, thisQty)
+                updateQty(items[i].pseq, parseInt(qtyInput.value))
                 calcAllPricesSum()
             })
         })
@@ -262,46 +257,59 @@
 
                 let qtyInput = qtyInputs[i]
                 let totPrice = totPrices[i]
-                let thisQty = parseInt(input.value)
 
                 let product = products.find(p => p.seq === items[i].pseq)
                 price = product.price - (product.price * (product.discount * 0.01))
 
-                if(thisQty <= 0) {
+                if(qtyInput.value <= 0) {
                     alert('최소 주문 수량은 1개입니다.')
-                    thisQty = 1
+                    qtyInput.value = 1
                     totPrice.textContent = price.toLocaleString('ko-KR') + '원'
-                } else if(thisQty > product.stock) {
+                } else if(qtyInput.value > product.stock) {
                     alert(`현재 재고가 ${product.stock}개 입니다.`)
-                    thisQty = product.stock
+                    qtyInput.value = product.stock
                 }
 
-                qtyInput.value = thisQty
-                totPrice.textContent = (price * thisQty).toLocaleString('ko-KR') + '원'
-                updateQty(items[i].pseq, thisQty)
+                totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
+                updateQty(items[i].pseq, parseInt(qtyInput.value))
                 calcAllPricesSum()
             })
         })
 
+        delCartItems.addEventListener('click', () => {
+            let confirmDelete = confirm('선택 상품을 삭제하시겠습니까?')
+            let checkedValues = []
+
+            if(confirmDelete) {
+                document.querySelectorAll('.selected_items:checked').forEach(item => {
+                    checkedValues.push(parseInt(item.value))
+                })
+                if(checkedValues && checkedValues.length > 0) {
+                    deleteCartItems(checkedValues)
+                    alert('선택한 제품이 삭제되었습니다.')
+                }
+                else alert('선택된 제품이 없습니다.')
+            }
+        })
+
+        function calcAllPricesSum() {
+            let totalSum = 0;
+            qtyInputs.forEach((input, i) => {
+                let product = products.find(p => p.seq === items[i].pseq);
+                let price = product.price - (product.price * (product.discount * 0.01));
+                totalSum += price * input.value;
+            });
+            sumAllProdsPrices.textContent = totalSum.toLocaleString('ko-KR') + '원';
+        }
+
         function toggleSelectAll(selectAllChkBox) {
-            const chkBoxes = document.querySelectorAll('input[name="selectedItems"]');
+            const chkBoxes = document.querySelectorAll('.selected_items');
             chkBoxes.forEach(chkBox => {
                 chkBox.checked = selectAllChkBox.checked;
             });
         }
 
-        function calcAllPricesSum() {
-            let totalSum = 0;
-            qtyInputs.forEach((input, i) => {
-                let thisQty = parseInt(input.value);
-                let product = products.find(p => p.seq === items[i].pseq);
-                let price = product.price - (product.price * (product.discount * 0.01));
-                totalSum += price * thisQty;
-            });
-            sumAllProdsPrices.textContent = totalSum.toLocaleString('ko-KR') + '원';
-        }
-
-        document.addEventListener('DOMContentLoaded', initializePrices);
+        document.addEventListener('DOMContentLoaded', initPrices);
     </script>
 </body>
 </html>

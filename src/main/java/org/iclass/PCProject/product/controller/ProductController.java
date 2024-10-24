@@ -33,6 +33,7 @@ public class ProductController {
 
     @GetMapping(value = {"/", "/삼성", "/lg", "/hp", "/asus", "/acer"})
     public String home(Model model, HttpServletRequest request) {
+
         if(request.getServletPath().equals("/")) {
             model.addAttribute("allProducts", productService.getAllProducts());
         } else {
@@ -45,6 +46,7 @@ public class ProductController {
 
     @GetMapping("/product_detail/{seq}")
     public String detailProd(@PathVariable("seq") int seq, Model model, Authentication auth) {
+
         model.addAttribute("product", productService.getProductBySeq(seq));
         model.addAttribute("detailImgs", detailService.getProductDetail(seq));
 
@@ -58,6 +60,12 @@ public class ProductController {
     @GetMapping("/cart")
     public String addCart(Authentication auth, Model model) {
 
+        if(auth == null) {
+            model.addAttribute("allProducts", productService.getAllProducts());
+            model.addAttribute("recommendedProducts", productService.recommendedProducts());
+            return "home";
+        }
+
         String username = memberService.memberInfo(auth).getUsername();
         List<CartDTO> items = cartService.getItems(username);
         List<ProductDTO> products = productService.getAllProducts();
@@ -66,7 +74,9 @@ public class ProductController {
         }
         model.addAttribute("products", products);
         model.addAttribute("items", items);
+
         return "lee/product/cart";
+
     }
 
     @PostMapping("/cart")
@@ -85,4 +95,5 @@ public class ProductController {
 
         return "redirect:/cart";
     }
+
 }

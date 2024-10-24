@@ -55,12 +55,24 @@ public class ApiProductController {
 
     @PostMapping("/cart/updateQty")
     public ResponseEntity<?> updateProductQuantity(@RequestBody Map<String, Object> req) {
-        log.info(":::req: {}:::", req);
         int pSeq = (int) req.get("pSeq");
         int qty = (int) req.get("qty");
         String username = req.get("username").toString();
 
         cartService.updateQuantity(pSeq, qty, username);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/cart/deleteItems")
+    public ResponseEntity<?> deleteCartItems(@RequestBody Map<String, Object> req) {
+        List<Integer> pSeqs = (List<Integer>) req.get("pSeqs");
+        String username = req.get("username").toString();
+
+        log.info(":::req: {}:::" ,req);
+        log.info(":::req.get('pSeqs'): {}:::", req.get("pSeqs"));
+        log.info(":::pSeqs: {}:::", pSeqs.get(0));
+        cartService.removeItems(pSeqs, username);
 
         return ResponseEntity.ok().build();
     }
