@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class QnADTO {
+public class QNADTO {
 
     private Long seq;
     private Long qseq;
@@ -20,8 +20,8 @@ public class QnADTO {
     private String contents;
     private LocalDateTime reg_Date;
 
-    public static QnADTO of(QnA entity) {
-        return QnADTO.builder()
+    public static QNADTO of(QNA entity) {
+        return QNADTO.builder()
                 .seq(entity.getSeq())
                 .qseq(entity.getQseq())
                 .vendor(entity.getVendor())
@@ -31,8 +31,8 @@ public class QnADTO {
                 .build();
     }
 
-    public QnA qnaEntity() {
-        return QnA.builder()
+    public QNA qnaEntity() {
+        return QNA.builder()
                 .seq(this.seq)
                 .qseq(this.qseq)
                 .vendor(this.vendor)

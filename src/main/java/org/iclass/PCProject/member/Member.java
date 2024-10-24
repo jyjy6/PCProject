@@ -1,4 +1,4 @@
-package org.iclass.PCProject.member.entity;
+package org.iclass.PCProject.member;
 
 import jakarta.persistence.*;
 import lombok.*;

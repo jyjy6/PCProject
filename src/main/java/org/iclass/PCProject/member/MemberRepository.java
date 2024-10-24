@@ -1,6 +1,5 @@
-package org.iclass.PCProject.member.repsitory;
+package org.iclass.PCProject.member;
 
-import org.iclass.PCProject.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

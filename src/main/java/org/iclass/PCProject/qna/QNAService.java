@@ -8,14 +8,14 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class QnAService {
+public class QNAService {
 
-    private final QnARepository qnaRepository;
+    private final QNARepository qnaRepository;
 
-    public List<QnADTO> list() {
-        List<QnA> list = qnaRepository.findAll();
+    public List<QNADTO> list() {
+        List<QNA> list = qnaRepository.findAll();
 
-        return list.stream().map(entity -> QnADTO.of(entity))
+        return list.stream().map(entity -> QNADTO.of(entity))
                 .collect(Collectors.toList());
         }
 }

@@ -3,8 +3,8 @@ package org.iclass.PCProject.security;
 
 import lombok.RequiredArgsConstructor;
 
-import org.iclass.PCProject.member.entity.Member;
-import org.iclass.PCProject.member.repsitory.MemberRepository;
+import org.iclass.PCProject.member.Member;
+import org.iclass.PCProject.member.MemberRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import org.springframework.security.core.userdetails.UserDetailsService;

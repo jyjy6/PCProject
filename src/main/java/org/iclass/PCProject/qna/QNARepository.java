@@ -7,7 +7,7 @@ import java.util.List;
 
 @Repository
 public interface
-QnARepository extends JpaRepository<QnA, String> {
+QNARepository extends JpaRepository<QNA, String> {
 
-    List<QnA> findAll();
+    List<QNA> findAll();
 }

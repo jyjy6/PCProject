@@ -1,4 +1,4 @@
 package org.iclass.PCProject.qna;
 
-public class QnAController {
+public class QNAController {
 }

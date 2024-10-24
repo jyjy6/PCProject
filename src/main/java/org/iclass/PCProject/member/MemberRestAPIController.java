@@ -1,9 +1,6 @@
-package org.iclass.PCProject.member.controller;
+package org.iclass.PCProject.member;
 
 import lombok.RequiredArgsConstructor;
-import org.iclass.PCProject.member.entity.Member;
-import org.iclass.PCProject.member.repsitory.MemberRepository;
-import org.iclass.PCProject.member.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;

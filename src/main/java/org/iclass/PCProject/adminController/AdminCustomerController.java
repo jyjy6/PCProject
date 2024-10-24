@@ -2,9 +2,9 @@ package org.iclass.PCProject.adminController;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.iclass.PCProject.member.dto.MemberDTO;
-import org.iclass.PCProject.member.service.MemberService;
-import org.iclass.PCProject.member.entity.Member;
+import org.iclass.PCProject.member.MemberDTO;
+import org.iclass.PCProject.member.MemberService;
+import org.iclass.PCProject.member.Member;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -1,7 +1,6 @@
-package org.iclass.PCProject.member.dto;
+package org.iclass.PCProject.member;
 
 import lombok.*;
-import org.iclass.PCProject.member.entity.Member;
 
 import java.time.LocalDateTime;
 
