@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Product List</title>
+</head>
+<body>
+<h1>Product List</h1>
+    <form method="get" th:action="@{/adminPage/ProductList}">
+        <label for="vendor">공급업체:</label>
+        <input type="text" id="vendor" name="vendor">
+        <button type="submit">필터</button>
+    </form>
+    <br>
+    <form method="get" th:action="@{/adminPage/ProductList}">
+        <button type="submit" name="regDate" value="asc">등록일 오름차순 정렬</button>
+        <button type="submit" name="regDate" value="desc">등록일 내림차순 정렬</button>
+    </form>
+    <br>
+    <form method="get" th:action="@{/adminPage/ProductList}">
+        <button type="submit" name="price" value="asc">가격 오름차순 정렬</button>
+        <button type="submit" name="price" value="desc">가격 내림차순 정렬</button>
+    </form>
+    <br>
+    <form method="get" th:action="@{/adminPage/ProductList}">
+        <button type="submit" name="stock" value="asc">남은 재고 오름차순 정렬</button>
+        <button type="submit" name="stock" value="desc">남은 재고 내림차순 정렬</button>
+    </form>
+    <br>
+    <a href="/adminPage/ProductWrite">제품 추가</a>
+    <a href="/adminPage/adminMain">돌아가기</a>
+    <br>
+    <table>
+        <tr>
+            <!--<th>seq</th>-->
+            <th>code</th>
+            <th>discount</th>
+            <th>name</th>
+            <th>price</th>
+            <th>regDate</th>
+            <th>status</th>
+            <th>stock</th>
+            <th>thumb</th>
+            <th>vendor</th>
+        </tr>
+        <tr th:each="product : ${products}">
+            <!--<td th:text="${product.seq}"></td>-->
+            <td th:text="${product.code}"></td>
+            <td th:text="${product.discount}"></td>
+            <td th:text="${product.name}"></td>
+            <td th:text="${product.price}"></td>
+            <td th:text="${product.regDate}"></td>
+            <td th:text="${product.status}"></td>
+            <td th:text="${product.stock}"></td>
+            <td th:text="${product.thumb}"></td>
+            <td th:text="${product.vendor}"></td>
+            <td>
+                <a th:href="@{/adminPage/ProductModify(seq=${product.seq})}">수정</a>
+                <form th:action="@{/adminPage/ProductDelete}" method="post" style="display:inline;">
+                    <input type="hidden" name="seq" th:value="${product.seq}"/>
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                    <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
+
+
+
+

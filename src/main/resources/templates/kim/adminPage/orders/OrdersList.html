@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Orders List</title>
+</head>
+<body>
+<h1>Orders List</h1>
+    <form method="get" th:action="@{/adminPage/OrdersList}">
+        <button type="submit" name="price" value="asc">결제가격 오름차순 정렬</button>
+        <button type="submit" name="price" value="desc">결제가격 내림차순 정렬</button>
+    </form>
+    <br>
+    <a href="/adminPage/adminMain">돌아가기</a>
+    <table>
+        <tr>
+            <th>seq</th>
+            <th>code</th>
+            <th>count</th>
+            <th>price</th>
+            <th>regDate</th>
+            <th>stslogis</th>
+            <th>vendor</th>
+            <th>username</th>
+        </tr>
+
+        <tr th:each="sales_history : ${sales_historys}">
+            <td th:text="${sales_history.seq}"></td>
+            <td th:text="${sales_history.code}"></td>
+            <td th:text="${sales_history.count}"></td>
+            <td th:text="${sales_history.price}"></td>
+            <td th:text="${sales_history.regdate}"></td>
+            <td th:text="${sales_history.stslogis}"></td>
+            <td th:text="${sales_history.vendor}"></td>
+            <td th:text="${sales_history.username}"></td>
+            <td>
+                <a th:href="@{/adminPage/OrdersModify(seq=${sales_history.seq})}">수정</a>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

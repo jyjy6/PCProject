@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Controller
-public class MemberController {
+public class    MemberController {
     private final MemberService memberService;
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;

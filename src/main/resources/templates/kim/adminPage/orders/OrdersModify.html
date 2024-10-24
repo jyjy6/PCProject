@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Update Orders</title>
+</head>
+<body>
+<h1>Update Orders</h1>
+<form th:action="@{/adminPage/OrdersModify}" method="post" th:object="${sales_history}">
+    <input type="hidden" th:field="*{seq}"/>
+    <div>
+        <label for="code">Code:</label>
+        <input type="text" id="code" th:field="*{code}" required/>
+    </div>
+
+    <div>
+        <label for="count">Count:</label>
+        <input type="text" id="count" th:field="*{count}" required/>
+    </div>
+
+    <div>
+        <label for="price">Price:</label>
+        <input type="text" id="price" th:field="*{price}" required/>
+    </div>
+
+    <div>
+        <label for="regdate">RegDate:</label>
+        <input type="date" id="regdate" th:field="*{regdate}" required/>
+    </div>
+
+    <div>
+        <label for="stslogis">Stslogis:</label>
+        <input type="text" id="stslogis" th:field="*{stslogis}" required/>
+    </div>
+
+    <div>
+        <label for="vendor">Vendor:</label>
+        <input type="text" id="vendor" th:field="*{vendor}"/>
+    </div>
+
+    <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" th:field="*{username}" required/>
+    </div>
+    <div>
+        <button type="submit">Update</button>
+        <button type="button">Delete</button>
+        <a href="/adminPage/OrdersList">Cancel</a>
+    </div>
+</form>
+</body>
+</html>
+
+

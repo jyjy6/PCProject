@@ -9,8 +9,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -35,6 +38,20 @@ public class MemberService {
 
         // 사용자 저장
         return memberRepository.save(member);
+    }
+
+    public List<MemberDTO> getAllMemberList() {
+        List<Member> list = memberRepository.findAll();
+        return list.stream().map(MemberDTO::toDto).collect(Collectors.toList());
+    }
+
+    public Member findById(Long seq) {
+        Optional<Member> memberOpt = memberRepository.findById(seq);
+        return memberOpt.orElse(null); // 존재하지 않으면 null 반환
+    }
+
+    public void update(Member member) {
+        memberRepository.save(member);
     }
 
 
