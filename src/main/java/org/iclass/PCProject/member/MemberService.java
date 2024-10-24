@@ -80,6 +80,7 @@ public class MemberService {
 
         MemberDTO userInfo = MemberDTO.builder()
                 .id(member.getId())
+                .name(member.getName())
                 .username(member.getUsername())
                 .displayName(member.getDisplayName())
                 .email(member.getEmail())
@@ -107,6 +108,7 @@ public class MemberService {
 
         // 비밀번호 검증
         if (passwordEncoder.matches(pw, correctPassword)) {
+
             return ResponseEntity.ok().body("Valid");
         } else {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Invalid password");

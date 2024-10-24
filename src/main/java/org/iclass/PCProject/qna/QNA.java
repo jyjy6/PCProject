@@ -1,32 +1,40 @@
 package org.iclass.PCProject.qna;
 
+
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+
 @Getter
 @Setter
-@EntityListeners(AuditingEntityListener.class)
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 public class QNA {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long seq;
-    private Long qseq;
+    @Column(nullable = false)
+    private String title;
     @Column(nullable = false)
     private String vendor;
     @Column(nullable = false)
     private String code;
     @Column(nullable = false)
-    private String id;
+    private String questioner;
     @Column(nullable = false)
-    private String contents;
-    @Column(nullable = false)
-    private LocalDateTime reg_Date;
+    private String content;
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime regDate;
+    private String answer;
+    private String answerUser;
+
+
+
+
 }

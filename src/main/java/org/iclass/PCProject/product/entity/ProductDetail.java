@@ -18,10 +18,11 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@SequenceGenerator(name = "productdetail_seq_generator")
 public class ProductDetail {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "productdetail_seq_generator")
     private int seq;
 
     @Column(nullable = false)

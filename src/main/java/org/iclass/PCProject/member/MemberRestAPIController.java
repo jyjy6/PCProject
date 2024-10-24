@@ -1,5 +1,6 @@
 package org.iclass.PCProject.member;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -66,8 +67,17 @@ public class MemberRestAPIController {
 
 
     @PostMapping("/validate")
-    public ResponseEntity<String> validatePassword(@RequestBody Map<String, String> requestBody) {
-        return memberService.validatePw(requestBody);
+    public ResponseEntity<String> validatePassword(@RequestBody Map<String, String> requestBody,
+                                                   HttpSession session) {
+        ResponseEntity<String> response = memberService.validatePw(requestBody);
+
+        // 검증이 성공한 경우 세션에 validated 속성 추가
+        if (response.getStatusCode() == HttpStatus.OK) {
+            session.setAttribute("validated", true); // 검증 성공 시 세션에 validated=true 추가
+        }
+
+        return response;
     }
+
 
 }

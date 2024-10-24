@@ -1,45 +1,12 @@
 package org.iclass.PCProject.qna;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.time.LocalDateTime;
-
-@Builder
-@Getter
 @Setter
-@ToString
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
 public class QNADTO {
-
-    private Long seq;
-    private Long qseq;
-    private String vendor;
-    private String code;
-    private String id;
-    private String contents;
-    private LocalDateTime reg_Date;
-
-    public static QNADTO of(QNA entity) {
-        return QNADTO.builder()
-                .seq(entity.getSeq())
-                .qseq(entity.getQseq())
-                .vendor(entity.getVendor())
-                .code(entity.getCode())
-                .id(entity.getId())
-                .reg_Date(entity.getReg_Date())
-                .build();
-    }
-
-    public QNA qnaEntity() {
-        return QNA.builder()
-                .seq(this.seq)
-                .qseq(this.qseq)
-                .vendor(this.vendor)
-                .code(this.code)
-                .id(this.id)
-                .reg_Date(this.reg_Date)
-                .build();
-
-    }
+    private Long seq; // 질문의 고유 ID
+    private String answerUser; // 답변 사용자
+    private String answer; // 답변 내용
 }

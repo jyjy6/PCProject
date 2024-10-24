@@ -40,10 +40,6 @@
         console.log(username)
 
 
-        if (!password) {
-            alert('비밀번호를 입력하세요.');
-            return;
-        }
 
         // 비밀번호 검증을 위한 데이터 준비
         const requestBody = {
@@ -56,6 +52,7 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+
             },
             body: JSON.stringify(requestBody),
         })

@@ -22,6 +22,7 @@ public class MemberDTO{
     private String address2;
     private String gender;
     private Integer age;
+    private String name;
 
     //    entity to dto
     public static MemberDTO toDto(Member entity) {
