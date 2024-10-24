@@ -9,8 +9,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -113,6 +116,18 @@ public class MemberService {
         memberRepository.delete(member);
         // 성공적으로 삭제되었음을 알리는 응답 반환
         return new ResponseEntity<>("회원이 성공적으로 삭제되었습니다.", HttpStatus.OK);
+    }
+
+    public List<MemberDTO> getAllMemberList() {
+        List<Member> list = memberRepository.findAll();
+        return list.stream().map(MemberDTO::toDTO).collect(Collectors.toList());
+    }
+    public Member findById(Long seq) {
+        Optional<Member> memberOpt = memberRepository.findById(seq);
+        return memberOpt.orElse(null); // 존재하지 않으면 null 반환
+    }
+    public void update(Member member) {
+        memberRepository.save(member);
     }
 
 

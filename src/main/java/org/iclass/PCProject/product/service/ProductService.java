@@ -6,6 +6,7 @@ import org.iclass.PCProject.product.dto.ProductDetailDTO;
 import org.iclass.PCProject.product.entity.Product;
 import org.iclass.PCProject.product.entity.ProductDetail;
 import org.iclass.PCProject.product.repository.ProductRepository;
+import org.iclass.PCProject.statistics.SalesHistory;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -51,5 +52,20 @@ public class ProductService {
         });
         return dto;
     }
+
+    public void createProduct(ProductDTO productDTO) {
+        System.out.println("Updated Product: " + productDTO);
+        productRepository.save(productDTO.toEntity());
+    }
+
+    public void updateProduct(ProductDTO productDTO) {
+        System.out.println("Updated Product: " + productDTO);
+        productRepository.save(productDTO.toEntity());
+    }
+
+    public void deleteProduct(int seq) {
+        System.out.println("Deleted Product: " + seq);
+    }
+
 
 }

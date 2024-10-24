@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Product Create</title>
+</head>
+<body>
+<h1>Product Create</h1>
+<form method="post" th:action="@{/adminPage/ProductWrite}">
+  <label for="code">code:</label>
+    <input type="text" id="code" name="code" required>
+  <br>
+  <label for="discount">discount:</label>
+    <input type="text" id="discount" name="discount">
+  <br>
+  <label for="name">name:</label>
+    <input type="text" id="name" name="name" required>
+  <br>
+  <label for="price">price:</label>
+    <input type="number" id="price" name="price" required>
+  <br>
+  <label for="regDate">regDate:</label>
+    <input type="date" id="regDate" name="regDate" required>
+  <br>
+  <label for="status">status:</label>
+    <input type="text" id="status" name="status">
+  <br>
+  <label for="stock">stock:</label>
+    <input type="number" id="stock" name="stock" required>
+  <br>
+  <label for="thumb">thumb:</label>
+    <input type="text" id="thumb" name="thumb">
+  <br>
+  <label for="vendor">vendor:</label>
+    <input type="text" id="vendor" name="vendor" required>
+  <br>
+  <button type="submit" onclick="return confirm('정말 추가하시겠습니까?');">제품 추가</button>
+</form>
+  <a href="/adminPage/ProductList">돌아가기</a>
+</body>
+</html>
