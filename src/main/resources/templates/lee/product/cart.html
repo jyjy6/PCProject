@@ -13,50 +13,61 @@
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         }
+
         h4 {
             font-size: 1.8em;
             margin-bottom: 20px;
             text-align: center;
         }
+
         table {
             width: 100%;
             margin-bottom: 20px;
             border-collapse: collapse;
             text-align: center;
         }
+
         th, td {
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
+
         th {
             background-color: #f4f4f4;
             font-weight: bold;
             font-size: 1.2em;
             text-align: center;
         }
+
         th:nth-child(2) {
             width: 60%;
         }
+
         th:nth-child(3), th:nth-child(4) {
             width: 20%;
         }
+
         td {
             font-size: 1.1em;
         }
+
         td:nth-child(4) {
             padding-right: 2%;
             text-align: right;
         }
+
         input[type="checkbox"] {
             width: 20px;
             height: 20px;
         }
+
         .qty_ctrl {
             display: flex;
             justify-content: center;
             align-items: center;
         }
+
         .qty_ctrl button {
             width: 35px;
             height: 35px;
@@ -68,9 +79,11 @@
             border-radius: 5px;
             margin: 0 5px;
         }
+
         .qty_ctrl button:hover {
             background-color: #cccccc;
         }
+
         .qty_ctrl .qty_number {
             width: 50px;
             height: 35px;
@@ -79,6 +92,7 @@
             border-radius: 5px;
             font-size: 1.2em;
         }
+
         .sum_total_price {
             width: 100%;
             text-align: right;
@@ -86,11 +100,13 @@
             font-size: 1.5em;
             color: #0056b3;
         }
+
         .purchase_btns {
             display: flex;
             justify-content: flex-end;
             gap: 10px;
         }
+
         .purchase_btns button {
             width: 200px;
             height: 50px;
@@ -100,26 +116,32 @@
             cursor: pointer;
             border-radius: 5px;
         }
+
         .cart_btn {
             background-color: #d9d9d9;
             color: #333;
         }
+
         .cart_btn:hover {
             background-color: #c4c4c4;
         }
+
         .purchase_btn {
             background-color: #007bff;
             color: white;
         }
+
         .purchase_btn:hover {
             background-color: #0056b3;
         }
+
         .empty_cart {
             text-align: center;
             padding: 20px;
             font-size: 1.2em;
             color: #999;
         }
+
         .product_total_price {
             width: 200px;
             text-align: right;
@@ -127,189 +149,189 @@
     </style>
 </head>
 <body>
-    <div th:replace="~{nav :: navbar}"></div>
-    <div class="cart_container">
-        <div class="product_info">
-            <h4>[[${items[0].username}]]님의 장바구니</h4>
-            <table>
-                <thead>
-                <tr>
-                    <th><input type="checkbox" id="select-all" onclick="toggleSelectAll(this)"/></th>
-                    <th>상품명</th>
-                    <th>수량</th>
-                    <th>제품별 합계 금액</th>
-                </tr>
-                </thead>
-                <tbody class="parent_node">
-                <tr th:each="item : ${items}" class="child_node">
-                    <td>
-                        <input type="checkbox" name="selected_items" class="selected_items" th:value="${item.pSeq}"/>
-                    </td>
-                    <td th:text="${item.vendor} + ' ' + ${item.name} + ' (' + ${item.code} + ')'"></td>
-                    <td>
-                        <span class="qty_ctrl">
-                            <button type="button" class="decreasing_btn fa-solid fa-minus"></button>
-                            <input type="text" class="qty_number" name="qty" th:value="${item.quantity}">
-                            <button type="button" class="increasing_btn fa-solid fa-plus"></button>
-                        </span>
-                    </td>
-                    <td>
-                        <span class="product_total_price"></span>
-                    </td>
-                </tr>
-                <tr th:if="${#lists.isEmpty(items)}">
-                    <td colspan="3" class="empty_cart">장바구니에 담긴 상품이 없습니다.</td>
-                </tr>
-                </tbody>
-            </table>
-            <p class="sum_total_price"></p>
-            <div class="purchase_btns">
-                <button type="submit" class="delete_cart_items_btn">선택 항목 삭제</button>
-                <button type="submit" class="purchase_btn">구매하기</button>
-            </div>
+<div th:replace="~{nav :: navbar}"></div>
+<div class="cart_container">
+    <div class="product_info">
+        <h4>님의 장바구니</h4>
+        <table>
+            <thead>
+            <tr>
+                <th><input type="checkbox" id="select-all" onclick="toggleSelectAll(this)"/></th>
+                <th>상품명</th>
+                <th>수량</th>9
+                <th>제품별 합계 금액</th>
+            </tr>
+            </thead>
+            <tbody class="parent_node">
+            <tr>
+                <td colspan="4" class="empty_cart">장바구니에 담긴 상품이 없습니다.</td>
+            </tr>
+            <tr th:if="${items != null && items.size() > 0}" th:each="item : ${items}" class="child_node">
+                <td>
+                    <input type="checkbox" name="selected_items" class="selected_items" th:value="${item.pSeq}"/>
+                </td>
+                <td th:text="${item.vendor} + ' ' + ${item.name} + ' (' + ${item.code} + ')'"></td>
+                <td>
+            <span class="qty_ctrl">
+                <button type="button" class="decreasing_btn fa-solid fa-minus"></button>
+                <input type="text" class="qty_number" name="qty" th:value="${item.quantity}">
+                <button type="button" class="increasing_btn fa-solid fa-plus"></button>
+            </span>
+                </td>
+                <td>
+                    <span class="product_total_price"></span>
+                </td>
+            </tr>
+            </tbody>
+
+        </table>
+        <p class="sum_total_price"></p>
+        <div class="purchase_btns">
+            <button type="submit" class="delete_cart_items_btn">선택 항목 삭제</button>
+            <button type="submit" class="purchase_btn">구매하기</button>
         </div>
     </div>
-    <script src="js/update_quantity.js"></script>
-    <script src="js/delete_cart_items.js"></script>
-    <script th:inline="javascript">
-        let products = /*[[${products}]]*/ [];
-        let items = /*[[${items}]]*/ [];
-        let username = /*[[${items[0].username}]]*/ ''
-        console.log('username', username)
-        console.log('products: ', products)
-        console.log('items: ', items)
+</div>
+<script src="js/update_quantity.js"></script>
+<script src="js/delete_cart_items.js"></script>
+<script th:inline="javascript">
+    let products = /*[[${products}]]*/ [];
+    let items = /*[[${items}]]*/ [];
+    let username = /*[[${items[0].username}]]*/ ''
+    console.log('username', username)
+    console.log('products: ', products)
+    console.log('items: ', items)
 
-        const qtyInputs = document.querySelectorAll('.qty_number')
-        const decreasingBtns = document.querySelectorAll('.decreasing_btn')
-        const increasingBtns = document.querySelectorAll('.increasing_btn')
-        const totPrices = document.querySelectorAll('.product_total_price')
-        const sumAllProdsPrices = document.querySelector('.sum_total_price')
-        const delCartItems = document.querySelector('.delete_cart_items_btn')
-        let price = 0
+    const qtyInputs = document.querySelectorAll('.qty_number')
+    const decreasingBtns = document.querySelectorAll('.decreasing_btn')
+    const increasingBtns = document.querySelectorAll('.increasing_btn')
+    const totPrices = document.querySelectorAll('.product_total_price')
+    const sumAllProdsPrices = document.querySelector('.sum_total_price')
+    const delCartItems = document.querySelector('.delete_cart_items_btn')
+    let price = 0
 
-        function initPrices() {
-            qtyInputs.forEach((input, i) => {
-                let qtyInput = qtyInputs[i];
-                let totPrice = totPrices[i];
-
-                let product = products.find(p => p.seq === items[i].pseq);
-                price = product.price - (product.price * (product.discount * 0.01))
-
-                if (qtyInput.value <= 0) {
-                    qtyInput.value = 1;
-                } else if (qtyInput.value > product.stock) {
-                    qtyInput.value = product.stock;
-                }
-
-                totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
-            })
-            calcAllPricesSum()
-        }
-
-        decreasingBtns.forEach((btn, i) => {
-            btn.addEventListener('click', () => {
-                sumAllProdsPrices.textContent = ''
-
-                let qtyInput = qtyInputs[i]
-                let totPrice = totPrices[i]
-
-                let product = products.find(p => p.seq === items[i].pseq)
-                price = product.price - (product.price * (product.discount * 0.01))
-
-                if(qtyInput.value > 1) {
-                    --qtyInput.value
-                    totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
-                } else {
-                    alert('최소 주문 수량은 1개입니다.')
-                    qtyInput.value = 1
-                    totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
-                }
-                updateQty(items[i].pseq, parseInt(qtyInput.value))
-                calcAllPricesSum()
-            })
-        })
-
-        increasingBtns.forEach((btn, i) => {
-            btn.addEventListener('click', () => {
-                sumAllProdsPrices.textContent = ''
-
-                let qtyInput = qtyInputs[i]
-                let totPrice = totPrices[i]
-
-                let product = products.find(p => p.seq === items[i].pseq)
-                ++qtyInput.value
-
-                if(qtyInput.value > product.stock) {
-                    alert(`현재 재고가 ${product.stock}개 입니다.`)
-                    qtyInput.value = product.stock
-                }
-
-                price = product.price - (product.price * (product.discount * 0.01))
-                totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
-                updateQty(items[i].pseq, parseInt(qtyInput.value))
-                calcAllPricesSum()
-            })
-        })
-
+    function initPrices() {
         qtyInputs.forEach((input, i) => {
-            input.addEventListener('input', () => {
-                sumAllProdsPrices.textContent = ''
+            let qtyInput = qtyInputs[i];
+            let totPrice = totPrices[i];
 
-                let qtyInput = qtyInputs[i]
-                let totPrice = totPrices[i]
+            let product = products.find(p => p.seq === items[i].pseq);
+            price = product.price - (product.price * (product.discount * 0.01))
 
-                let product = products.find(p => p.seq === items[i].pseq)
-                price = product.price - (product.price * (product.discount * 0.01))
-
-                if(qtyInput.value <= 0) {
-                    alert('최소 주문 수량은 1개입니다.')
-                    qtyInput.value = 1
-                    totPrice.textContent = price.toLocaleString('ko-KR') + '원'
-                } else if(qtyInput.value > product.stock) {
-                    alert(`현재 재고가 ${product.stock}개 입니다.`)
-                    qtyInput.value = product.stock
-                }
-
-                totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
-                updateQty(items[i].pseq, parseInt(qtyInput.value))
-                calcAllPricesSum()
-            })
-        })
-
-        delCartItems.addEventListener('click', () => {
-            let confirmDelete = confirm('선택 상품을 삭제하시겠습니까?')
-            let checkedValues = []
-
-            if(confirmDelete) {
-                document.querySelectorAll('.selected_items:checked').forEach(item => {
-                    checkedValues.push(parseInt(item.value))
-                })
-                if(checkedValues && checkedValues.length > 0) {
-                    deleteCartItems(checkedValues)
-                    alert('선택한 제품이 삭제되었습니다.')
-                }
-                else alert('선택된 제품이 없습니다.')
+            if (qtyInput.value <= 0) {
+                qtyInput.value = 1;
+            } else if (qtyInput.value > product.stock) {
+                qtyInput.value = product.stock;
             }
+
+            totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
         })
+        calcAllPricesSum()
+    }
 
-        function calcAllPricesSum() {
-            let totalSum = 0;
-            qtyInputs.forEach((input, i) => {
-                let product = products.find(p => p.seq === items[i].pseq);
-                let price = product.price - (product.price * (product.discount * 0.01));
-                totalSum += price * input.value;
-            });
-            sumAllProdsPrices.textContent = totalSum.toLocaleString('ko-KR') + '원';
+    decreasingBtns.forEach((btn, i) => {
+        btn.addEventListener('click', () => {
+            sumAllProdsPrices.textContent = ''
+
+            let qtyInput = qtyInputs[i]
+            let totPrice = totPrices[i]
+
+            let product = products.find(p => p.seq === items[i].pseq)
+            price = product.price - (product.price * (product.discount * 0.01))
+
+            if (qtyInput.value > 1) {
+                --qtyInput.value
+                totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
+            } else {
+                alert('최소 주문 수량은 1개입니다.')
+                qtyInput.value = 1
+                totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
+            }
+            updateQty(items[i].pseq, parseInt(qtyInput.value))
+            calcAllPricesSum()
+        })
+    })
+
+    increasingBtns.forEach((btn, i) => {
+        btn.addEventListener('click', () => {
+            sumAllProdsPrices.textContent = ''
+
+            let qtyInput = qtyInputs[i]
+            let totPrice = totPrices[i]
+
+            let product = products.find(p => p.seq === items[i].pseq)
+            ++qtyInput.value
+
+            if (qtyInput.value > product.stock) {
+                alert(`현재 재고가 ${product.stock}개 입니다.`)
+                qtyInput.value = product.stock
+            }
+
+            price = product.price - (product.price * (product.discount * 0.01))
+            totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
+            updateQty(items[i].pseq, parseInt(qtyInput.value))
+            calcAllPricesSum()
+        })
+    })
+
+    qtyInputs.forEach((input, i) => {
+        input.addEventListener('input', () => {
+            sumAllProdsPrices.textContent = ''
+
+            let qtyInput = qtyInputs[i]
+            let totPrice = totPrices[i]
+
+            let product = products.find(p => p.seq === items[i].pseq)
+            price = product.price - (product.price * (product.discount * 0.01))
+
+            if (qtyInput.value <= 0) {
+                alert('최소 주문 수량은 1개입니다.')
+                qtyInput.value = 1
+                totPrice.textContent = price.toLocaleString('ko-KR') + '원'
+            } else if (qtyInput.value > product.stock) {
+                alert(`현재 재고가 ${product.stock}개 입니다.`)
+                qtyInput.value = product.stock
+            }
+
+            totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
+            updateQty(items[i].pseq, parseInt(qtyInput.value))
+            calcAllPricesSum()
+        })
+    })
+
+    delCartItems.addEventListener('click', () => {
+        let confirmDelete = confirm('선택 상품을 삭제하시겠습니까?')
+        let checkedValues = []
+
+        if (confirmDelete) {
+            document.querySelectorAll('.selected_items:checked').forEach(item => {
+                checkedValues.push(parseInt(item.value))
+            })
+            if (checkedValues && checkedValues.length > 0) {
+                deleteCartItems(checkedValues)
+                alert('선택한 제품이 삭제되었습니다.')
+            } else alert('선택된 제품이 없습니다.')
         }
+    })
 
-        function toggleSelectAll(selectAllChkBox) {
-            const chkBoxes = document.querySelectorAll('.selected_items');
-            chkBoxes.forEach(chkBox => {
-                chkBox.checked = selectAllChkBox.checked;
-            });
-        }
+    function calcAllPricesSum() {
+        let totalSum = 0;
+        qtyInputs.forEach((input, i) => {
+            let product = products.find(p => p.seq === items[i].pseq);
+            let price = product.price - (product.price * (product.discount * 0.01));
+            totalSum += price * input.value;
+        });
+        sumAllProdsPrices.textContent = totalSum.toLocaleString('ko-KR') + '원';
+    }
 
-        document.addEventListener('DOMContentLoaded', initPrices);
-    </script>
+    function toggleSelectAll(selectAllChkBox) {
+        const chkBoxes = document.querySelectorAll('.selected_items');
+        chkBoxes.forEach(chkBox => {
+            chkBox.checked = selectAllChkBox.checked;
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', initPrices);
+</script>
 </body>
 </html>

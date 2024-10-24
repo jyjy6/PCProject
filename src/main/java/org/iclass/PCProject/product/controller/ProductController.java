@@ -59,34 +59,38 @@ public class ProductController {
 
     @GetMapping("/cart")
     public String addCart(Authentication auth, Model model) {
-
-        if(auth == null) {
+        // 인증되지 않은 경우 홈으로 리디렉션
+        if (auth == null) {
             model.addAttribute("allProducts", productService.getAllProducts());
             model.addAttribute("recommendedProducts", productService.recommendedProducts());
             return "home";
         }
 
+        // 인증된 사용자 정보를 가져옴
         String username = memberService.memberInfo(auth).getUsername();
         List<CartDTO> items = cartService.getItems(username);
         List<ProductDTO> products = productService.getAllProducts();
-        if (items == null) {
-            items = new ArrayList<>(); // 기본값
+
+        // 장바구니가 비어 있는 경우 빈 리스트를 모델에 추가
+        if (items == null || items.isEmpty()) {
+            items = new ArrayList<>();
+            System.out.println(items);
         }
+
+        // 모델에 데이터 추가
         model.addAttribute("products", products);
         model.addAttribute("items", items);
 
         return "lee/product/cart";
-
     }
 
+
     @PostMapping("/cart")
-    public String addCart(@RequestParam("pSeq") int pSeq, @RequestParam("qty") int qty, RedirectAttributes redirectAttributes, Authentication auth) {
+    public String addCart(@RequestParam("pSeq") Integer pSeq, @RequestParam("qty") int qty, RedirectAttributes redirectAttributes, Authentication auth) {
 
         if(auth != null) {
             String username = memberService.memberInfo(auth).getUsername();
             cartService.addItem(pSeq, qty, username);
-//            List<CartDTO> items = cartService.getItems(username);
-//            List<ProductDTO> products = productService.getAllProducts();
 
         } else {
             redirectAttributes.addFlashAttribute("message", "로그인이 필요한 서비스입니다.");

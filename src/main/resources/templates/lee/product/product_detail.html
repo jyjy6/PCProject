@@ -165,7 +165,7 @@
             </div>
             <hr>
             <form action="/cart" method="POST">
-                <input type="hidden" class="seq" name="seq" th:value="${product.seq}">
+                <input type="hidden" class="seq" name="pSeq" th:value="${product.seq}">
                 <div class="qty_price_box">
                     <p class="product_title">[[${product.vendor}]] [[${product.name}]] [[${product.code}]]</p>
                     <span class="qty_ctrl">
