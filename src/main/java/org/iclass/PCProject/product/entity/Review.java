@@ -27,11 +27,11 @@ public class Review {
     private String code;
     @Column(nullable = false)
     private String content;
-    @Column(nullable = false)
+    @Column(nullable = false, name="P_SEQ")
     private int pSeq;
     @Column(nullable = false)
     private long score;
-    @Column(nullable = false)
+    @Column(nullable = false, name="REG_DATE")
     @CreatedDate
     private LocalDate regDate;
 }

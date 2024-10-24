@@ -26,7 +26,7 @@ public class Cart {
     @Column(nullable = false)
     private String username;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, name="P_SEQ")
     private int pSeq;
 
     @Column(nullable = false)
@@ -44,7 +44,7 @@ public class Cart {
     @Column(nullable = false)
     private int quantity;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name="REG_DATE")
     @CreatedDate
     @LastModifiedDate
     private LocalDate regDate;
