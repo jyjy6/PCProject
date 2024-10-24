@@ -1,13 +1,14 @@
-package org.iclass.PCProject.salesHis;
+package org.iclass.PCProject.statistics;
 
 import lombok.*;
+
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class SalesHistoryDto {
     private int             seq;
     private String          vendor;

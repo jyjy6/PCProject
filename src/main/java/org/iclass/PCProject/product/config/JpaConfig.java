@@ -1,10 +1,10 @@
-package org.iclass.PCProject.config;
+package org.iclass.PCProject.product.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @Configuration
 @EnableJpaAuditing
-public class JPAConfig {
+public class JpaConfig {
 
 }
