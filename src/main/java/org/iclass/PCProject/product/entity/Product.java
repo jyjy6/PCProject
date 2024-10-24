@@ -17,14 +17,14 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-/*@SequenceGenerator(name = "product_seq_generator")*/
+@SequenceGenerator(name = "product_seq_generator")
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY/*, generator = "product_seq_generator"*/)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "product_seq_generator")
     private int seq;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String code;
 
     @Column(nullable = false)
