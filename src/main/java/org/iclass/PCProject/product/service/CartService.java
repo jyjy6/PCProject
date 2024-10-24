@@ -1,6 +1,7 @@
 package org.iclass.PCProject.product.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.iclass.PCProject.product.dto.CartDTO;
 import org.iclass.PCProject.product.dto.ProductDTO;
 import org.iclass.PCProject.product.entity.Cart;
@@ -10,11 +11,13 @@ import org.iclass.PCProject.product.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CartService {
 
     private final CartRepository cartRepository;
@@ -26,7 +29,7 @@ public class CartService {
     }
 
     ProductDTO dto = null;
-    public CartDTO addItem(int seq, int qty, String username) {
+    public void addItem(int seq, int qty, String username) {
         Optional<Product> product = productRepository.findById(seq);
         product.ifPresent(p -> {
             Product entity = product.get();
@@ -42,8 +45,35 @@ public class CartService {
         item.setPrice(dto.getPrice());
         item.setQuantity(qty);
 
-        Cart entity = cartRepository.save(item.toEntity());
+//        cartRepository.save(item.toEntity());
 
-        return CartDTO.toDTO(entity);
+        boolean flag = false;
+        for(Cart c : cartRepository.findAllByUsernameOrderByRegDateDesc(username)) {
+            if(c.getPSeq() == item.getPSeq()) flag = true;
+        }
+
+        if(flag) {
+            int qtyResult = cartRepository.findQuantityBypSeq(seq).getQuantity() + qty;
+            cartRepository.updateQuantityBypSeq(item.getPSeq(), qtyResult, username);
+        }
+        else if(!flag) {
+            cartRepository.save(item.toEntity());
+        }
+    }
+
+    public void removeItems(List<Integer> pSeqs, String username) {
+        List<Cart> items = cartRepository.findAllByUsernameOrderByRegDateDesc(username);
+        log.info(":::items: {}", items);
+        for(Integer pSeq : pSeqs) {
+                log.info(":::pSeq: {}:::", pSeq);
+                cartRepository.deleteByUsernameAndPSeq(pSeq, username);
+        }
+    }
+
+    public void updateQuantity(int pSeq, int qty, String username) {
+        List<Cart> items = cartRepository.findAllByUsernameOrderByRegDateDesc(username);
+        for(Cart c : items) {
+            if(c.getPSeq() == pSeq) cartRepository.updateQuantityBypSeq(pSeq, qty, username);
+        }
     }
 }

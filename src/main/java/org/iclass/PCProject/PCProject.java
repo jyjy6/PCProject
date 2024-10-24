@@ -2,8 +2,10 @@ package org.iclass.PCProject;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
+//@ComponentScan(basePackages = {"org.iclass.PCProject.config"})
 public class PCProject {
 
 	public static void main(String[] args) {
