@@ -2,10 +2,10 @@ package org.iclass.PCProject.product.service;
 
 import lombok.RequiredArgsConstructor;
 import org.iclass.PCProject.product.dto.ProductDTO;
-import org.iclass.PCProject.product.dto.ProductDetailDTO;
 import org.iclass.PCProject.product.entity.Product;
-import org.iclass.PCProject.product.entity.ProductDetail;
 import org.iclass.PCProject.product.repository.ProductRepository;
+import org.iclass.PCProject.salesHis.SalesHistory;
+import org.iclass.PCProject.salesHis.SalesHistoryDto;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -50,6 +50,18 @@ public class ProductService {
             dto = ProductDTO.toDto(entity);
         });
         return dto;
+    }
+
+    public void createProduct(ProductDTO productDTO) {
+        productRepository.save(productDTO.toEntity());
+    }
+
+    public void updateProduct(ProductDTO productDTO) {
+        productRepository.save(productDTO.toEntity());
+    }
+
+    public void deleteProduct(Product seq) {
+        productRepository.delete(seq);
     }
 
 }

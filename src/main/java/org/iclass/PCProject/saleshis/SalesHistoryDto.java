@@ -1,7 +1,6 @@
-package org.iclass.PCProject.saleshis;
+package org.iclass.PCProject.salesHis;
 
 import lombok.*;
-
 import java.time.LocalDateTime;
 
 @Getter

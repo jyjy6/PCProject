@@ -1,4 +1,4 @@
-package org.iclass.PCProject.saleshis;
+package org.iclass.PCProject.salesHis;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,4 +25,6 @@ public interface SalesHistoryRepository extends JpaRepository<SalesHistory, Inte
     "FROM SALES_HISTORY H " +
     "GROUP BY H.VENDOR, H.CODE) STAT ", nativeQuery = true)
   public List<Object[]> getSalesHistoryStat();
+
+  List<SalesHistory> findAll();
 }
