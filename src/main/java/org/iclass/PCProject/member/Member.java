@@ -43,7 +43,6 @@ public class Member {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
-
     // 계정 정보 마지막 수정 날짜.
     @UpdateTimestamp
     @Column(updatable = true)
