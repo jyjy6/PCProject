@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name="USER_TOKEN")
 public class UserToken {
 
     @Id
@@ -27,7 +28,7 @@ public class UserToken {
     private String token;
 
     @CreationTimestamp
-    @Column(nullable = false)
+    @Column(nullable = false, name="CREATED_AT")
     private LocalDateTime createdAt;
 
 
