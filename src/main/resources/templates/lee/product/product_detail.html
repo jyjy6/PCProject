@@ -131,6 +131,13 @@
         .detail_imgs {
             text-align: center;
         }
+        .out_of_stock {
+            margin-top: 150px;
+            text-align: center;
+            color: #e74c3c;
+            font-size: 1.5em;
+            font-weight: 700;
+        }
     </style>
 </head>
 <body>
@@ -164,28 +171,31 @@
                 <p class="p2 price_val">무료배송</p>
             </div>
             <hr>
-            <form action="/cart" method="POST">
-                <input type="hidden" class="seq" name="pSeq" th:value="${product.seq}">
-                <div class="qty_price_box">
-                    <p class="product_title">[[${product.vendor}]] [[${product.name}]] [[${product.code}]]</p>
-                    <span class="qty_ctrl">
-                        <button type="button" class="decreasing_btn fa-solid fa-minus"></button>
-                        <input type="text" class="qty_number" name="qty" th:value="1">
-                        <button type="button" class="increasing_btn fa-solid fa-plus"></button>
-                        <span class="a_few_stock">재고 수량: [[${product.stock}]]개</span>
-                        <p class="final_price"></p>
-                    </span>
-                </div>
-                <hr>
-                <div class="total_price">
-                    <span class="total_price_info">총 합계 금액</span>
-                    <span class="product_total_price"></span>
-                </div>
-                <div class="purchase_btns">
-                    <button type="submit" class="cart_btn fa-solid fa-cart-shopping"></button>
-                    <button type="submit" class="purchase_btn">구매하기</button>
-                </div>
-            </form>
+            <th:block th:if="${product.stock != 0}">
+                <form action="/cart" method="POST">
+                    <input type="hidden" class="seq" name="pSeq" th:value="${product.seq}">
+                    <div class="qty_price_box">
+                        <p class="product_title">[[${product.vendor}]] [[${product.name}]] [[${product.code}]]</p>
+                        <span class="qty_ctrl">
+                            <button type="button" class="decreasing_btn fa-solid fa-minus"></button>
+                            <input type="text" class="qty_number" name="qty" th:value="1">
+                            <button type="button" class="increasing_btn fa-solid fa-plus"></button>
+                            <span class="a_few_stock">재고 수량: [[${product.stock}]]개</span>
+                            <p class="final_price"></p>
+                        </span>
+                    </div>
+                    <hr>
+                    <div class="total_price">
+                        <span class="total_price_info">총 합계 금액</span>
+                        <span class="product_total_price"></span>
+                    </div>
+                    <div class="purchase_btns">
+                        <button type="submit" class="cart_btn fa-solid fa-cart-shopping"></button>
+                        <button type="submit" class="purchase_btn">구매하기</button>
+                    </div>
+                </form>
+            </th:block>
+            <p th:unless="${product.stock != 0}" class="out_of_stock">현재 품절로 구매할 수 없는 제품입니다.</p>
         </div>
         <div class="detail_nav">
             <p class="detail_spec"><a href="javascript:getDetailSpec()">상세정보</a></p>

@@ -63,7 +63,6 @@ public class CartService {
 
     public void removeItems(List<Integer> pSeqs, String username) {
         List<Cart> items = cartRepository.findAllByUsernameOrderByRegDateDesc(username);
-        log.info(":::items: {}", items);
         for(Integer pSeq : pSeqs) {
                 log.info(":::pSeq: {}:::", pSeq);
                 cartRepository.deleteByUsernameAndPSeq(pSeq, username);

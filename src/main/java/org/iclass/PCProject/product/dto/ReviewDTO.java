@@ -4,6 +4,7 @@ import lombok.*;
 import org.iclass.PCProject.product.entity.Review;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Builder
 @Getter
@@ -19,7 +20,7 @@ public class ReviewDTO {
     private String content;
     private long score;
     private int pSeq;
-    private LocalDate regDate;
+    private LocalDateTime regDate;
 
     public static ReviewDTO toDTO(Review entity) {
         return ReviewDTO.builder()

@@ -4,6 +4,7 @@ import lombok.*;
 import org.iclass.PCProject.product.entity.Product;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Builder
 @Getter
@@ -20,7 +21,7 @@ public class ProductDTO {
     private int price;
     private int discount;
     private String thumb;
-    private LocalDate regDate;
+    private LocalDateTime regDate;
     private int stock;
     private char status;
 

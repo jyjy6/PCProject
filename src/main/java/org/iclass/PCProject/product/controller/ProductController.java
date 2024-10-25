@@ -59,25 +59,20 @@ public class ProductController {
 
     @GetMapping("/cart")
     public String addCart(Authentication auth, Model model) {
-        // 인증되지 않은 경우 홈으로 리디렉션
+
         if (auth == null) {
             model.addAttribute("allProducts", productService.getAllProducts());
             model.addAttribute("recommendedProducts", productService.recommendedProducts());
             return "home";
         }
 
-        // 인증된 사용자 정보를 가져옴
         String username = memberService.memberInfo(auth).getUsername();
         List<CartDTO> items = cartService.getItems(username);
         List<ProductDTO> products = productService.getAllProducts();
 
-        // 장바구니가 비어 있는 경우 빈 리스트를 모델에 추가
-        if (items == null || items.isEmpty()) {
-            items = new ArrayList<>();
-            System.out.println(items);
-        }
+        if (items == null || items.isEmpty()) items = new ArrayList<>();
 
-        // 모델에 데이터 추가
+        model.addAttribute("username", username);
         model.addAttribute("products", products);
         model.addAttribute("items", items);
 

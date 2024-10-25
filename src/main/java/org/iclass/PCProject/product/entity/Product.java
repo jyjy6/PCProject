@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Builder
 @Getter
@@ -44,7 +45,7 @@ public class Product {
 
     @CreatedDate
     @Column(nullable = false, name="REG_DATE")
-    private LocalDate regDate;
+    private LocalDateTime regDate;
 
     @Column(nullable = false)
     private int stock;
