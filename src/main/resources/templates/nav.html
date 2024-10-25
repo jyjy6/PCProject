@@ -56,6 +56,7 @@
                                 <div sec:authorize="isAuthenticated()">
                                     <p>환영합니다,<span th:text="${#authentication.principal.displayName}"></span>님</p>
                                 </div>
+                                <p><a href="/cart"><i class="fas fa-shopping-cart"></i> 장바구니</a></p>
                                 <p><a href="/mypage/orders"><i class="fas fa-list-alt"></i> 주문내역</a></p>
                                 <p><a href="/member/modify"><i class="fas fa-user-edit"></i> 회원정보수정</a></p>
                                 <p><a href="/mypage/qna"> <i class="fas fa-comments"></i> 상담내역</a></p>

@@ -310,6 +310,7 @@
             if (checkedValues && checkedValues.length > 0) {
                 deleteCartItems(checkedValues)
                 alert('선택한 제품이 삭제되었습니다.')
+                window.location.reload();
             } else alert('선택된 제품이 없습니다.')
         }
     })

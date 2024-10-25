@@ -2,6 +2,7 @@ package org.iclass.PCProject.member;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.iclass.PCProject.product.repository.CartRepository;
 import org.iclass.PCProject.qna.QNA;
 import org.iclass.PCProject.qna.QNARepository;
 import org.iclass.PCProject.security.CustomUserDetails;
@@ -30,8 +31,7 @@ public class MemberController {
     private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
     private final QNARepository qnaRepository;
-
-
+    private final CartRepository cartRepository;
 
 
     @PostMapping("/sign-up")
@@ -76,6 +76,9 @@ public class MemberController {
             //모든 상담의 개수 바인딩
             var qnaAllLength = qnaRepository.findByQuestioner(username).size();
             model.addAttribute("qnaAllLength", qnaAllLength);
+            //장바구니에 담긴 개수 바인딩
+            var cartLength = cartRepository.findAllByUsernameOrderByRegDateDesc(username).size();
+            model.addAttribute("cartLength", cartLength);
         }
         //qna페이지로 이동 시 해당 유저의 질문들을 바인딩(3개만)
         if (id.equals("qna") && auth != null) {
