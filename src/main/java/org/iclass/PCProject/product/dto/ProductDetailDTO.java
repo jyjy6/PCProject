@@ -4,6 +4,7 @@ import lombok.*;
 import org.iclass.PCProject.product.entity.ProductDetail;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Builder
 @Getter
@@ -16,7 +17,7 @@ public class ProductDetailDTO {
     private int seq;
     private int pSeq;
     private String fileName;
-    private LocalDate regDate;
+    private LocalDateTime regDate;
 
     public static ProductDetailDTO toDto(ProductDetail entity) {
         return ProductDetailDTO.builder()

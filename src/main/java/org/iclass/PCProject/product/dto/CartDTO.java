@@ -4,6 +4,7 @@ import lombok.*;
 import org.iclass.PCProject.product.entity.Cart;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Builder
 @Getter
@@ -21,7 +22,7 @@ public class CartDTO {
     private String code;
     private int price;
     private int quantity;
-    private LocalDate regDate;
+    private LocalDateTime regDate;
 
     public static CartDTO toDTO(Cart cart) {
         return CartDTO.builder()

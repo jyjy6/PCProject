@@ -7,6 +7,7 @@ import org.iclass.PCProject.product.dto.ProductDetailDTO;
 import org.iclass.PCProject.product.entity.Product;
 import org.iclass.PCProject.product.entity.ProductDetail;
 import org.iclass.PCProject.product.entity.Review;
+import org.iclass.PCProject.product.repository.CartRepository;
 import org.iclass.PCProject.product.repository.ProductRepository;
 import org.iclass.PCProject.product.service.CartService;
 import org.iclass.PCProject.product.service.ProductDetailService;
@@ -15,6 +16,7 @@ import org.iclass.PCProject.product.service.ReviewService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -28,8 +30,8 @@ public class ApiProductController {
     private final ProductService productService;
     private final ReviewService reviewService;
     private final ProductDetailService productDetailService;
-    private final ProductRepository productRepository;
     private final CartService cartService;
+    private final CartRepository cartRepository;
 
     @GetMapping("/allProducts")
     public ResponseEntity<?> allProducts() {
@@ -69,11 +71,12 @@ public class ApiProductController {
         List<Integer> pSeqs = (List<Integer>) req.get("pSeqs");
         String username = req.get("username").toString();
 
-        log.info(":::req: {}:::" ,req);
-        log.info(":::req.get('pSeqs'): {}:::", req.get("pSeqs"));
-        log.info(":::pSeqs: {}:::", pSeqs.get(0));
         cartService.removeItems(pSeqs, username);
+        cartRepository.findAllByUsernameOrderByRegDateDesc(username);
 
-        return ResponseEntity.ok().build();
+        Map<String, Object> resp = new HashMap<>();
+        resp.put("success", true);
+
+        return ResponseEntity.ok(resp);
     }
 }

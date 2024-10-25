@@ -6,6 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Builder
 @Getter
@@ -33,5 +34,5 @@ public class Review {
     private long score;
     @Column(nullable = false, name="REG_DATE")
     @CreatedDate
-    private LocalDate regDate;
+    private LocalDateTime regDate;
 }

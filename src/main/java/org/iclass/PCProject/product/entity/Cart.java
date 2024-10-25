@@ -7,6 +7,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Builder
 @Getter
@@ -47,5 +48,5 @@ public class Cart {
     @Column(nullable = false, name="REG_DATE")
     @CreatedDate
     @LastModifiedDate
-    private LocalDate regDate;
+    private LocalDateTime regDate;
 }
