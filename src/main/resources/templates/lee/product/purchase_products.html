@@ -172,14 +172,17 @@
     let username = /*[[${username}]]*/ ''
     // console.log('username: ', username)
     let items = /*[[${items}]]*/ []
-    let total = 0
+    console.log('Items:', items);
+
 
     function sumAllPrices() {
+        let total = 0
         for(let item of items) {
-            total += item.price * item.quantity
+            if(item.status ==0)
+                total += item.price
         }
 
-        document.querySelector('.total_prices').textContent = total.toLocaleString('ko-KR') + '원'
+        document.querySelector('.total_prices').innerHTML = total.toLocaleString('ko-KR') + '원'
     }
 
     function confirmPayment() {
@@ -190,7 +193,9 @@
         }
     }
 
-    document.addEventListener('DOMContentLoaded', sumAllPrices)
+    document.addEventListener('DOMContentLoaded', ()=>{
+        sumAllPrices();
+    })
 </script>
 </body>
 </html>
