@@ -11,30 +11,21 @@
         <h2>내 구매내역 <i class="fas fa-shopping-cart"></i></h2>
 
         <div th:fragment="buyhistory">
-            <div class="purchase-item card mb-3">
+            <div class="purchase-item card mb-3 fade-in" th:each="purchase : ${purchaseList}">
                 <div class="card-body">
-                    <h5 class="card-title">주문 번호: #123456</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">상품명: 예시 상품</h6>
-                    <p class="card-text">주문 일자: 2024-10-16</p>
-                    <p class="card-text">금액: 50,000 원</p>
-                    <p class="card-text"><strong>상태:</strong> 배송 중</p>
-                    <a href="#" class="btn btn-primary">상세보기</a>
-                </div>
-            </div>
-
-            <div class="purchase-item card mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">주문 번호: #123457</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">상품명: 또 다른 예시 상품</h6>
-                    <p class="card-text">주문 일자: 2024-10-15</p>
-                    <p class="card-text">금액: 30,000 원</p>
+                    <h5 class="card-title" th:text="'주문번호 : '+${purchase.seq}">주문 번호: #123456</h5>
+                    <h6 class="card-subtitle mb-2 text-muted" th:text="'상품코드 : '+${purchase.code}">상품명: 예시 상품</h6>
+                    <!-- 날짜 포맷팅 -->
+                    <p class="card-text" th:text="'주문일자 : ' + ${#temporals.format(purchase.regdate, 'yyyy-MM-dd')}">주문 일자: 2024-10-16</p>
+                    <!-- 가격 포맷팅 (#numbers.formatInteger 사용) -->
+                    <p class="card-text" th:text="'금액 : ' + ${#numbers.formatInteger(purchase.price, 0, 'COMMA')} + '원'">금액: 50,000 원</p>
                     <p class="card-text"><strong>상태:</strong> 배송 완료</p>
-                    <a href="#" class="btn btn-primary">상세보기</a>
+                    <!-- <a href="#" class="btn btn-primary">상세보기</a> -->
                 </div>
             </div>
         </div>
-
     </div>
+
 
     <style>
         .qna-main-container {
@@ -45,7 +36,31 @@
             border: 1px solid #ddd;
             border-radius: 5px;
         }
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 0.5s forwards; /* 0.5초 동안 애니메이션 효과 */
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
     </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const items = document.querySelectorAll('.purchase-item');
+            items.forEach((item, index) => {
+                setTimeout(() => {
+                    item.classList.add('fade-in'); // 각 항목에 fade-in 클래스 추가
+                }, index * 100); // 각 항목마다 100ms 간격으로 애니메이션 적용
+            });
+        });
+
+    </script>
 </th:block>
 
 

@@ -6,9 +6,14 @@ import org.iclass.PCProject.product.repository.CartRepository;
 import org.iclass.PCProject.qna.QNA;
 import org.iclass.PCProject.qna.QNARepository;
 import org.iclass.PCProject.security.CustomUserDetails;
+import org.iclass.PCProject.statistics.PurchaseHistoryRepository;
+import org.iclass.PCProject.statistics.SalesHistory;
+import org.iclass.PCProject.statistics.SalesHistoryRepository;
+import org.iclass.PCProject.statistics.SalesHistoryService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,6 +24,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +40,8 @@ public class MemberController {
     private final MemberRepository memberRepository;
     private final QNARepository qnaRepository;
     private final CartRepository cartRepository;
+    private final SalesHistoryRepository salesHistoryRepository;
+    private final SalesHistoryService salesHistoryService;
 
 
     @PostMapping("/sign-up")
@@ -60,7 +70,10 @@ public class MemberController {
     public String myPage(@PathVariable("id") String id,
                          @RequestParam(value = "page", defaultValue = "0") Integer page,
                          Model model,
-                         Authentication auth) {
+                         Authentication auth,
+                         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+
         // 이 코드는 PathVariable을 통해 데이터 바인딩해서
 //         <div th:replace="~{jung/mypage/__${id}__ :: content}"></div> 이 값을 유동적으로 바꿈
         model.addAttribute("id", id);
@@ -79,15 +92,40 @@ public class MemberController {
             //장바구니에 담긴 개수 바인딩
             var cartLength = cartRepository.findAllByUsernameOrderByRegDateDesc(username).size();
             model.addAttribute("cartLength", cartLength);
+            //주문내역 건수를 바인딩
+            var purchaseLength = salesHistoryRepository.findByUsername(username);
+            model.addAttribute("purchaseLength", purchaseLength.size());
         }
+
         //qna페이지로 이동 시 해당 유저의 질문들을 바인딩(3개만)
         if (id.equals("qna") && auth != null) {
             var qnaList = qnaRepository.findTop3ByQuestionerOrderByRegDateDesc(username);
             model.addAttribute("qnaList", qnaList);
         }
 
+        if (id.equals("orders") && auth != null) {
+            // 기본값 설정 (전체 조회용)
+            List<SalesHistory> purchaseList;
+
+            if (startDate == null) {
+                startDate = LocalDate.of(2000, 1, 1);
+            }
+            if (endDate == null) {
+                endDate = LocalDate.now(); // 오늘 날짜로 설정
+            }
+
+            LocalDateTime startDateTime = startDate.atStartOfDay();
+            LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
+
+            purchaseList = salesHistoryService.findPurchaseHistory(
+                    username, startDateTime, endDateTime);
+            model.addAttribute("purchaseList", purchaseList);
+
+        }
+
         return "jung/mypage/mypage"; // 주 템플릿 경로
     }
+
 
     @GetMapping("/member/modify")
     public String modify(Authentication auth,
@@ -130,6 +168,23 @@ public class MemberController {
         model.addAttribute("username", username);
         return "jung/memberWithdrawPage";
     }
+
+//    @GetMapping("/mypage/orders")
+//    public String buyHistory(@PathVariable(required = false) String condition,
+//                             @RequestParam(value = "page", defaultValue = "1") int page,
+//                             @RequestParam(defaultValue = "3") int size,
+//                             @RequestParam(value = "search", required = false) String search, // 검색어 추가
+//                             Model model,
+//                             Authentication auth){
+//        //유저 id를 auth정보에서 추출
+//        String username = ((CustomUserDetails) auth.getPrincipal()).getUsername();
+//        var purchaseList = salesHistoryRepository.findByUsername(username);
+//
+//        model.addAttribute("purchaseList", purchaseList);
+//        System.out.println(purchaseList.toString());
+//
+//        return "jung/mypage/buyHistory";
+//    }
 
 
 
