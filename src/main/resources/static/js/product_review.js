@@ -14,22 +14,22 @@ function review() {
         .catch(err => console.error('error: ', err))
 
     function printReviewList(list) {
-        let str = ''
+        let str = '';
         if(list && list.length > 0) {
             list.forEach(dto => {
                 str += `
-                    <li>
-                        <span class="username">${dto.username}</span>
-                        <textarea class="content">${dto.content}</textarea>
-                        <span class="regDate">${dto.regDate}</span>
-                        <span class="score">${dto.score}</span>
-                    </li>
-                `
-            })
+                <li>
+                    <span class="username">${dto.username}</span>
+                    <textarea class="content">${dto.content}</textarea>
+                    <span class="regDate">${dto.regDate}</span>
+                    <span class="score">${dto.score}</span>
+                </li>
+            `;
+            });
         }
 
-        let btnStr = '<button class="write_review_btn">리뷰작성</button>'
-        detailArea.innerHTML = '<ul>' + str + '</ul>' + btnStr
+        let btnStr = '<button class="write_review_btn">리뷰작성</button>';
+        detailArea.innerHTML = '<ul class="review_list">' + str + '</ul>' + btnStr;
 
         document.querySelector('.write_review_btn').addEventListener('click', () => {
             if(!username) {

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>purchasing</title>
+    <style>
+        .purchase_container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+        h4 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: collapse;
+            text-align: center;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+            font-size: 1.2em;
+            text-align: center;
+        }
+        th:nth-child(3) {
+            width: 40%;
+        }
+        th:nth-child(4), th:nth-child(5) {
+            width: 20%;
+        }
+        td {
+            font-size: 1.1em;
+        }
+        td:nth-child(5) {
+            padding-right: 2%;
+            text-align: right;
+        }
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+        }
+        .qty_ctrl {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .qty_ctrl button {
+            width: 35px;
+            height: 35px;
+            background-color: #e9e9e9;
+            border: none;
+            font-size: 1.2em;
+            color: #333;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 0 5px;
+        }
+        .qty_ctrl button:hover {
+            background-color: #cccccc;
+        }
+        .qty_ctrl .qty_number {
+            width: 50px;
+            height: 35px;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1.2em;
+        }
+        .purchase_btns button {
+            width: 200px;
+            height: 50px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .empty_cart {
+            text-align: center;
+            padding: 20px;
+            font-size: 1.2em;
+            color: #999;
+        }
+        .product_total_price {
+            width: 200px;
+            text-align: right;
+        }
+        .thumbnail {
+            width: 70%;
+        }
+        .child_node a {
+            text-decoration: none;
+            color: #000;
+        }
+        .total_prices {
+            width: 100%;
+            text-align: right;
+            font-weight: 700;
+            font-size: 1.5em;
+            color: #0056b3;
+        }
+        .purchase_btns {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        .purchase_btns button {
+            width: 200px;
+            height: 50px;
+            font-size: 1.1em;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .purchase_btn {
+            background-color: #007bff;
+            color: white;
+        }
+        .purchase_btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div th:replace="~{nav :: navbar}"></div>
+    <div class="purchase_container">
+        <h3>결제하기</h3>
+        <table th:if="${not #lists.isEmpty(items)}" class="parent_node">
+            <tr th:each="item : ${items}" th:if="${item.status == 0}" class="child_node">
+                <td style="width: 20%; text-align: center;"><a th:href="|@{product_detail}/${item.pSeq}|"><img th:src="|@{../images}/${item.thumb}|" class="thumbnail" style="width: 150px;"></a></td>
+                <td><a th:text="${item.vendor} + ' ' + ${item.productname} + ' (' + ${item.code} + ')'" th:href="|@{product_detail}/${item.pSeq}|"></a></td>
+                <td>
+                    <span class="qty_ctrl">
+                        <input type="text" class="qty_number" name="qty" th:value="${item.quantity}" readonly>
+                    </span>
+                    <p style="display: inline-block; width:100%; text-align: center; margin-top: 15%;">[[${#numbers.formatInteger(item.price * item.quantity, 0,'COMMA')}]]원</p>
+                </td>
+                <td><button class="delete_btn" th:value="${item.pSeq}">삭제</button></td>
+            </tr>
+        </table>
+        <tbody th:if="${#lists.isEmpty(items)}">
+            <tr>
+                <td colspan="5" class="empty_cart">결제할 상품이 없습니다.</td>
+            </tr>
+        </tbody>
+        <p class="total_prices"></p>
+        <div class="/payment" th:unless="${#lists.isEmpty(items)}">
+<!--            <button type="submit" class="delete_cart_items_btn">선택 항목 삭제</button>-->
+            <form action="/payment" method="POST" class="form_purchase">
+                <div th:each="item : ${items}" th:if="${item.status == 0}">
+                    <input type="hidden" name="itemPseqs" th:value="${item.pSeq}">
+                </div>
+                <button type="submit" class="purchase_btn">결제하기</button>
+            </form>
+        </div>
+    </div>
+<script src="js/delete_purchase_product.js"></script>
+<script th:inline="javascript">
+    let username = /*[[${username}]]*/ ''
+    // console.log('username: ', username)
+    let items = /*[[${items}]]*/ []
+    let total = 0
+
+    function sumAllPrices() {
+        for(let item of items) {
+            total += item.price * item.quantity
+        }
+
+        document.querySelector('.total_prices').textContent = total.toLocaleString('ko-KR') + '원'
+    }
+
+    function confirmForm() {
+        if(confirm('결제하시겠습니까?')) document.querySelector('.purchase_products').submit()
+    }
+
+    document.addEventListener('DOMContentLoaded', sumAllPrices)
+</script>
+</body>
+</html>

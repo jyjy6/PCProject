@@ -17,11 +17,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@SequenceGenerator(name = "cart_seq_generator")
 public class Cart {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "cart_seq_generator")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int seq;
 
     @Column(nullable = false)
@@ -44,6 +43,9 @@ public class Cart {
 
     @Column(nullable = false)
     private int quantity;
+
+    @Column(nullable = false)
+    private String thumb;
 
     @Column(nullable = false, name="REG_DATE")
     @CreatedDate

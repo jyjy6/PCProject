@@ -138,12 +138,52 @@
             font-size: 1.5em;
             font-weight: 700;
         }
+        /* 리뷰 리스트 스타일 */
+        .review_list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .review_list li {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+            transition: background-color 0.3s;
+        }
+        .review_list li:hover {
+            background-color: #f0f0f0;
+        }
+        .review_list .username {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .review_list .regDate {
+            font-size: 0.9em;
+            color: #999;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .review_list .score {
+            font-size: 1.1em;
+            color: #ffcc00;
+            margin-top: 5px;
+        }
+        .review_list textarea {
+            width: 100%;
+            height: 60px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 5px;
+            resize: none;
+        }
     </style>
 </head>
 <body>
     <div th:replace="~{nav :: navbar}"></div>
     <div class="container">
-        <h3 th:if="${username != null}">[[${username}]]</h3>
         <div class="product_info_top">
             <span class>[[${product.vendor}]] [[${product.name}]] [[${product.code}]]</span>
         </div>
@@ -172,7 +212,7 @@
             </div>
             <hr>
             <th:block th:if="${product.stock != 0}">
-                <form action="/cart" method="POST">
+                <form action="/cart" method="POST" class="product_form">
                     <input type="hidden" class="seq" name="pSeq" th:value="${product.seq}">
                     <div class="qty_price_box">
                         <p class="product_title">[[${product.vendor}]] [[${product.name}]] [[${product.code}]]</p>
@@ -190,8 +230,8 @@
                         <span class="product_total_price"></span>
                     </div>
                     <div class="purchase_btns">
-                        <button type="submit" class="cart_btn fa-solid fa-cart-shopping"></button>
-                        <button type="submit" class="purchase_btn">구매하기</button>
+                        <button type="submit" class="cart_btn fa-solid fa-cart-shopping" onclick="submitForm('/cart')"></button>
+                        <button type="submit" class="purchase_btn" onclick="submitForm('/purchase_products')">구매하기</button>
                     </div>
                 </form>
             </th:block>
@@ -202,7 +242,7 @@
             <p class="product_review"><a href="javascript:review()">상품평</a></p>
             <p><a href="../qna/add">Q&A</a></p>
         </div>
-        <div class="detail_area detail_imgs"></div>
+        <div class="detail_area detail_imgs review_list"></div>
     </div>
     <script th:inline="javascript">
         const qtyInput = document.querySelector('.qty_number')
@@ -249,6 +289,12 @@
             }
             totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
         })
+
+        function submitForm(action) {
+            const form = document.querySelector('.product_form')
+            form.action = action
+            form.submit()
+        }
     </script>
     <script type="text/javascript">
         const username ='[[${username}]]'
