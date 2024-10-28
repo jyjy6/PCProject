@@ -179,6 +179,25 @@
             margin-top: 5px;
             resize: none;
         }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .rating {
+            display: flex;
+            cursor: pointer;
+        }
+        .star {
+            font-size: 30px; /* 별 크기 */
+            color: gray; /* 기본 색상 */
+            transition: color 0.2s;
+        }
+        .star:hover, .star:hover ~ .star {
+            color: gold;
+        }
+        .star.selected {
+            color: gold;
+        }
     </style>
 </head>
 <body>
@@ -301,5 +320,6 @@
     </script>
     <script th:inline="javascript" th:src="@{/js/detail_img.js}"></script>
     <script th:inline="javascript" th:src="@{/js/product_review.js}"></script>
+    <script th:src="@{/js/score.js}"></script>
 </body>
 </html>
