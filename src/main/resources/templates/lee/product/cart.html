@@ -170,7 +170,7 @@
             <div class="purchase_btns" th:unless="${#lists.isEmpty(items)}">
                 <button type="submit" class="delete_cart_items_btn">선택 항목 삭제</button>
                 <form action="/purchase_products" method="POST" class="form_purchase">
-                    <input type="hidden" name="pSeqs" class="pSeqs">
+                    <input type="hidden" name="pSeq" class="pSeq">
 <!--                    <input type="hidden" name="items" class="items" th:value="${items}">-->
                     <button type="submit" class="purchase_btn" name="purchase_btn" onclick="submitFormWithSelectedItems()">구매하기</button>
                 </form>
@@ -343,9 +343,9 @@
     }
 
     function submitFormWithSelectedItems() {
-        document.querySelector('.pSeqs').value = getSelectedItems()
+        document.querySelector('.pSeq').value = getSelectedItems()
         console.log('getSelectedItems(): ', getSelectedItems())
-        // document.querySelector('.form_purchase').submit()
+
     }
 
     document.addEventListener('DOMContentLoaded', () => {

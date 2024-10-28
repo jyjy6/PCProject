@@ -163,7 +163,7 @@
                 <div th:each="item : ${items}" th:if="${item.status == 0}">
                     <input type="hidden" name="itemPseqs" th:value="${item.pSeq}">
                 </div>
-                <button type="submit" class="purchase_btn">결제하기</button>
+                <button onclick="confirmPayment()" type="button" class="purchase_btn">결제하기</button>
             </form>
         </div>
     </div>
@@ -182,8 +182,12 @@
         document.querySelector('.total_prices').textContent = total.toLocaleString('ko-KR') + '원'
     }
 
-    function confirmForm() {
-        if(confirm('결제하시겠습니까?')) document.querySelector('.purchase_products').submit()
+    function confirmPayment() {
+        const isConfirmed = confirm("결제하시겠습니까?");
+        if (isConfirmed) {
+            alert("결제가 완료되었습니다.");
+            document.querySelector(".form_purchase").submit();
+        }
     }
 
     document.addEventListener('DOMContentLoaded', sumAllPrices)

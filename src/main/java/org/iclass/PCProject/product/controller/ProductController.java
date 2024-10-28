@@ -12,6 +12,7 @@ import org.iclass.PCProject.product.service.CartService;
 import org.iclass.PCProject.product.service.ProductDetailService;
 import org.iclass.PCProject.product.service.ProductPaymentService;
 import org.iclass.PCProject.product.service.ProductService;
+import org.iclass.PCProject.statistics.SalesHistoryService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +33,7 @@ public class ProductController {
     private final MemberService memberService;
     private final CartService cartService;
     private final ProductPaymentService paymentService;
+    private final SalesHistoryService salesHistoryService;
 
     @GetMapping(value = {"/", "/삼성", "/lg", "/hp", "/asus", "/acer"})
     public String home(Model model, HttpServletRequest request) {
@@ -83,7 +85,12 @@ public class ProductController {
 
 
     @PostMapping("/cart")
-    public String addCart(@RequestParam("pSeq") Integer pSeq, @RequestParam("qty") int qty, RedirectAttributes redirectAttributes, Authentication auth) {
+    public String addCart(
+            @RequestParam("pSeq") Integer pSeq,
+            @RequestParam("qty") int qty,
+            @RequestParam(value = "purchaseDirect", required = false) String purchaseDirect,
+            RedirectAttributes redirectAttributes,
+            Authentication auth) {
 
         if (auth != null) {
             String username = memberService.memberInfo(auth).getUsername();
@@ -96,6 +103,7 @@ public class ProductController {
 
         return "redirect:/cart";
     }
+
 
     @GetMapping("/purchase_products")
     public String purchaseProducts(Authentication auth, Model model) {
@@ -118,12 +126,19 @@ public class ProductController {
     }
 
     @PostMapping("/purchase_products")
-    public String purchaseProducts(Authentication auth, @RequestParam("pSeqs") List<Integer> pSeqs) {
+    public String purchaseProducts(Authentication auth,
+                                   @RequestParam("pSeq") List<Integer> pSeq,
+                                   @RequestParam(value = "qty", required = false) Integer qty) {
+
+        if(pSeq.size()==1 && qty !=null ){
+            String username = memberService.memberInfo(auth).getUsername();
+            cartService.addItem(pSeq.get(0), qty, username);
+        }
 
         if (auth != null) {
             String username = memberService.memberInfo(auth).getUsername();
-            paymentService.addItems(username, pSeqs);
-            cartService.removeItems(pSeqs, username);
+            paymentService.addItems(username, pSeq);
+            cartService.removeItems(pSeq, username);
 //            String[] pSeqArray = request.getParameterValues("pSeq");
 //            List<Integer> pSeqs = new ArrayList<>();
 //            int qty = Integer.parseInt(request.getParameter("qty").replaceAll(",", ""));
@@ -140,12 +155,14 @@ public class ProductController {
     }
 
     @PostMapping("/payment")
-    public String doPayment(Authentication auth, @RequestParam("itemPseqs") String[] pSeqs, RedirectAttributes redirectAttributes) {
+    public String doPayment(Authentication auth, @RequestParam("itemPseqs") Integer[] pSeqs, RedirectAttributes redirectAttributes) {
 
         if (auth != null) {
             String username = memberService.memberInfo(auth).getUsername();
-            for (String pSeq : pSeqs) {
+            for (Integer pSeq : pSeqs) {
                 paymentService.updateStatus(pSeq, username);
+                paymentService.saveAllBypSeq(pSeq);
+
             }
 
             redirectAttributes.addFlashAttribute("message", "결제가 완료되었습니다.");

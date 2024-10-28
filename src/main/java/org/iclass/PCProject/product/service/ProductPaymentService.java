@@ -7,6 +7,7 @@ import org.iclass.PCProject.product.dto.ProductPaymentDTO;
 import org.iclass.PCProject.product.entity.Cart;
 import org.iclass.PCProject.product.entity.ProductPayment;
 import org.iclass.PCProject.product.repository.ProductPaymentRepository;
+import org.iclass.PCProject.statistics.SalesHistoryService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class ProductPaymentService {
     private final ProductService productService;
     private final ProductPaymentRepository paymentRepository;
     private final CartService cartService;
+    private final SalesHistoryService salesHistoryService;
 
     public static int paymentNo = 1;
 
@@ -67,7 +69,22 @@ public class ProductPaymentService {
         return items.stream().map(ProductPaymentDTO::toDto).collect(Collectors.toList());
     }
 
-    public void updateStatus(String pSeq, String username) {
+    public void updateStatus(Integer pSeq, String username) {
         paymentRepository.updateAllBypSeqAndUsername(pSeq, username);
+    }
+
+    public void saveAllBypSeq(Integer pSeq) {
+        var result = paymentRepository.findBypSeq(pSeq);
+        for (ProductPayment item : result) {
+            // 필요한 값들을 ProductPayment 객체에서 추출
+            String username = item.getUsername();
+            String code = item.getCode();
+            Integer price = item.getPrice();
+            Integer quantity = item.getQuantity();
+            String vendor = item.getVendor();
+            // SalesHistory 객체 저장을 위해 savePayment 메서드 호출
+            salesHistoryService.savePayment(username, code, price, quantity, vendor);
+        }
+
     }
 }

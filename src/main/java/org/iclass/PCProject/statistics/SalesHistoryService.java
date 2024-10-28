@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 public class SalesHistoryService {
     private final SalesHistoryRepository dao;
 
+
     public String getStatUser() {
         return "OK";
     }
@@ -41,6 +42,18 @@ public class SalesHistoryService {
     // 날짜별 조회 메서드
     public List<SalesHistory> findPurchaseHistory(String username, LocalDateTime startDate, LocalDateTime endDate) {
         return dao.findByUsernameAndRegdateBetween(username, startDate, endDate);
+    }
+
+    public void savePayment(String username, String code, Integer price, Integer quantity, String vendor){
+        SalesHistory dto = new SalesHistory();
+        dto.setUsername(username);
+        dto.setCode(code);
+        dto.setRegdate(LocalDateTime.now());
+        dto.setPrice(price);
+        dto.setStslogis(0);
+        dto.setCount(quantity);
+        dto.setVendor(vendor);
+        dao.save(dto);
     }
 
 }
