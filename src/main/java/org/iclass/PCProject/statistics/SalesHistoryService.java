@@ -5,6 +5,7 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,6 +36,11 @@ public class SalesHistoryService {
     public void update(SalesHistory salesHistory) {
         System.out.println("Updated SalesHistory: " + salesHistory);
         dao.save(salesHistory);
+    }
+
+    // 날짜별 조회 메서드
+    public List<SalesHistory> findPurchaseHistory(String username, LocalDateTime startDate, LocalDateTime endDate) {
+        return dao.findByUsernameAndRegdateBetween(username, startDate, endDate);
     }
 
 }

@@ -11,7 +11,7 @@
     <!-- 부트스트랩 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-    <form th:action="@{/order/search}" method="get" class="order-search-form">
+    <form th:action="@{/mypage/orders}" method="get" class="order-search-form">
         <div class="row mb-3">
             <!-- 날짜 선택 -->
             <div class="col-md-3">
@@ -21,55 +21,22 @@
                 <input type="date" id="endDate" name="endDate" class="form-control" th:value="${endDate}">
             </div>
             <div class="col-md-6 d-flex align-items-end">
-                <!-- 조회 버튼들 -->
-                <button type="button" class="btn btn-primary me-2" onclick="allDay()">전체</button>
-                <button type="button" class="btn btn-primary me-2" onclick="setToday()">오늘</button>
-                <button type="button" class="btn btn-primary me-2" onclick="setWeek()">1주일</button>
-                <button type="button" class="btn btn-primary me-2" onclick="setMonth()">1개월</button>
-                <button type="button" class="btn btn-primary" onclick="set3Months()">3개월</button>
-            </div>
-        </div>
-
-        <div class="row mb-3">
-            <!-- 주문 상태 선택 -->
-            <div class="col-md-3">
-                <label for="orderStatus" class="form-label">주문 상태:</label>
-                <select id="orderStatus" name="orderStatus" class="form-select">
-                    <option value="">전체</option>
-                    <option value="orderCompleted">주문완료</option>
-                    <option value="paymentCompleted">결제완료</option>
-                    <option value="shippingInProgress">배송중</option>
-                    <option value="shippingCompleted">배송완료</option>
-                    <option value="orderCancelled">주문취소</option>
+                <!-- 기간 설정 버튼 (드롭다운) -->
+                <select class="form-select me-2" onchange="setDateRange(this.value)">
+                    <option value="">기간 설정</option>
+                    <option value="all">전체</option>
+                    <option value="today">오늘</option>
+                    <option value="week">1주일</option>
+                    <option value="month">1개월</option>
+                    <option value="3months">3개월</option>
                 </select>
+                <!-- 검색 버튼 -->
+                <button type="submit" class="btn btn-success">검색</button>
             </div>
-            <!-- 주문 번호, 상품 번호, 상품명 선택 -->
-            <div class="col-md-3">
-                <label for="searchType" class="form-label">검색 조건:</label>
-                <select id="searchType" name="searchType" class="form-select">
-                    <option value="orderNumber">주문번호</option>
-                    <option value="productNumber">상품번호</option>
-                    <option value="productName">상품명</option>
-                </select>
-            </div>
-            <div class="col-md-4">
-                <label for="searchKeyword"></label>
-                <input type="text" id="searchKeyword" name="searchKeyword" class="form-control mt-2" placeholder="검색어를 입력하세요">
-                <div style="display:flex; justify-content:flex-end; gap:5px;">
-                    <button type="submit" class="btn btn-success">검색</button>
-                    <button type="reset" class="btn btn-secondary">초기화</button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 d-flex justify-content-center">
-                    <!-- 검색 및 초기화 버튼 -->
-                </div>
-            </div>
-
         </div>
     </form>
 
-    <p>0건</p>
+    <p th:text="'총 '+${purchaseList.size()}+'건의 상품'">0건</p>
     <hr>
 
     <div class="order-history-container">
@@ -83,6 +50,44 @@
 
 
     <script>
+
+        // 기간 설정 함수
+        function setDateRange(value) {
+            const today = new Date();
+            let startDate;
+
+            switch(value) {
+                case 'all':
+                    startDate = '2010-01-01';
+                    break;
+                case 'today':
+                    startDate = today.toISOString().split('T')[0];
+                    break;
+                case 'week':
+                    const oneWeekAgo = new Date(today);
+                    oneWeekAgo.setDate(today.getDate() - 7);
+                    startDate = oneWeekAgo.toISOString().split('T')[0];
+                    break;
+                case 'month':
+                    const oneMonthAgo = new Date(today);
+                    oneMonthAgo.setMonth(today.getMonth() - 1);
+                    startDate = oneMonthAgo.toISOString().split('T')[0];
+                    break;
+                case '3months':
+                    const threeMonthsAgo = new Date(today);
+                    threeMonthsAgo.setMonth(today.getMonth() - 3);
+                    startDate = threeMonthsAgo.toISOString().split('T')[0];
+                    break;
+                default:
+                    return; // Do nothing if no valid option selected
+            }
+
+            // 시작일과 종료일 설정
+            document.getElementById('startDate').value = startDate;
+            document.getElementById('endDate').value = today.toISOString().split('T')[0];
+        }
+
+
         function allDay() {
         // 전체 기간의 시작일을 특정 날짜로 설정 (예: 사이트 개설일)
         const startDate = '2010-01-01'; // 시작일을 원하는 날짜로 설정
