@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SalesHistoryStatCode {
+public class PurchaseHistoryByCodeDto {
   private int     idx;
   private String  vendor;
   private String  code;

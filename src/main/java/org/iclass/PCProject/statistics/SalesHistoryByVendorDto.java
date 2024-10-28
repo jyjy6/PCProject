@@ -7,12 +7,13 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PurchaseHistoryStatVendor {
+public class SalesHistoryByVendorDto {
   private int     idx;
   private String  vendor;
   private String  code;
-  private int     price;
-  private int     count;
-  private long    total;
   private int     stock;
+  private int     price;
+  private int     income;
+  private int     count;
+  private int     total;
 }

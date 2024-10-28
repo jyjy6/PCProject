@@ -27,8 +27,10 @@ public class StatisticsRestAPIController {
 
   @GetMapping("/chart")
   public ResponseEntity<?> statChart() {
-    List<ChartDto> list = svc.getChartList();
-    return ResponseEntity.ok().body(list);
+    List<ChartDto> dataPurchase = svc.getChartPurchase();
+    List<ChartDto> dataSales    = svc.getChartSales();
+    List<ChartDto> dataUsers    = svc.getChartUsers();
+    return ResponseEntity.ok().body(Map.of("purchase", dataPurchase, "sales", dataSales, "users", dataUsers));
   }
 
   @GetMapping("/prodlist")
@@ -42,12 +44,12 @@ public class StatisticsRestAPIController {
     log.info("[PurchaseHistoryRestAPIController] sdate: {}, edate: {}, vendor: {}, code: {}, column: {}, dir: {}, sno: {}, eno: {}", sdate, edate, vendor, code, column, dir, sno, eno);
 
     if ("%".equals (code)) {
-      int total = svc.getPurchaseHistoryStatVendorCount(sdate, edate, vendor, code);
-      List<PurchaseHistoryStatVendor> list = svc.getPurchaseHistoryStatVendor(sdate, edate, vendor, code, column, dir, sno, eno);
+      int total = svc.getPurchaseHistoryCountByVendor(sdate, edate, vendor, code);
+      List<PurchaseHistoryByVendorDto> list = svc.getPurchaseHistoryByVendor(sdate, edate, vendor, code, column, dir, sno, eno);
       return ResponseEntity.ok().body(Map.of("total", total, "data", list));
     } else {
-      int total = svc.getPurchaseHistoryStatCodeCount(sdate, edate, vendor, code);
-      List<PurchaseHistoryStatCode> list = svc.getPurchaseHistoryStatCode(sdate, edate, vendor, code, column, dir, sno, eno);
+      int total = svc.getPurchaseHistoryCountByCode(sdate, edate, vendor, code);
+      List<PurchaseHistoryByCodeDto> list = svc.getPurchaseHistoryByCode(sdate, edate, vendor, code, column, dir, sno, eno);
       return ResponseEntity.ok().body(Map.of("total", total, "data", list));
     }
   }
@@ -57,18 +59,24 @@ public class StatisticsRestAPIController {
     log.info("[SalesHistoryRestAPIController] sdate: {}, edate: {}, vendor: {}, code: {}, column: {}, dir: {}, sno: {}, eno: {}", sdate, edate, vendor, code, column, dir, sno, eno);
 
     if ("%".equals (code)) {
-      int total = svc.getSalesHistoryStatVendorCount(sdate, edate, vendor, code);
-      List<SalesHistoryStatVendor> list = svc.getSalesHistoryStatVendor(sdate, edate, vendor, code, column, dir, sno, eno);
+      int total = svc.getSalesHistoryCountByVendor(sdate, edate, vendor, code);
+      List<SalesHistoryByVendorDto> list = svc.getSalesHistoryByVendor(sdate, edate, vendor, code, column, dir, sno, eno);
       return ResponseEntity.ok().body(Map.of("total", total, "data", list));
     } else {
-      int total = svc.getSalesHistoryStatCodeCount(sdate, edate, vendor, code);
-      List<SalesHistoryStatCode> list = svc.getSalesHistoryStatCode(sdate, edate, vendor, code, column, dir, sno, eno);
+      int total = svc.getSalesHistoryCountByCode(sdate, edate, vendor, code);
+      List<SalesHistoryByCodeDto> list = svc.getSalesHistoryByCode(sdate, edate, vendor, code, column, dir, sno, eno);
       return ResponseEntity.ok().body(Map.of("total", total, "data", list));
     }
   }
 
   @GetMapping("/users")
-  public ResponseEntity<?> statUser () {
-    return ResponseEntity.ok("Users OK");
+  public ResponseEntity<?> statUsers () {
+    List<UserDto> list = svc.getUsers();
+    return ResponseEntity.ok().body(list);
+  }
+  @GetMapping("/usersales")
+  public ResponseEntity<?> statSalesByUser (String sdate, String edate) {
+    List<SalesByUserDto> list = svc.getSalesByUser(sdate, edate);
+    return ResponseEntity.ok().body(list);
   }
 }
