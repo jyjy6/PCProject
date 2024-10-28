@@ -14,14 +14,16 @@ import java.util.List;
 public interface CartRepository extends JpaRepository<Cart, Integer> {
 
     List<Cart> findAllByUsernameOrderByRegDateDesc(String username);
+    @Query("select c from Cart c where c.username = :username and c.pSeq = :pSeq")
+    Cart findByUsernameAndpSeq(String username, int pSeq);
     Cart save(Cart cart);
     Cart findQuantityBypSeq(int pSeq);
     @Modifying
     @Transactional
     @Query("update Cart c set c.quantity = :quantity where c.username = :username and c.pSeq = :pSeq")
-    int updateQuantityBypSeq(int pSeq, int quantity, String username);
+    void updateQuantityBypSeq(int pSeq, int quantity, String username);
     @Modifying
     @Transactional
     @Query("delete from Cart c where c.username = :username and c.pSeq = :pSeq")
-    int deleteByUsernameAndPSeq(int pSeq, String username);
+    void deleteByUsernameAndPSeq(int pSeq, String username);
 }

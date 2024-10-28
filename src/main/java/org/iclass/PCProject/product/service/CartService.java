@@ -28,7 +28,12 @@ public class CartService {
         return items.stream().map(CartDTO::toDTO).collect(Collectors.toList());
     }
 
-    ProductDTO dto = null;
+    public CartDTO getItems(String username, int pSeq) {
+        Cart item = cartRepository.findByUsernameAndpSeq(username, pSeq);
+        return CartDTO.toDTO(item);
+    }
+
+    private ProductDTO dto = null;
     public void addItem(int seq, int qty, String username) {
         Optional<Product> product = productRepository.findById(seq);
         product.ifPresent(p -> {
@@ -43,6 +48,7 @@ public class CartService {
         item.setName(dto.getName());
         item.setCode(dto.getCode());
         item.setPrice(dto.getPrice());
+        item.setThumb(dto.getThumb());
         item.setQuantity(qty);
 
 //        cartRepository.save(item.toEntity());
@@ -62,9 +68,7 @@ public class CartService {
     }
 
     public void removeItems(List<Integer> pSeqs, String username) {
-        List<Cart> items = cartRepository.findAllByUsernameOrderByRegDateDesc(username);
         for(Integer pSeq : pSeqs) {
-                log.info(":::pSeq: {}:::", pSeq);
                 cartRepository.deleteByUsernameAndPSeq(pSeq, username);
         }
     }

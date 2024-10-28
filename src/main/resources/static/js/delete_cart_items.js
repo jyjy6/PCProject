@@ -1,4 +1,5 @@
-function deleteCartItems(chkValues) {    fetch('api/cart/deleteItems', {
+function deleteCartItems(chkValues) {
+    fetch('api/cart/deleteItems', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

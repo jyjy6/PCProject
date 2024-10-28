@@ -13,61 +13,50 @@
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         }
-
         h4 {
             font-size: 1.8em;
             margin-bottom: 20px;
             text-align: center;
         }
-
         table {
             width: 100%;
             margin-bottom: 20px;
             border-collapse: collapse;
             text-align: center;
         }
-
         th, td {
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
-
         th {
             background-color: #f4f4f4;
             font-weight: bold;
             font-size: 1.2em;
             text-align: center;
         }
-
-        th:nth-child(2) {
-            width: 60%;
+        th:nth-child(3) {
+            width: 40%;
         }
-
-        th:nth-child(3), th:nth-child(4) {
+        th:nth-child(4), th:nth-child(5) {
             width: 20%;
         }
-
         td {
             font-size: 1.1em;
         }
-
-        td:nth-child(4) {
+        td:nth-child(5) {
             padding-right: 2%;
             text-align: right;
         }
-
         input[type="checkbox"] {
             width: 20px;
             height: 20px;
         }
-
         .qty_ctrl {
             display: flex;
             justify-content: center;
             align-items: center;
         }
-
         .qty_ctrl button {
             width: 35px;
             height: 35px;
@@ -79,11 +68,9 @@
             border-radius: 5px;
             margin: 0 5px;
         }
-
         .qty_ctrl button:hover {
             background-color: #cccccc;
         }
-
         .qty_ctrl .qty_number {
             width: 50px;
             height: 35px;
@@ -92,7 +79,6 @@
             border-radius: 5px;
             font-size: 1.2em;
         }
-
         .sum_total_price {
             width: 100%;
             text-align: right;
@@ -100,13 +86,11 @@
             font-size: 1.5em;
             color: #0056b3;
         }
-
         .purchase_btns {
             display: flex;
             justify-content: flex-end;
             gap: 10px;
         }
-
         .purchase_btns button {
             width: 200px;
             height: 50px;
@@ -116,35 +100,29 @@
             cursor: pointer;
             border-radius: 5px;
         }
-
-        .cart_btn {
-            background-color: #d9d9d9;
-            color: #333;
-        }
-
-        .cart_btn:hover {
-            background-color: #c4c4c4;
-        }
-
         .purchase_btn {
             background-color: #007bff;
             color: white;
         }
-
         .purchase_btn:hover {
             background-color: #0056b3;
         }
-
         .empty_cart {
             text-align: center;
             padding: 20px;
             font-size: 1.2em;
             color: #999;
         }
-
         .product_total_price {
             width: 200px;
             text-align: right;
+        }
+        .thumbnail {
+            width: 70%;
+        }
+        .child_node a {
+            text-decoration: none;
+            color: #000;
         }
     </style>
 </head>
@@ -156,18 +134,20 @@
         <table>
             <thead>
             <tr>
-                <th><input type="checkbox" id="select-all" onclick="toggleSelectAll(this)"/></th>
+                <th><input type="checkbox" class="select_all" onclick="toggleSelectAll(this), checkIfChecked()"/></th>
+                <th>상품이미지</th>
                 <th>상품명</th>
                 <th>수량</th>
-                <th>제품별 합계 금액</th>
+                <th>가격</th>
             </tr>
             </thead>
             <tbody th:if="${not #lists.isEmpty(items)}" class="parent_node">
                     <tr th:each="item : ${items}" class="child_node">
                         <td>
-                            <input type="checkbox" name="selected_items" class="selected_items" th:value="${item.pSeq}"/>
+                            <input type="checkbox" name="selected_items" class="selected_items" th:value="${item.pSeq}" onchange="checkIfChecked()"/>
                         </td>
-                        <td th:text="${item.vendor} + ' ' + ${item.name} + ' (' + ${item.code} + ')'"></td>
+                        <td style="width: 20%; text-align: center;"><a th:href="|@{product_detail}/${item.pSeq}|"><img th:src="|@{../images}/${item.thumb}|" class="thumbnail"></a></td>
+                        <td><a th:text="${item.vendor} + ' ' + ${item.name} + ' (' + ${item.code} + ')'" th:href="|@{product_detail}/${item.pSeq}|"></a></td>
                         <td>
                             <span class="qty_ctrl">
                                 <button type="button" class="decreasing_btn fa-solid fa-minus"></button>
@@ -182,15 +162,19 @@
             </tbody>
             <tbody th:if="${#lists.isEmpty(items)}">
                 <tr>
-                    <td colspan="4" class="empty_cart">장바구니에 담긴 상품이 없습니다.</td>
+                    <td colspan="5" class="empty_cart">장바구니에 담긴 상품이 없습니다.</td>
                 </tr>
             </tbody>
         </table>
         <p class="sum_total_price"></p>
-        <div class="purchase_btns">
-            <button type="submit" class="delete_cart_items_btn">선택 항목 삭제</button>
-            <button type="submit" class="purchase_btn">구매하기</button>
-        </div>
+            <div class="purchase_btns" th:unless="${#lists.isEmpty(items)}">
+                <button type="submit" class="delete_cart_items_btn">선택 항목 삭제</button>
+                <form action="/purchase_products" method="POST" class="form_purchase">
+                    <input type="hidden" name="pSeqs" class="pSeqs">
+<!--                    <input type="hidden" name="items" class="items" th:value="${items}">-->
+                    <button type="submit" class="purchase_btn" name="purchase_btn" onclick="submitFormWithSelectedItems()">구매하기</button>
+                </form>
+            </div>
     </div>
 </div>
 <script src="js/update_quantity.js"></script>
@@ -201,6 +185,7 @@
     let username = /*[[${username}]]*/ ''
 
     let qtyInputs = document.querySelectorAll('.qty_number')
+    let chkBoxes = document.querySelectorAll('.selected_items')
     const decreasingBtns = document.querySelectorAll('.decreasing_btn')
     const increasingBtns = document.querySelectorAll('.increasing_btn')
     const totPrices = document.querySelectorAll('.product_total_price')
@@ -310,6 +295,7 @@
             if (checkedValues && checkedValues.length > 0) {
                 deleteCartItems(checkedValues)
                 alert('선택한 제품이 삭제되었습니다.')
+                window.location.reload()
             } else alert('선택된 제품이 없습니다.')
         }
     })
@@ -317,21 +303,56 @@
     function calcAllPricesSum() {
         let totalSum = 0
         qtyInputs.forEach((input, i) => {
-            let product = products.find(p => p.seq === items[i].pseq)
-            let price = product.price - (product.price * (product.discount * 0.01))
-            totalSum += price * input.value
+            if (chkBoxes[i].checked) {
+                let product = products.find(p => p.seq === items[i].pseq)
+                let price = product.price - (product.price * (product.discount * 0.01))
+                totalSum += price * input.value
+            }
         })
         sumAllProdsPrices.textContent = totalSum.toLocaleString('ko-KR') + '원'
     }
 
     function toggleSelectAll(selectAllChkBox) {
-        const chkBoxes = document.querySelectorAll('.selected_items')
         chkBoxes.forEach(chkBox => {
             chkBox.checked = selectAllChkBox.checked
         })
+        calcAllPricesSum()
     }
 
-    document.addEventListener('DOMContentLoaded', initPrices)
+    function checkIfChecked() {
+        let flag = true
+        const select_all = document.querySelector('.select_all')
+        chkBoxes.forEach(chkBox => {
+            if(!chkBox.checked) flag = false
+        })
+        select_all.checked = flag
+        calcAllPricesSum()
+    }
+
+    function getSelectedItems() {
+        const checkedItems = []
+        chkBoxes.forEach(chkBox => {
+            if(chkBox.checked) checkedItems.push(chkBox.value)
+        })
+        if(!checkedItems || checkedItems.length <= 0) {
+            alert('구매할 상품을 선택해 주세요.')
+            return
+        }
+        console.log('checkedItems: ', checkedItems)
+        return checkedItems
+    }
+
+    function submitFormWithSelectedItems() {
+        document.querySelector('.pSeqs').value = getSelectedItems()
+        console.log('getSelectedItems(): ', getSelectedItems())
+        // document.querySelector('.form_purchase').submit()
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelector('.select_all').checked = true
+        toggleSelectAll(document.querySelector('.select_all'))
+        initPrices()
+    })
 </script>
 </body>
 </html>

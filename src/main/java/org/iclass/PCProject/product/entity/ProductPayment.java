@@ -2,43 +2,57 @@ package org.iclass.PCProject.product.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Builder
+@Entity
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Slf4j
 @EntityListeners(AuditingEntityListener.class)
-@SequenceGenerator(name = "review_seq_generator")
-public class Review {
+@Table(name="PRODUCT_PAYMENT")
+public class ProductPayment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "review_seq_generator")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int seq;
+
+    @Column(nullable = false, name = "P_SEQ")
+    private int pSeq;
+
     @Column(nullable = false)
     private String username;
+
+    @Column(nullable = false)
+    private String vendor;
+
+    @Column(nullable = false)
+    private String productname;
+
     @Column(nullable = false)
     private String code;
+
     @Column(nullable = false)
-    private String content;
-    @Column(nullable = false, name="P_SEQ")
-    private int pSeq;
+    private int quantity;
+
     @Column(nullable = false)
-    private long score;
-    @Column(name="IMG_PATH")
-    private String imgPath;
-    @Column(name="IMG_PATH2")
-    private String imgPath2;
-    @Column(name = "IMG_PATH3")
-    private String imgPath3;
-    @Column(nullable = false, name="REG_DATE")
+    private int price;
+
+    @Column(nullable = false)
+    private String thumb;
+
+    @Column(nullable = false)
+    private int status;
+
     @CreatedDate
+    @Column(nullable = false, name="REG_DATE")
     private LocalDateTime regDate;
 }

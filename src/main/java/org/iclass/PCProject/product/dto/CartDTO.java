@@ -22,6 +22,7 @@ public class CartDTO {
     private String code;
     private int price;
     private int quantity;
+    private String thumb;
     private LocalDateTime regDate;
 
     public static CartDTO toDTO(Cart cart) {
@@ -33,6 +34,7 @@ public class CartDTO {
                 .code(cart.getCode())
                 .price(cart.getPrice())
                 .quantity(cart.getQuantity())
+                .thumb(cart.getThumb())
                 .build();
     }
 
@@ -46,6 +48,7 @@ public class CartDTO {
                 .code(this.code)
                 .price(this.price)
                 .quantity(this.quantity)
+                .thumb(this.thumb)
                 .regDate(this.regDate)
                 .build();
     }

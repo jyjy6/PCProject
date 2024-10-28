@@ -4,22 +4,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.iclass.PCProject.product.dto.ProductDTO;
 import org.iclass.PCProject.product.dto.ProductDetailDTO;
-import org.iclass.PCProject.product.entity.Product;
-import org.iclass.PCProject.product.entity.ProductDetail;
-import org.iclass.PCProject.product.entity.Review;
 import org.iclass.PCProject.product.repository.CartRepository;
-import org.iclass.PCProject.product.repository.ProductRepository;
-import org.iclass.PCProject.product.service.CartService;
-import org.iclass.PCProject.product.service.ProductDetailService;
-import org.iclass.PCProject.product.service.ProductService;
-import org.iclass.PCProject.product.service.ReviewService;
+import org.iclass.PCProject.product.repository.ProductPaymentRepository;
+import org.iclass.PCProject.product.service.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,6 +25,7 @@ public class ApiProductController {
     private final ProductDetailService productDetailService;
     private final CartService cartService;
     private final CartRepository cartRepository;
+    private final ProductPaymentRepository paymentRepository;
 
     @GetMapping("/allProducts")
     public ResponseEntity<?> allProducts() {
@@ -51,7 +45,7 @@ public class ApiProductController {
     }
 
     @GetMapping("/review/{pSeq}")
-    public ResponseEntity<?> reviewList(@PathVariable int pSeq) {
+    public ResponseEntity<?> reviewList(@PathVariable Integer pSeq) {
         return ResponseEntity.ok(reviewService.getReviews(pSeq));
     }
 
@@ -73,6 +67,18 @@ public class ApiProductController {
 
         cartService.removeItems(pSeqs, username);
         cartRepository.findAllByUsernameOrderByRegDateDesc(username);
+
+        Map<String, Object> resp = new HashMap<>();
+        resp.put("success", true);
+
+        return ResponseEntity.ok(resp);
+    }
+
+    @DeleteMapping("/purchaseList/deleteItem/{pSeq}")
+    public ResponseEntity<?> deletePurchaseList(@PathVariable int pSeq, @RequestBody Map<String, String> req) {
+
+        String username = req.get("username");
+        paymentRepository.deleteBypSeqAndUsername(pSeq, username);
 
         Map<String, Object> resp = new HashMap<>();
         resp.put("success", true);
