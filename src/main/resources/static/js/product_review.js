@@ -45,6 +45,16 @@ function review() {
                     <textarea class="content"></textarea>
                     <span class="regDate">${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}</span>
                     <span class="score"></span>
+                    <div class="rating">
+                        <span class="star" data-value="1">★</span>
+                        <span class="star" data-value="2">★</span>
+                        <span class="star" data-value="3">★</span>
+                        <span class="star" data-value="4">★</span>
+                        <span class="star" data-value="5">★</span>
+                    </div>
+                    <div class="rating-info">
+                        <p>평점: <span id="rating-value">0</span>/5</p>
+                    </div>
                 </li>
             `
                 let btnStr = '<button type="submit" class="write_review_btn">완료</button>' +
