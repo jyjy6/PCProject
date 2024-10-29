@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 public class Review {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "review_seq_generator")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int seq;
     @Column(nullable = false)
     private String username;
@@ -32,12 +32,6 @@ public class Review {
     private int pSeq;
     @Column(nullable = false)
     private long score;
-    @Column(name="IMG_PATH")
-    private String imgPath;
-    @Column(name="IMG_PATH2")
-    private String imgPath2;
-    @Column(name = "IMG_PATH3")
-    private String imgPath3;
     @Column(nullable = false, name="REG_DATE")
     @CreatedDate
     private LocalDateTime regDate;

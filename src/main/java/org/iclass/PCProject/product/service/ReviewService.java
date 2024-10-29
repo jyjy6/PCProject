@@ -1,5 +1,6 @@
 package org.iclass.PCProject.product.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.iclass.PCProject.product.dto.ProductDTO;
@@ -29,13 +30,17 @@ public class ReviewService {
         return list.stream().map(ReviewDTO::toDTO).collect(Collectors.toList());
     }
 
+    @Transactional
     public void addReview(Map<String, Object> map, ProductDTO dto, String username) {
-
         ReviewDTO reviewDTO = new ReviewDTO();
         reviewDTO.setCode(dto.getCode());
         reviewDTO.setContent(map.get("content").toString());
-        reviewDTO.setScore((Long) map.get("score"));
+        // Long으로 변환하여 설정
+        reviewDTO.setScore(((Number) map.get("score")).longValue());
         reviewDTO.setUsername(username);
         reviewDTO.setPSeq(dto.getSeq());
+
+        reviewRepository.save(reviewDTO.toEntity());
     }
+
 }
