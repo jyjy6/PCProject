@@ -16,15 +16,11 @@ public interface ProductPaymentRepository extends JpaRepository<ProductPayment, 
     ProductPayment save(ProductPaymentDTO dto);
 
     List<ProductPayment> findAllByUsername(String username);
+    List<ProductPayment> findBypSeq(Integer pSeq);
 
     @Modifying
     @Transactional
     @Query("delete from ProductPayment p where p.username = :username and p.pSeq = :pSeq")
-    int deleteBypSeqAndUsername(int pSeq, String username);
+    void deleteBypSeqAndUsername(int pSeq, String username);
 
-    @Modifying
-    @Transactional
-    @Query("update ProductPayment p set p.status = 1 where p.username = :username and p.pSeq = :pSeq")
-    void updateAllBypSeqAndUsername(Integer pSeq, String username);
-    List<ProductPayment> findBypSeq(Integer pSeq);
 }

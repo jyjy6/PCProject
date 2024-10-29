@@ -149,14 +149,6 @@ public class ProductController {
             String username = memberService.memberInfo(auth).getUsername();
             paymentService.addItems(username, pSeq);
             cartService.removeItems(pSeq, username);
-//            String[] pSeqArray = request.getParameterValues("pSeq");
-//            List<Integer> pSeqs = new ArrayList<>();
-//            int qty = Integer.parseInt(request.getParameter("qty").replaceAll(",", ""));
-//            for(String pSeq : pSeqArray) pSeqs.add(Integer.parseInt(pSeq));
-
-//            if(cartService.getItems(username, pSeqs.get(0)) == null) {
-//                cartService.addItem(pSeqs.get(0), qty, username);
-//            }
         } else {
             return "redirect:/home";
         }
@@ -170,10 +162,11 @@ public class ProductController {
 
         if (auth != null) {
             String username = memberService.memberInfo(auth).getUsername();
-            for (Integer pSeq : pSeqs) {
-                paymentService.updateStatus(pSeq, username);
+            for (int pSeq : pSeqs) {
+                paymentService.saveBypSeqIntoSalesHistory(pSeq);
                 paymentService.updateStock(pSeq);
                 paymentService.saveAllBypSeq(pSeq);
+                paymentService.deleteItemsDonePurchasing(pSeq, username);
             }
 
             redirectAttributes.addFlashAttribute("message", "결제가 완료되었습니다.");

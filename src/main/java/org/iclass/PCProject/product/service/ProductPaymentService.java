@@ -1,6 +1,7 @@
 package org.iclass.PCProject.product.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.iclass.PCProject.product.dto.CartDTO;
 import org.iclass.PCProject.product.dto.ProductDTO;
 import org.iclass.PCProject.product.dto.ProductPaymentDTO;
@@ -8,6 +9,8 @@ import org.iclass.PCProject.product.entity.Product;
 import org.iclass.PCProject.product.entity.ProductPayment;
 import org.iclass.PCProject.product.repository.ProductPaymentRepository;
 import org.iclass.PCProject.product.repository.ProductRepository;
+import org.iclass.PCProject.statistics.SalesHistory;
+import org.iclass.PCProject.statistics.SalesHistoryRepository;
 import org.iclass.PCProject.statistics.StatisticsService;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +21,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProductPaymentService {
 
     private final ProductService productService;
@@ -25,6 +29,7 @@ public class ProductPaymentService {
     private final CartService cartService;
     private final StatisticsService statisticsService;
     private final ProductRepository productRepository;
+    private final SalesHistoryRepository salesHistoryRepository;
 
     public void addItems(String username, List<Integer> pSeqs) {
         StringBuilder alertMessage = new StringBuilder();
@@ -43,8 +48,6 @@ public class ProductPaymentService {
 
                 if (newQuantity > stock) {
                     existingPayment.setQuantity(stock);
-                    alertMessage.append("수량 변경: ").append(dto.getName()).append(dto.getCode())
-                            .append(" 제품의 수량이 재고를 초과하여 재고 수량으로 수정되었습니다.\\n");
                 } else {
                     existingPayment.setQuantity(newQuantity);
                 }
@@ -62,10 +65,6 @@ public class ProductPaymentService {
                         .status(0)
                         .build();
 
-                if (dto.getQuantity() > stock) {
-                    alertMessage.append("수량 변경: ").append(dto.getName()).append(dto.getCode())
-                            .append(" 제품의 수량이 재고를 초과하여 재고 수량으로 수정되었습니다.\\n");
-                }
                 paymentRepository.save(item.toEntity());
             }
         }
@@ -80,8 +79,8 @@ public class ProductPaymentService {
         return items.stream().map(ProductPaymentDTO::toDto).collect(Collectors.toList());
     }
 
-    public void updateStatus(int pSeq, String username) {
-        paymentRepository.updateAllBypSeqAndUsername(pSeq, username);
+    public void deleteItemsDonePurchasing(int pSeq, String username) {
+        paymentRepository.deleteBypSeqAndUsername(pSeq, username);
     }
 
     public void saveAllBypSeq(int pSeq) {
@@ -100,13 +99,37 @@ public class ProductPaymentService {
 
     public void updateStock(int pSeq) {
         List<ProductPayment> items =  paymentRepository.findBypSeq(pSeq);
+        log.info(":::items : {}:::", items);
         List<ProductDTO> dtos = productRepository.findAll().stream().map(ProductDTO::toDto).collect(Collectors.toList());
+        log.info(":::dtos : {}:::", dtos);
         for(ProductPayment item : items) {
+            log.info(":::item : {}:::", item);
             for(int i=0; i<dtos.size(); i++) {
                 if(item.getPSeq() == dtos.get(i).getSeq()) {
-                    dtos.get(i).setSeq(dtos.get(i).getStock() - item.getQuantity());
+                    log.info(":::item.getPSeq: {}:::", item.getPSeq());
+                    log.info(":::dtos.get(i).getSeq(): {}:::", dtos.get(i).getSeq());
+                    log.info(":::dtos.get(i).getStock() : {}:::", dtos.get(i).getStock());
+                    dtos.get(i).setStock(dtos.get(i).getStock() - item.getQuantity());
+                    log.info(":::item.getQuantity() : {}:::", item.getQuantity());
+                    log.info(":::dtos.get(i).getStock() : {}:::", dtos.get(i).getStock());
+                    productRepository.updateStockBySeq(dtos.get(i).getStock(), dtos.get(i).getSeq());
                 }
             }
+        }
+    }
+
+    public void saveBypSeqIntoSalesHistory(Integer pSeq) {
+        List<ProductPayment> items =  paymentRepository.findBypSeq(pSeq);
+        for(ProductPayment item : items) {
+            SalesHistory dto = new SalesHistory();
+            dto.setCode(item.getCode());
+            dto.setCount(item.getQuantity());
+            dto.setPrice(item.getPrice());
+            dto.setUsername(item.getUsername());
+            dto.setVendor(item.getVendor());
+            dto.setStslogis(0);
+
+            salesHistoryRepository.save(dto);
         }
     }
 }
