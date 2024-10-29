@@ -26,6 +26,5 @@ public interface ProductPaymentRepository extends JpaRepository<ProductPayment, 
     @Transactional
     @Query("update ProductPayment p set p.status = 1 where p.username = :username and p.pSeq = :pSeq")
     void updateAllBypSeqAndUsername(Integer pSeq, String username);
-
-    List<ProductPayment> findBypSeq(Integer pSeq);  // P를 소문자 p로 변경
+    List<ProductPayment> findBypSeq(Integer pSeq);
 }

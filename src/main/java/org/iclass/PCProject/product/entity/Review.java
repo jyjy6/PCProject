@@ -31,7 +31,7 @@ public class Review {
     @Column(nullable = false, name="P_SEQ")
     private int pSeq;
     @Column(nullable = false)
-    private long score;
+    private int score;
     @Column(nullable = false, name="REG_DATE")
     @CreatedDate
     private LocalDateTime regDate;

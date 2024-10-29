@@ -2,9 +2,12 @@ package org.iclass.PCProject.product.service;
 
 import lombok.RequiredArgsConstructor;
 import org.iclass.PCProject.product.dto.CartDTO;
+import org.iclass.PCProject.product.dto.ProductDTO;
 import org.iclass.PCProject.product.dto.ProductPaymentDTO;
+import org.iclass.PCProject.product.entity.Product;
 import org.iclass.PCProject.product.entity.ProductPayment;
 import org.iclass.PCProject.product.repository.ProductPaymentRepository;
+import org.iclass.PCProject.product.repository.ProductRepository;
 import org.iclass.PCProject.statistics.StatisticsService;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,7 @@ public class ProductPaymentService {
     private final StatisticsService statisticsService;
 
     public static int paymentNo = 1;
+    private final ProductRepository productRepository;
 
     public void addItems(String username, List<Integer> pSeqs) {
         ProductPaymentDTO item = new ProductPaymentDTO();
@@ -66,14 +70,13 @@ public class ProductPaymentService {
         return items.stream().map(ProductPaymentDTO::toDto).collect(Collectors.toList());
     }
 
-    public void updateStatus(Integer pSeq, String username) {
+    public void updateStatus(int pSeq, String username) {
         paymentRepository.updateAllBypSeqAndUsername(pSeq, username);
     }
 
-    public void saveAllBypSeq(Integer pSeq) {
-        var result = paymentRepository.findBypSeq(pSeq);
-        for (ProductPayment item : result) {
-            // 필요한 값들을 ProductPayment 객체에서 추출
+    public void saveAllBypSeq(int pSeq) {
+        List<ProductPayment> items = paymentRepository.findBypSeq(pSeq);
+        for (ProductPayment item : items) {
             String username = item.getUsername();
             String code = item.getCode();
             Integer price = item.getPrice();
@@ -83,5 +86,17 @@ public class ProductPaymentService {
            /* statisticsService.savePayment(username, code, price, quantity, vendor);*/
         }
 
+    }
+
+    public void updateStock(int pSeq) {
+        List<ProductPayment> items =  paymentRepository.findBypSeq(pSeq);
+        List<ProductDTO> dtos = productRepository.findAll().stream().map(ProductDTO::toDto).collect(Collectors.toList());
+        for(ProductPayment item : items) {
+            for(int i=0; i<dtos.size(); i++) {
+                if(item.getPSeq() == dtos.get(i).getSeq()) {
+                    dtos.get(i).setSeq(dtos.get(i).getStock() - item.getQuantity());
+                }
+            }
+        }
     }
 }

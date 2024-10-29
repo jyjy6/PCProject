@@ -19,7 +19,7 @@ public class ReviewDTO {
     private String username;
     private String code;
     private String content;
-    private long score;
+    private int score;
     private int pSeq;
     private LocalDateTime regDate;
 

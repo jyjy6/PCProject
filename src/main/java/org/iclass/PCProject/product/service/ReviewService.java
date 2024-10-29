@@ -35,8 +35,7 @@ public class ReviewService {
         ReviewDTO reviewDTO = new ReviewDTO();
         reviewDTO.setCode(dto.getCode());
         reviewDTO.setContent(map.get("content").toString());
-        // Long으로 변환하여 설정
-        reviewDTO.setScore(((Number) map.get("score")).longValue());
+        reviewDTO.setScore((Integer) map.get("score"));
         reviewDTO.setUsername(username);
         reviewDTO.setPSeq(dto.getSeq());
 
