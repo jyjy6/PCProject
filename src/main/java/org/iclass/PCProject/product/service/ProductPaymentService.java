@@ -2,16 +2,13 @@ package org.iclass.PCProject.product.service;
 
 import lombok.RequiredArgsConstructor;
 import org.iclass.PCProject.product.dto.CartDTO;
-import org.iclass.PCProject.product.dto.ProductDTO;
 import org.iclass.PCProject.product.dto.ProductPaymentDTO;
-import org.iclass.PCProject.product.entity.Cart;
 import org.iclass.PCProject.product.entity.ProductPayment;
 import org.iclass.PCProject.product.repository.ProductPaymentRepository;
-import org.iclass.PCProject.statistics.SalesHistoryService;
+import org.iclass.PCProject.statistics.StatisticsService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,7 +18,7 @@ public class ProductPaymentService {
     private final ProductService productService;
     private final ProductPaymentRepository paymentRepository;
     private final CartService cartService;
-    private final SalesHistoryService salesHistoryService;
+    private final StatisticsService statisticsService;
 
     public static int paymentNo = 1;
 
@@ -83,7 +80,7 @@ public class ProductPaymentService {
             Integer quantity = item.getQuantity();
             String vendor = item.getVendor();
             // SalesHistory 객체 저장을 위해 savePayment 메서드 호출
-            salesHistoryService.savePayment(username, code, price, quantity, vendor);
+           /* statisticsService.savePayment(username, code, price, quantity, vendor);*/
         }
 
     }

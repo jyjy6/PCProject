@@ -12,7 +12,6 @@ import org.iclass.PCProject.product.service.CartService;
 import org.iclass.PCProject.product.service.ProductDetailService;
 import org.iclass.PCProject.product.service.ProductPaymentService;
 import org.iclass.PCProject.product.service.ProductService;
-import org.iclass.PCProject.statistics.SalesHistoryService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,7 +32,6 @@ public class ProductController {
     private final MemberService memberService;
     private final CartService cartService;
     private final ProductPaymentService paymentService;
-    private final SalesHistoryService salesHistoryService;
 
     @GetMapping(value = {"/", "/삼성", "/lg", "/hp", "/asus", "/acer"})
     public String home(Model model, HttpServletRequest request) {

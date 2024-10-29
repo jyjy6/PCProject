@@ -118,18 +118,4 @@ public class MemberService {
         return new ResponseEntity<>("회원이 성공적으로 삭제되었습니다.", HttpStatus.OK);
     }
 
-    public List<MemberDTO> getAllMemberList() {
-        List<Member> list = memberRepository.findAll();
-        return list.stream().map(MemberDTO::toDTO).collect(Collectors.toList());
-    }
-    public Member findById(Long seq) {
-        Optional<Member> memberOpt = memberRepository.findById(seq);
-        return memberOpt.orElse(null); // 존재하지 않으면 null 반환
-    }
-    public void update(Member member) {
-        memberRepository.save(member);
-    }
-
-
-
 }

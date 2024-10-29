@@ -28,7 +28,6 @@ public class SalesHistory {
     private String username;
 
     @CreationTimestamp
-    @Column(updatable = false)
     private LocalDateTime regdate;
 
     @Column(nullable = false)
@@ -38,4 +37,5 @@ public class SalesHistory {
     private Integer count;
 
     private Integer stslogis;
+
 }

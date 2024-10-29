@@ -1,4 +1,4 @@
-package org.iclass.PCProject.adminController;
+package org.iclass.PCProject.admin.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

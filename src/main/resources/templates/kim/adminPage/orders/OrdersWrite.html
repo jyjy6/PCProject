@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Orders Create</title>
+</head>
+<body>
+<h1>Orders Create</h1>
+    <form method="post" th:action="@{/adminPage/OrdersWrite}">
+        <label for="code">code:</label>
+        <input type="text" id="code" name="code">
+        <br>
+        <label for="count">count:</label>
+        <input type="number" id="count" name="count" required>
+        <br>
+        <label for="price">price:</label>
+        <input type="number" id="price" name="price" required>
+        <br>
+        <label for="regdate">regDate:</label>
+        <input type="datetime-local" id="regdate" name="regdate" required>
+        <br>
+        <label for="stslogis">배송 상태:</label>
+        <select id="stslogis" required>
+            <option value="0">결제완료</option>
+            <option value="1">배송준비</option>
+            <option value="2">배송중</option>
+            <option value="3">배송완료</option>
+        </select>
+        <br>
+        <label for="vendor">vendor:</label>
+        <input type="text" id="vendor" name="vendor" required>
+        <br>
+        <label for="username">username:</label>
+        <input type="text" id="username" name="username">
+        <br>
+        <button type="submit" onclick="return confirm('정말 추가하시겠습니까?');">제품 추가</button>
+    </form>
+    <a href="/adminPage/OrdersList">돌아가기</a>
+</body>
+</html>

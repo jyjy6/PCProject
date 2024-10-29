@@ -51,19 +51,4 @@ public class ProductService {
         return dto;
     }
 
-    public void createProduct(ProductDTO productDTO) {
-        System.out.println("Updated Product: " + productDTO);
-        productRepository.save(productDTO.toEntity());
-    }
-
-    public void updateProduct(ProductDTO productDTO) {
-        System.out.println("Updated Product: " + productDTO);
-        productRepository.save(productDTO.toEntity());
-    }
-
-    public void deleteProduct(int seq) {
-        System.out.println("Deleted Product: " + seq);
-    }
-
-
 }

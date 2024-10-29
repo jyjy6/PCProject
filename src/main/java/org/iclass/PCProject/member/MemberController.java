@@ -3,16 +3,11 @@ package org.iclass.PCProject.member;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.iclass.PCProject.product.repository.CartRepository;
-import org.iclass.PCProject.qna.QNA;
 import org.iclass.PCProject.qna.QNARepository;
 import org.iclass.PCProject.security.CustomUserDetails;
-import org.iclass.PCProject.statistics.PurchaseHistoryRepository;
 import org.iclass.PCProject.statistics.SalesHistory;
 import org.iclass.PCProject.statistics.SalesHistoryRepository;
-import org.iclass.PCProject.statistics.SalesHistoryService;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
+import org.iclass.PCProject.statistics.StatisticsService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +36,7 @@ public class MemberController {
     private final QNARepository qnaRepository;
     private final CartRepository cartRepository;
     private final SalesHistoryRepository salesHistoryRepository;
-    private final SalesHistoryService salesHistoryService;
+    private final StatisticsService statisticsService;
 
 
     @PostMapping("/sign-up")
@@ -117,9 +112,9 @@ public class MemberController {
             LocalDateTime startDateTime = startDate.atStartOfDay();
             LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
 
-            purchaseList = salesHistoryService.findPurchaseHistory(
+            /*purchaseList = statisticsService.findPurchaseHistory(
                     username, startDateTime, endDateTime);
-            model.addAttribute("purchaseList", purchaseList);
+            model.addAttribute("purchaseList", purchaseList);*/
 
         }
 

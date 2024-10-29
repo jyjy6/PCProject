@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Customer Create</title>
+</head>
+<body>
+<h1>Customer Create</h1>
+  <form method="post" th:action="@{/adminPage/CustomerWrite}">
+    <label for="address">address:</label>
+    <input type="text" id="address" name="address">
+    <br>
+    <label for="address2">address2:</label>
+    <input type="text" id="address2" name="address2" required>
+    <br>
+    <label for="createdAt">CreatedAt:</label>
+    <input type="datetime-local" id="createdAt" required/>
+    <br>
+    <label for="email">email:</label>
+    <input type="email" id="email" name="email" required>
+    <br>
+    <label for="gender">Gender:</label>
+    <select id="gender">
+      <option value="MALE" th:text="'Male'">Male</option>
+      <option value="FEMALE" th:text="'Female'">Female</option>
+    </select>
+    <br>
+    <label for="name">name:</label>
+    <input type="text" id="name" name="name" required>
+    <br>
+    <label for="password">password:</label>
+    <input type="password" id="password" name="password">
+    <br>
+    <label for="role">role:</label>
+    <input type="text" id="role" name="role" required>
+    <br>
+    <label for="updateAt">updateAt:</label>
+    <input type="datetime-local" id="updateAt" name="updateAt" required>
+    <br>
+    <label for="username">username:</label>
+    <input type="text" id="username" name="username" required>
+    <br>
+    <label for="displayName">displayname:</label>
+    <input type="text" id="displayName" name="displayName" required>
+    <br>
+    <div>
+      <button type="submit" onclick="return confirm('정말 추가하시겠습니까?');">신입회원 추가</button>
+      <button type="button" onclick="history.back();">돌아가기</button>
+    </div>
+  </form>
+  <a href="/adminPage/ProductList">돌아가기</a>
+</body>
+</html>

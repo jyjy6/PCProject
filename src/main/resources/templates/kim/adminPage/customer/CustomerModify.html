@@ -34,7 +34,7 @@
 
     <div>
         <label for="address2">Address2:</label>
-        <input type="text" id="address2" th:field="*{address2}"/>
+        <input type="text" id="address2" th:field="*{address2}" required/>
     </div>
 
     <div>
@@ -49,13 +49,37 @@
             <option value="FEMALE" th:text="'Female'">Female</option>
         </select>
     </div>
-
+    <div>
+        <label for="role">Gender:</label>
+        <select id="role" th:field="*{role}">
+            <option value="ROLE_USER" th:text="'ROLE_USER'">ROLE_USER</option>
+            <option value="ROLE_VAILD" th:text="'ROLE_VAILD'">ROLE_VAILD</option>
+        </select>
+    </div>
+    <br>
     <div>
         <button type="submit">Update</button>
-        <button type="button">Delete</button>
-        <a href="/adminPage/CustomerList">Cancel</a>
+        <button type="button" onclick="deleteCustomer()">강제 탈퇴</button>
+        <button type="button" onclick="history.back();">Cancel</button>
     </div>
 </form>
+
+<script>
+    function deleteCustomer() {
+        if (confirm('정말 이 회원을 강제 탈퇴처리 시키겠습니까?')) {
+            const form = document.createElement('form');
+            form.method = 'post';
+            form.action = '/adminPage/CustomerDelete';
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'id';
+            input.value = document.getElementById('id').value;
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+</script>
 </body>
 </html>
 

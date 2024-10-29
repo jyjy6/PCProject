@@ -19,10 +19,10 @@
         <button type="submit">필터</button>
     </form>
     <br>
+    <a href="/adminPage/CustomerWrite">신입회원 등록</a>
     <a href="/adminPage/adminMain">돌아가기</a>
     <table>
         <tr>
-            <!--<th>id</th>-->
             <th>username</th>
             <th>displayName</th>
             <th>email</th>
@@ -33,10 +33,9 @@
             <th>gender</th>
             <th>createdAt</th>
             <th>updatedAt</th>
+            <th>role</th>
         </tr>
-
         <tr th:each="member : ${members}">
-            <!--<td th:text="${member.id}"></td>-->
             <td th:text="${member.username}"></td>
             <td th:text="${member.displayName}"></td>
             <td th:text="${member.email}"></td>
@@ -47,10 +46,25 @@
             <td th:text="${member.gender}"></td>
             <td th:text="${member.createdAt}"></td>
             <td th:text="${member.updatedAt}"></td>
-            <td>
-                <a th:href="@{/adminPage/CustomerModify(id=${member.id})}">수정</a>
-            </td>
+            <td th:text="${member.role}"></td>
+            <td><a th:href="@{/adminPage/CustomerModify(id=${member.id})}">수정</a></td>
         </tr>
-</table>
+    </table>
+    <div>
+        <span th:if="${totalPages > 1}">
+            <span>페이지: </span>
+            <a th:if="${currentPage > 0}" th:href="@{/adminPage/CustomerList(page=0, year=${year})}">처음</a>
+            <a th:if="${currentPage > 0}" th:href="@{/adminPage/CustomerList(page=${currentPage - 1}, year=${year})}">이전</a>
+            <span th:each="page : ${#numbers.sequence(0, totalPages - 1)}"
+                  th:if="${page >= currentPage - 2 && page <= currentPage + 2}">
+                <a th:href="@{/adminPage/CustomerList(page=${page}, year=${year})}"
+                   th:text="${page + 1}"
+                   th:classappend="${page == currentPage} ? 'active' : ''"></a>
+                <span th:if="${page < totalPages - 1}"> | </span>
+            </span>
+            <a th:if="${currentPage < totalPages - 1}" th:href="@{/adminPage/CustomerList(page=${currentPage + 1}, year=${year})}">다음</a>
+            <a th:if="${currentPage < totalPages - 1}" th:href="@{/adminPage/CustomerList(page=${totalPages - 1}, year=${year})}">끝</a>
+        </span>
+    </div>
 </body>
 </html>
