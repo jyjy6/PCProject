@@ -2,7 +2,6 @@ package org.iclass.PCProject.product.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.iclass.PCProject.member.MemberService;
@@ -52,7 +51,6 @@ public class ProductController {
 
         model.addAttribute("product", productService.getProductBySeq(seq));
         model.addAttribute("detailImgs", detailService.getProductDetail(seq));
-        model.addAttribute("avgScore", productService.getAvgScore(seq));
 
         if (auth != null) {
             model.addAttribute("username", memberService.memberInfo(auth).getUsername());
@@ -118,16 +116,6 @@ public class ProductController {
         List<ProductPaymentDTO> dtos = paymentService.getAllItemsByUsername(username);
         List<ProductDTO> products = productService.getAllProducts();
 
-        for(ProductPaymentDTO dto : dtos) {
-            for(ProductDTO product : products) {
-                if(dto.getPSeq() == product.getSeq() && dto.getQuantity() > product.getStock()) {
-                    dto.setQuantity(product.getStock());
-                } else if(dto.getPSeq() == product.getSeq() && product.getStock() <= 0) {
-                    dto.setQuantity(0);
-                }
-            }
-        }
-
         model.addAttribute("username", username);
         model.addAttribute("items", dtos);
         model.addAttribute("products", products);
@@ -149,6 +137,14 @@ public class ProductController {
             String username = memberService.memberInfo(auth).getUsername();
             paymentService.addItems(username, pSeq);
             cartService.removeItems(pSeq, username);
+//            String[] pSeqArray = request.getParameterValues("pSeq");
+//            List<Integer> pSeqs = new ArrayList<>();
+//            int qty = Integer.parseInt(request.getParameter("qty").replaceAll(",", ""));
+//            for(String pSeq : pSeqArray) pSeqs.add(Integer.parseInt(pSeq));
+
+//            if(cartService.getItems(username, pSeqs.get(0)) == null) {
+//                cartService.addItem(pSeqs.get(0), qty, username);
+//            }
         } else {
             return "redirect:/home";
         }
@@ -157,22 +153,19 @@ public class ProductController {
     }
 
     @PostMapping("/payment")
-    @Transactional
     public String doPayment(Authentication auth, @RequestParam("itemPseqs") Integer[] pSeqs, RedirectAttributes redirectAttributes) {
 
         if (auth != null) {
             String username = memberService.memberInfo(auth).getUsername();
-            for (int pSeq : pSeqs) {
-                paymentService.saveBypSeqIntoSalesHistory(pSeq);
-                paymentService.updateStock(pSeq);
+            for (Integer pSeq : pSeqs) {
+                paymentService.updateStatus(pSeq, username);
                 paymentService.saveAllBypSeq(pSeq);
-                paymentService.deleteItemsDonePurchasing(pSeq, username);
+
             }
 
             redirectAttributes.addFlashAttribute("message", "결제가 완료되었습니다.");
             return "redirect:/mypage/orders";
         }
-        redirectAttributes.addFlashAttribute("message", "결제가 실패하였습니다. 다시 시도해 주세요.");
         return "redirect:/purchase_products";
     }
 }

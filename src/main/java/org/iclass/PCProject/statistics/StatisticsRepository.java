@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -254,4 +255,6 @@ public class StatisticsRepository {
     Query query = em.createNativeQuery(sql);
     return query.getResultList();
   }
+
+
 }

@@ -98,7 +98,7 @@ public class MemberController {
             model.addAttribute("qnaList", qnaList);
         }
 
-        if (id.equals("orders") && auth != null) {
+        if (id.equals("orders") || id.equals("main") && auth != null) {
             // 기본값 설정 (전체 조회용)
             List<SalesHistory> purchaseList;
 
@@ -112,9 +112,26 @@ public class MemberController {
             LocalDateTime startDateTime = startDate.atStartOfDay();
             LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
 
-            /*purchaseList = statisticsService.findPurchaseHistory(
+            purchaseList = statisticsService.findPurchaseHistory(
                     username, startDateTime, endDateTime);
-            model.addAttribute("purchaseList", purchaseList);*/
+            model.addAttribute("purchaseList", purchaseList);
+
+            // 각 상태별 주문 개수 초기화
+            int[] statusCounts = new int[4]; // 0: 주문완료, 1: 결제완료, 2: 배송중, 3: 배송완료
+
+            // 각 상태별 개수 세기
+            for (SalesHistory purchase : purchaseList) {
+                int status = purchase.getStslogis(); // stslogis 값 가져오기
+                if (status >= 0 && status < statusCounts.length) {
+                    statusCounts[status] += 1; // 해당 상태 카운트 증가
+                }
+            }
+
+            // 모델에 상태별 카운트 추가
+            model.addAttribute("orderCompletedCount", statusCounts[0]);
+            model.addAttribute("paymentCompletedCount", statusCounts[1]);
+            model.addAttribute("shippingCount", statusCounts[2]);
+            model.addAttribute("deliveredCount", statusCounts[3]);
 
         }
 

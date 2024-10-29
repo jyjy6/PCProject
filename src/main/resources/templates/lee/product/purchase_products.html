@@ -3,11 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>purchasing</title>
-    <script th:inline="javascript">
-        let message = [[${message}]]
-        if(message != null) alert(message)
-        message = null
-    </script>
     <style>
         .purchase_container {
             max-width: 1200px;
@@ -147,13 +142,12 @@
             <tr th:each="item : ${items}" th:if="${item.status == 0}" class="child_node">
                 <td style="width: 20%; text-align: center;"><a th:href="|@{product_detail}/${item.pSeq}|"><img th:src="|@{../images}/${item.thumb}|" class="thumbnail" style="width: 150px;"></a></td>
                 <td><a th:text="${item.vendor} + ' ' + ${item.productname} + ' (' + ${item.code} + ')'" th:href="|@{product_detail}/${item.pSeq}|"></a></td>
-                <td th:if="${item.quantity != 0}">
+                <td>
                     <span class="qty_ctrl">
                         <input type="text" class="qty_number" name="qty" th:value="${item.quantity}" readonly>
                     </span>
                     <p style="display: inline-block; width:100%; text-align: center; margin-top: 15%;">[[${#numbers.formatInteger(item.price * item.quantity, 0,'COMMA')}]]원</p>
                 </td>
-                <td th:if="${item.quantity <= 0}">품절</td>
                 <td><button class="delete_btn" th:value="${item.pSeq}">삭제</button></td>
             </tr>
         </table>
@@ -164,6 +158,7 @@
         </tbody>
         <p class="total_prices"></p>
         <div class="/payment" th:unless="${#lists.isEmpty(items)}">
+<!--            <button type="submit" class="delete_cart_items_btn">선택 항목 삭제</button>-->
             <form action="/payment" method="POST" class="form_purchase">
                 <div th:each="item : ${items}" th:if="${item.status == 0}">
                     <input type="hidden" name="itemPseqs" th:value="${item.pSeq}">
@@ -192,13 +187,7 @@
 
     function confirmPayment() {
         const isConfirmed = confirm("결제하시겠습니까?");
-        for(let item of items) {
-            if(item.quantity <= 0) {
-                alert('품절 상품을 삭제 후 결제해 주세요.')
-                return
-            }
-        }
-        if(isConfirmed) {
+        if (isConfirmed) {
             alert("결제가 완료되었습니다.");
             document.querySelector(".form_purchase").submit();
         }

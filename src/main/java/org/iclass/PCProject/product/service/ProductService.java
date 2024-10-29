@@ -2,11 +2,8 @@ package org.iclass.PCProject.product.service;
 
 import lombok.RequiredArgsConstructor;
 import org.iclass.PCProject.product.dto.ProductDTO;
-import org.iclass.PCProject.product.dto.ReviewDTO;
 import org.iclass.PCProject.product.entity.Product;
-import org.iclass.PCProject.product.entity.Review;
 import org.iclass.PCProject.product.repository.ProductRepository;
-import org.iclass.PCProject.product.repository.ReviewRepository;
 import org.iclass.PCProject.statistics.SalesHistory;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +15,6 @@ import java.util.stream.Collectors;
 public class ProductService {
 
     private final ProductRepository productRepository;
-    private final ReviewRepository reviewRepository;
 
     public List<ProductDTO> recommendedProducts() {
         List<Product> list = productRepository.findAll();
@@ -55,13 +51,4 @@ public class ProductService {
         return dto;
     }
 
-    public double getAvgScore(int pSeq) {
-
-        double avgScore = 0;
-        List<Review> list = reviewRepository.findAllBypSeqOrderByRegDateDesc(pSeq);
-        for(Review entity : list) {
-            avgScore += entity.getScore();
-        }
-        return avgScore;
-    }
 }
