@@ -145,6 +145,14 @@ public class MemberController {
                          Model model) {
         // 세션에서 validated 값 가져오기
         Boolean validated = (Boolean) session.getAttribute("validated");
+        auth.getAuthorities();
+        var userRole = auth.getAuthorities().toString(); // 권한 목록을 문자열로 변환
+        System.out.println(userRole.contains("ROLE_OAuth"));
+        if (userRole.contains("ROLE_OAuth")) { // "ROLE_OAuth" 포함 여부 확인
+            MemberDTO member = memberService.memberInfo(auth);
+            model.addAttribute("member", member);
+            return "jung/modify.html";
+        }
 
         // 검증이 되지 않은 경우 리다이렉트
         if (validated == null || !validated) {
