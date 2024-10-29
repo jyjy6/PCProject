@@ -2,69 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Product Create</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      padding: 0;
-      background-color: #f4f4f4;
-    }
-
-    h1 {
-      text-align: center;
-      color: #333;
-    }
-
-    form {
-      background: white;
-      padding: 20px;
-      border-radius: 5px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      max-width: 500px;
-      margin: auto;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-
-    input[type="text"],
-    input[type="email"],
-    input[type="password"],
-    input[type="datetime-local"],
-    select {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      box-sizing: border-box;
-    }
-
-    button {
-      padding: 10px 15px;
-      border: none;
-      border-radius: 5px;
-      background-color: #5cb85c;
-      color: white;
-      cursor: pointer;
-      margin-right: 10px;
-    }
-
-    button:hover {
-      background-color: #4cae4c;
-    }
-
-    button[type="button"] {
-      background-color: #d9534f;
-    }
-
-    button[type="button"]:hover {
-      background-color: #c9302c;
-    }
-  </style>
 </head>
 <body>
 <h1>Product Create</h1>
@@ -80,26 +17,24 @@
     <br>
     <label for="price">price:</label>
       <input type="number" id="price" name="price" required>
-    <br><br>
+    <br>
     <label for="regDate">regDate:</label>
       <input type="date" id="regDate" name="regDate" required>
-    <br><br>
+    <br>
     <label for="status">status:</label>
       <input type="text" id="status" name="status">
     <br>
     <label for="stock">stock:</label>
       <input type="number" id="stock" name="stock" required>
-    <br><br>
+    <br>
     <label for="thumb">thumb:</label>
       <input type="text" id="thumb" name="thumb">
     <br>
     <label for="vendor">vendor:</label>
       <input type="text" id="vendor" name="vendor" required>
     <br>
-    <div>
-      <button type="submit" onclick="return confirm('정말 추가하시겠습니까?');">제품 추가</button>
-      <button type="button" onclick="history.back();">돌아가기</button>
-    </div>
+    <button type="submit" onclick="return confirm('정말 추가하시겠습니까?');">제품 추가</button>
   </form>
+  <a href="/adminPage/ProductList">돌아가기</a>
 </body>
 </html>

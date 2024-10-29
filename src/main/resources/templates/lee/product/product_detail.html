@@ -251,8 +251,8 @@
                         <span class="product_total_price"></span>
                     </div>
                     <div class="purchase_btns">
-                        <button type="submit" class="cart_btn fa-solid fa-cart-shopping" onclick="submitForm('/cart')"></button>
-                        <button type="submit" class="purchase_btn" onclick="submitForm('/purchase_products')">구매하기</button>
+                        <button type="submit" class="cart_btn fa-solid fa-cart-shopping"></button>
+                        <button type="submit" class="purchase_btn" formaction="/purchase_products">구매하기</button>
                     </div>
                 </form>
             </th:block>
@@ -311,12 +311,6 @@
             }
             totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
         })
-
-        function submitForm(action) {
-            const form = document.querySelector('.product_form')
-            form.action = action
-            form.submit()
-        }
     </script>
     <script type="text/javascript">
         const username ='[[${username}]]'

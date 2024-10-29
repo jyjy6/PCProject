@@ -111,9 +111,6 @@ public class AdminProductController {
         model.addAttribute("regDate", regDate);
         model.addAttribute("price", price);
         model.addAttribute("stock", stock);
-        model.addAttribute("regDateSort", request.getParameter("regDateSort"));
-        model.addAttribute("priceSort", request.getParameter("priceSort"));
-        model.addAttribute("stockSort", request.getParameter("stockSort"));
 
         return "kim/adminPage/product/ProductList";
     }

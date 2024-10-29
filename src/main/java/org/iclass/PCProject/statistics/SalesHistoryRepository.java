@@ -15,5 +15,4 @@ public interface SalesHistoryRepository extends JpaRepository<SalesHistory, Inte
     List<SalesHistory> findByUsername(String username);
     List<SalesHistory> findByUsernameAndRegdateBetween(String username, LocalDateTime startDate, LocalDateTime endDate);
 
-
 }

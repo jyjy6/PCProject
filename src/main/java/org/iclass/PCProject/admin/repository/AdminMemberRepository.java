@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AdminMemberRepository extends JpaRepository<Member, Long> {
 
-    @Query("SELECT m FROM Member m WHERE YEAR(m.createdAt) = :year order by m.createdAt DESC")
-    Page<Member> findByCreatedAtYear(String year, Pageable pageable);
-
+    @Query("SELECT m FROM Member m WHERE YEAR(m.createdAt) = :year")
+    Page<Member> findByCreatedAtYear(@Param("year") int year, Pageable pageable);
 }

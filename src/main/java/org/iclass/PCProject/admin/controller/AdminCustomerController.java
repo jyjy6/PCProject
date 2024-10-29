@@ -25,19 +25,22 @@ public class AdminCustomerController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/CustomerList")
-    public String customerList(@RequestParam(required = false) String year,
-                               @RequestParam(defaultValue = "0") int page,
-                               @RequestParam(required = false) String sortDirection,
-                               Model model) {
-        Pageable pageable = PageRequest.of(page, 10);
+    public String customerList(Model model,
+                               @RequestParam(required = false) String year,
+                               @RequestParam(defaultValue = "0") int page) {
+        Pageable pageable = PageRequest.of(page, 20);
+        Page<MemberDTO> memberPage;
 
-        Page<MemberDTO> membersPage = adminCustomerService.findByCreatedAtYear(year, pageable);
+        if (year != null && !year.isEmpty()) {
+            memberPage = adminCustomerService.getAllMemberListByYear(Integer.parseInt(year), pageable);
+        } else {
+            memberPage = adminCustomerService.getAllMemberList(pageable);
+        }
 
-        model.addAttribute("members", membersPage.getContent());
-        model.addAttribute("totalPages", membersPage.getTotalPages());
-        model.addAttribute("currentPage", page);
+        model.addAttribute("members", memberPage.getContent());
+        model.addAttribute("currentPage", memberPage.getNumber() + 1);
+        model.addAttribute("totalPages", memberPage.getTotalPages());
         model.addAttribute("year", year);
-        model.addAttribute("sortDirection", sortDirection); // 현재 정렬 방향 추가
 
         return "kim/adminPage/customer/CustomerList";
     }

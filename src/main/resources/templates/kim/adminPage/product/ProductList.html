@@ -9,77 +9,57 @@
             margin: 0;
             padding: 20px;
         }
-
         h1 {
             color: #333;
         }
-
         form {
             margin-bottom: 20px;
         }
-
         input[type="text"] {
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
             width: 200px;
         }
-
         button {
-            padding: 4px 8px;
+            padding: 10px 15px;
             border: none;
             border-radius: 5%;
             background-color: gray;
             color: white;
             cursor: pointer;
             margin-left: 10px;
-
         }
-
         button:hover {
             background-color: #4cae4c;
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
             background-color: white;
         }
-
         th, td {
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
-
         th {
             background-color: #f2f2f2;
         }
-
         tr:hover {
             background-color: #f1f1f1;
         }
-
         a {
             text-decoration: none;
-            padding: 4px 6px;
-            border: none;
-            border-radius: 5%;
-            background-color: gray;
-            color: white;
-            cursor: pointer;
-            margin-left: 10px;
+            color: #007bff;
         }
-
         a:hover {
-            background-color: #4cae4c;
+            text-decoration: underline;
         }
-
         .pagination {
             margin-top: 20px;
         }
-
         .pagination a {
             padding: 8px 12px;
             margin: 0 5px;
@@ -87,12 +67,10 @@
             border-radius: 4px;
             color: #007bff;
         }
-
         .pagination a.active {
             background-color: #007bff;
             color: white;
         }
-
         .pagination a:hover {
             background-color: #0056b3;
             color: white;
@@ -110,6 +88,7 @@
         <input type="hidden" name="page" th:value="${currentPage}"/>
         <button type="submit">필터</button>
     </form>
+    <br>
     <form method="get" th:action="@{/adminPage/ProductList}">
         <input type="hidden" name="vendor" th:value="${vendor}">
         <input type="hidden" name="regDate" th:value="${regDate}">
@@ -119,6 +98,7 @@
         <button type="submit" name="regDateSort" value="asc">등록일 오름차순 정렬</button>
         <button type="submit" name="regDateSort" value="desc">등록일 내림차순 정렬</button>
     </form>
+    <br>
     <form method="get" th:action="@{/adminPage/ProductList}">
         <input type="hidden" name="vendor" th:value="${vendor}">
         <input type="hidden" name="regDate" th:value="${regDate}">
@@ -127,6 +107,7 @@
         <button type="submit" name="priceSort" value="asc">가격 오름차순 정렬</button>
         <button type="submit" name="priceSort" value="desc">가격 내림차순 정렬</button>
     </form>
+    <br>
     <form method="get" th:action="@{/adminPage/ProductList}">
         <input type="hidden" name="vendor" th:value="${vendor}">
         <input type="hidden" name="regDate" th:value="${regDate}">
@@ -135,6 +116,7 @@
         <button type="submit" name="stockSort" value="asc">남은 재고 오름차순 정렬</button>
         <button type="submit" name="stockSort" value="desc">남은 재고 내림차순 정렬</button>
     </form>
+    <br>
     <a href="/adminPage/ProductWrite">제품 추가</a>
     <a href="/adminPage/adminMain">돌아가기</a>
     <br>
@@ -161,7 +143,7 @@
             <td th:text="${product.thumb}"></td>
             <td th:text="${product.vendor}"></td>
             <td>
-                <a th:href="@{/adminPage/ProductModify(seq=${product.seq})}">수정</a>
+                <button><a th:href="@{/adminPage/ProductModify(seq=${product.seq})}">수정</a></button>
                 <form th:action="@{/adminPage/ProductDelete}" method="post" style="display:inline;">
                     <input type="hidden" name="seq" th:value="${product.seq}"/>
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -170,15 +152,14 @@
             </td>
         </tr>
     </table>
-    <br>
-    <div style="text-align: center;">
+    <div>
         <span th:if="${totalPages > 1}">
             <span>페이지: </span>
-            <span th:each="page : ${#numbers.sequence(0, totalPages - 1)}">
-                <a th:href="@{/adminPage/ProductList(page=${page}, vendor=${vendor}, regDate=${regDate}, price=${price}, stock=${stock}, regDateSort=${regDateSort}, priceSort=${priceSort}, stockSort=${stockSort})}"
-                   th:text="${page + 1}"
+            <span th:each="page : ${#numbers.sequence(1, totalPages)}">
+                <a th:href="@{/adminPage/ProductList(page=${page - 1}, vendor=${vendor}, regDate=${regDate}, price=${price}, stock=${stock})}"
+                   th:text="${page}"
                    th:classappend="${page == currentPage} ? 'active' : ''"></a>
-                <span th:if="${page < totalPages - 1}"> | </span>
+                <span th:if="${page < totalPages}"> | </span>
             </span>
         </span>
     </div>
