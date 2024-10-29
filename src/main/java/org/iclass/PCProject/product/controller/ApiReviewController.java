@@ -1,13 +1,16 @@
 package org.iclass.PCProject.product.controller;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.iclass.PCProject.member.MemberService;
 import org.iclass.PCProject.product.dto.ProductDTO;
 import org.iclass.PCProject.product.dto.ReviewDTO;
 import org.iclass.PCProject.product.entity.Review;
+import org.iclass.PCProject.product.repository.ReviewRepository;
 import org.iclass.PCProject.product.service.ProductService;
 import org.iclass.PCProject.product.service.ReviewService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +27,7 @@ public class ApiReviewController {
     private final ReviewService reviewService;
     private final ProductService productService;
     private final MemberService memberService;
+    private final ReviewRepository reviewRepository;
 
     @PostMapping("/comment/add")
     public ResponseEntity<?> addReview(@RequestBody Map<String, Object> map, @RequestParam("pSeq") int seq, Authentication auth) {
@@ -53,9 +57,16 @@ public class ApiReviewController {
         }
     }
 
+    @Transactional
     @DeleteMapping("/comment/remove")
-    public ResponseEntity<?> removeReview() {
-
-        return null;
+    public ResponseEntity<?> removeReview(@RequestParam("seq") int seq) {
+        try {
+            reviewRepository.deleteBySeq(seq);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("댓글 삭제에 실패했습니다.");
+        }
     }
+
 }

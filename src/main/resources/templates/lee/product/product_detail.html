@@ -192,12 +192,18 @@
             color: gray; /* 기본 색상 */
             transition: color 0.2s;
         }
-        .star:hover, .star:hover ~ .star {
-            color: gold;
-        }
+
         .star.selected {
-            color: gold;
+            color: gold; /* 선택된 별 색상 */
         }
+
+
+        /* 추가 스타일 */
+        .rating-info {
+            margin-top: 10px; /* 평점 정보와 별점 사이의 간격 */
+            font-size: 16px; /* 평점 정보 크기 */
+        }
+
     </style>
 </head>
 <body>
