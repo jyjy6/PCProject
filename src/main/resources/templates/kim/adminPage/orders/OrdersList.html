@@ -2,6 +2,102 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Orders List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 200px;
+        }
+
+        button {
+            padding: 4px 8px;
+            border: none;
+            border-radius: 5%;
+            background-color: gray;
+            color: white;
+            cursor: pointer;
+            margin-left: 10px;
+
+        }
+
+        button:hover {
+            background-color: #4cae4c;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        a {
+            text-decoration: none;
+            padding: 4px 6px;
+            border: none;
+            border-radius: 5%;
+            background-color: gray;
+            color: white;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        a:hover {
+            background-color: #4cae4c;
+        }
+
+        .pagination {
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            padding: 8px 12px;
+            margin: 0 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            color: #007bff;
+        }
+
+        .pagination a.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .pagination a:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+    </style>
 </head>
 <body>
 <h1>Orders List</h1>
@@ -10,15 +106,12 @@
         <button type="submit" name="price" value="asc">결제가격 오름차순 정렬</button>
         <button type="submit" name="price" value="desc">결제가격 내림차순 정렬</button>
     </form>
-    <br>
     <form method="get" th:action="@{/adminPage/OrdersList}">
         <button type="submit" name="regdate" value="asc">등록일 오름차순 정렬</button>
         <button type="submit" name="regdate" value="desc">등록일 내림차순 정렬</button>
     </form>
-    <br>
     <a href="/adminPage/OrdersWrite">추가</a>
     <a href="/adminPage/adminMain">돌아가기</a>
-
     <table>
         <tr>
             <th>code</th>
@@ -55,8 +148,9 @@
             </td>
         </tr>
     </table>
+    <br>
     <!-- 페이지네이션 추가 -->
-    <div>
+    <div style="text-align: center;">
         <span th:if="${totalPages > 1}">
             <span>페이지: </span>
             <a th:if="${currentPage > 0}" th:href="@{/adminPage/OrdersList(page=0, price=${param.price}, regdate=${param.regdate})}">처음</a>

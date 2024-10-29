@@ -7,7 +7,6 @@ import org.iclass.PCProject.member.Member;
 import org.iclass.PCProject.member.MemberDTO;
 import org.iclass.PCProject.member.MemberRepository;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 import java.util.*;
@@ -42,12 +41,12 @@ public class AdminCustomerService {
         memberRepository.deleteById(id);
     }
 
-    public Page<MemberDTO> getAllMemberList(Pageable pageable) {
-        return memberRepository.findAll(pageable).map(this::convertToDTO);
-    }
-
-    public Page<MemberDTO> getAllMemberListByYear(int year, Pageable pageable) {
-        return adminMemberRepository.findByCreatedAtYear(year, pageable).map(this::convertToDTO);
+    public Page<MemberDTO> findByCreatedAtYear(String year, Pageable pageable) {
+        if (year == null || year.isEmpty()) {
+            return memberRepository.findAll(pageable).map(this::convertToDTO);
+        } else {
+            return adminMemberRepository.findByCreatedAtYear(year, pageable).map(this::convertToDTO);
+        }
     }
 
     private MemberDTO convertToDTO(Member member) {

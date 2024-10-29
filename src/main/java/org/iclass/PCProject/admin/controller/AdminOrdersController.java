@@ -35,7 +35,7 @@ public class AdminOrdersController {
                                 Model model) {
 
         // Pageable 및 Sort 설정
-        Pageable pageable = PageRequest.of(page, 20); // 20개씩
+        Pageable pageable = PageRequest.of(page, 10);
         Sort sort = Sort.unsorted();
 
         // 가격 정렬 설정
