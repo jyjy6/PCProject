@@ -3,11 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script th:inline="javascript">
-        let message = [[${message}]]
-        if(message != null) alert(message)
-        message = null
-    </script>
 </head>
 <body>
 <div th:fragment="content" class="order-main-wrapper">
