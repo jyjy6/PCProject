@@ -182,7 +182,7 @@
         </aside>
         <article>
             <section class="recommended">
-                <h2>추천상품</h2>
+                <h2>추천제품</h2>
                 <div class="recommended-list">
                     <div class="recommended-item" th:each="rProduct : ${recommendedProducts}">
                         <a th:href="|@{product_detail}/${rProduct.seq}|"><img th:src="|@{images}/${rProduct.thumb}|"></a>
@@ -198,6 +198,7 @@
                 </div>
             </section>
             <section class="product-list">
+                <h2>전체제품</h2>
                 <div class="detail" th:each="product : ${allProducts}">
                     <a th:href="|@{product_detail}/${product.seq}|"><img th:src="|@{images}/${product.thumb}|"></a>
                     <hr class="seperating-line">
