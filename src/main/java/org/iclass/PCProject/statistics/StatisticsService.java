@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class StatisticsService {
   private final StatisticsRepository dao;
+  private final SalesHistoryRepository historyDao;
 
   public String getStatUser() {
     return "OK";
@@ -150,5 +151,9 @@ public class StatisticsService {
                                                      ((BigDecimal)o[4]).intValue(),
                                                      ((BigDecimal)o[5]).intValue(),
                                                      ((BigDecimal)o[6]).intValue())).toList();
+  }
+
+  public List<SalesHistory> findPurchaseHistory(String username, LocalDateTime startDate, LocalDateTime endDate) {
+    return historyDao.findByUsernameAndRegdateBetween(username, startDate, endDate);
   }
 }
