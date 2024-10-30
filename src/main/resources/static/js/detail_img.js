@@ -17,7 +17,7 @@ function getDetailSpec() {
 }
 
 function printDetailSpec(data) {
-    let str = ''
+    detailArea.innerHTML = ''
     if(data && data.length > 0) {
         data.forEach(d => {
             const img = document.createElement('img');

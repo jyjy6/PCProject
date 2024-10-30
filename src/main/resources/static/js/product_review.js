@@ -9,6 +9,7 @@ function review() {
         .then((data) => {
             console.log(productSeq);
             console.log(data);
+            detailArea.innerHTML = ''
             printReviewList(data);
         })
         .catch(err => console.error('error: ', err));

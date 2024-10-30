@@ -206,7 +206,7 @@
                     <div class="retail">
                         <span class="discount-rate">[[${product.discount}]]%</span> <span class="retail-price">[[${product.price}]]원</span>
                     </div>
-                    <p class="price"><a href="detail">[[${#numbers.formatInteger(product.price-(product.price*(product.discount*0.01)), 0,'COMMA')}]]원</a></p>
+                    <p class="price"><a th:href="|@{product_detail}/${product.seq}|">[[${#numbers.formatInteger(product.price-(product.price*(product.discount*0.01)), 0,'COMMA')}]]원</a></p>
                     <span class="stock-status" th:if="${product.stock == 0}">품절</span>
                 </div>
             </section>

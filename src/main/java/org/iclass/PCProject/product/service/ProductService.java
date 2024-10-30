@@ -62,6 +62,10 @@ public class ProductService {
         for(Review entity : list) {
             avgScore += entity.getScore();
         }
+
+        if(list.size() > 0) avgScore = avgScore / list.size();
+        else avgScore = 0.0;
+
         return avgScore;
     }
 }

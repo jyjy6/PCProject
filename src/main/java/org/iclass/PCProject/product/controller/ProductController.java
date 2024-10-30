@@ -51,7 +51,7 @@ public class ProductController {
     public String detailProd(@PathVariable("seq") int seq, Model model, Authentication auth) {
 
         model.addAttribute("product", productService.getProductBySeq(seq));
-        model.addAttribute("detailImgs", detailService.getProductDetail(seq));
+//        model.addAttribute("detailImgs", detailService.getProductDetail(seq));
         model.addAttribute("avgScore", productService.getAvgScore(seq));
 
         if (auth != null) {

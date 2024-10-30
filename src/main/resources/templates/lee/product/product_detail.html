@@ -44,7 +44,7 @@
         }
         .p2 {
             font-size: 1.2em;
-         }
+        }
         .qty_price_box {
             width: 100%;
             height: 100px;
@@ -117,6 +117,7 @@
             align-items: center;
         }
         .detail_nav p {
+            display: flex;
             width: 300px;
             padding: 30px;
             text-align: center;
@@ -128,7 +129,8 @@
             text-decoration: none;
             color: #000;
         }
-        .detail_imgs {
+        .detail_area {
+            clear: both;
             text-align: center;
         }
         .out_of_stock {
@@ -203,119 +205,120 @@
     </style>
 </head>
 <body>
-    <div th:replace="~{nav :: navbar}"></div>
-    <div class="container">
-        <div class="product_info_top">
-            <span class>[[${product.vendor}]] [[${product.name}]] [[${product.code}]]</span>
+<div th:replace="~{nav :: navbar}"></div>
+<div class="container">
+    <div class="product_info_top">
+        <span class>[[${product.vendor}]] [[${product.name}]] [[${product.code}]]</span>
+    </div>
+    <hr>
+    <img class="product_thumbnail" th:src="|@{../images}/${product.thumb}|">
+    <div class="product_info_right">
+        <p class="product_code">상품번호 [[${product.seq}]]</p>
+        <div>
+            <p class="p1 price_name">판매가</p>
+            <p class="p2 price_val"></p>
         </div>
         <hr>
-        <img class="product_thumbnail" th:src="|@{../images}/${product.thumb}|">
-        <div class="product_info_right">
-            <p class="product_code">상품번호 [[${product.seq}]]</p>
-            <div>
-                <p class="p1 price_name">판매가</p>
-                <p class="p2 price_val"></p>
-            </div>
-            <hr>
-            <div>
-                <p class="p1 product_comment">상품평</p>
-                <p class="p2 comment_val">[[${avgScore}]]</p>
-            </div>
-            <hr>
-            <div>
-                <p class="p1 product_delivery_info">배송정보</p>
-                <p class="p2 delivery_info">기본 택배 발송</p>
-            </div>
-            <hr>
-            <div>
-                <p class="p1 price_name">배송비</p>
-                <p class="p2 price_val">무료배송</p>
-            </div>
-            <hr>
-            <th:block th:if="${product.stock != 0}">
-                <form action="/cart" method="POST" class="product_form">
-                    <input type="hidden" class="seq" name="pSeq" th:value="${product.seq}">
-                    <div class="qty_price_box">
-                        <p class="product_title">[[${product.vendor}]] [[${product.name}]] [[${product.code}]]</p>
-                        <span class="qty_ctrl">
+        <div>
+            <p class="p1 product_comment">상품평</p>
+            <p class="p2 comment_val">[[${avgScore}]]</p>
+        </div>
+        <hr>
+        <div>
+            <p class="p1 product_delivery_info">배송정보</p>
+            <p class="p2 delivery_info">기본 택배 발송</p>
+        </div>
+        <hr>
+        <div>
+            <p class="p1 price_name">배송비</p>
+            <p class="p2 price_val">무료배송</p>
+        </div>
+        <hr>
+        <th:block th:if="${product.stock != 0}">
+            <form action="/cart" method="POST" class="product_form">
+                <input type="hidden" class="seq" name="pSeq" th:value="${product.seq}">
+                <div class="qty_price_box">
+                    <p class="product_title">[[${product.vendor}]] [[${product.name}]] [[${product.code}]]</p>
+                    <span class="qty_ctrl">
                             <button type="button" class="decreasing_btn fa-solid fa-minus"></button>
                             <input type="text" class="qty_number" name="qty" th:value="1">
                             <button type="button" class="increasing_btn fa-solid fa-plus"></button>
                             <span class="a_few_stock">재고 수량: [[${product.stock}]]개</span>
                             <p class="final_price"></p>
                         </span>
-                    </div>
-                    <hr>
-                    <div class="total_price">
-                        <span class="total_price_info">총 합계 금액</span>
-                        <span class="product_total_price"></span>
-                    </div>
-                    <div class="purchase_btns">
-                        <button type="submit" class="cart_btn fa-solid fa-cart-shopping"></button>
-                        <button type="submit" class="purchase_btn" formaction="/purchase_products">구매하기</button>
-                    </div>
-                </form>
-            </th:block>
-            <p th:unless="${product.stock != 0}" class="out_of_stock">현재 품절로 구매할 수 없는 제품입니다.</p>
-        </div>
-        <div class="detail_nav">
-            <p class="detail_spec"><a href="javascript:getDetailSpec()">상세정보</a></p>
-            <p class="product_review"><a href="javascript:review()">상품평</a></p>
-            <p><a href="../qna/add">Q&A</a></p>
-        </div>
-        <div class="detail_area detail_imgs review_list"></div>
+                </div>
+                <hr>
+                <div class="total_price">
+                    <span class="total_price_info">총 합계 금액</span>
+                    <span class="product_total_price"></span>
+                </div>
+                <div class="purchase_btns">
+                    <button type="submit" class="cart_btn fa-solid fa-cart-shopping"></button>
+                    <button type="submit" class="purchase_btn" formaction="/purchase_products">구매하기</button>
+                </div>
+            </form>
+        </th:block>
+        <input type="hidden" class="seq" name="pSeq" th:value="${product.seq}">
+        <p th:unless="${product.stock != 0}" class="out_of_stock">현재 품절로 구매할 수 없는 제품입니다.</p>
     </div>
-    <script></script>
-    <script th:inline="javascript">
-        const qtyInput = document.querySelector('.qty_number')
-        const decreasingBtn = document.querySelector('.decreasing_btn')
-        const increasingBtn = document.querySelector('.increasing_btn')
-        const priceVal = document.querySelector('.price_val')
-        const totPrice = document.querySelector('.product_total_price')
-        const stock = document.querySelector('.a_few_stock')
+    <div class="detail_nav">
+        <p class="detail_spec"><a href="javascript:getDetailSpec()">상세정보</a></p>
+        <p class="product_review"><a href="javascript:review()">상품평</a></p>
+        <p><a href="../qna/add">Q&A</a></p>
+    </div>
+    <div class="detail_area"></div>
+</div>
+<script></script>
+<script th:inline="javascript">
+    const qtyInput = document.querySelector('.qty_number')
+    const decreasingBtn = document.querySelector('.decreasing_btn')
+    const increasingBtn = document.querySelector('.increasing_btn')
+    const priceVal = document.querySelector('.price_val')
+    const totPrice = document.querySelector('.product_total_price')
+    const stock = document.querySelector('.a_few_stock')
 
-        const price = [[${product.price-(product.price*(product.discount*0.01))}]]
+    const price = [[${product.price-(product.price*(product.discount*0.01))}]]
 
-        priceVal.textContent = price.toLocaleString('ko-KR') + '원'
+    priceVal.textContent = price.toLocaleString('ko-KR') + '원'
+    totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
+
+    if([[${product.stock}]] <= 5) stock.style.display = 'inline-block'
+
+    decreasingBtn.addEventListener('click', () => {
+        if(qtyInput.value > 1) {
+            --qtyInput.value
+            totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
+        }
+        else if(qtyInput.value <= 1) {
+            alert('최소 주문 수량은 1개입니다.')
+            qtyInput.value = 1
+        }
+    })
+
+    increasingBtn.addEventListener('click', () => {
+        ++qtyInput.value
+        if(qtyInput.value > [[${product.stock}]]) {
+            alert(`현재 재고가 ${[[${product.stock}]]}개입니다.`)
+            qtyInput.value = [[${product.stock}]]
+        }
         totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
+    })
 
-        if([[${product.stock}]] <= 5) stock.style.display = 'inline-block'
-
-        decreasingBtn.addEventListener('click', () => {
-            if(qtyInput.value > 1) {
-                --qtyInput.value
-                totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
-            }
-            else if(qtyInput.value <= 1) {
-                alert('최소 주문 수량은 1개입니다.')
-                qtyInput.value = 1
-            }
-        })
-
-        increasingBtn.addEventListener('click', () => {
-            ++qtyInput.value
-            if(qtyInput.value > [[${product.stock}]]) {
-                alert(`현재 재고가 ${[[${product.stock}]]}개입니다.`)
-                qtyInput.value = [[${product.stock}]]
-            }
-            totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
-        })
-
-        qtyInput.addEventListener('input', () => {
-            if(qtyInput.value > [[${product.stock}]]) {
-                alert(`현재 재고가 ${[[${product.stock}]]}개입니다.`)
-                qtyInput.value = [[${product.stock}]]
-            } else if(qtyInput.value <= 0) {
-                alert('최소 주문 수량은 1개입니다.')
-                qtyInput.value = 1
-            }
-            totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
-        })
-    </script>
-    <script type="text/javascript">
-        const username ='[[${username}]]'
-    </script>
-    <script th:inline="javascript" th:src="@{/js/detail_img.js}"></script>
-    <script th:inline="javascript" th:src="@{/js/product_review.js}"></script>
+    qtyInput.addEventListener('input', () => {
+        if(qtyInput.value > [[${product.stock}]]) {
+            alert(`현재 재고가 ${[[${product.stock}]]}개입니다.`)
+            qtyInput.value = [[${product.stock}]]
+        } else if(qtyInput.value <= 0) {
+            alert('최소 주문 수량은 1개입니다.')
+            qtyInput.value = 1
+        }
+        totPrice.textContent = (price * qtyInput.value).toLocaleString('ko-KR') + '원'
+    })
+</script>
+<script type="text/javascript">
+    const username ='[[${username}]]'
+</script>
+<script th:inline="javascript" th:src="@{/js/detail_img.js}"></script>
+<script th:inline="javascript" th:src="@{/js/product_review.js}"></script>
 </body>
 </html>
