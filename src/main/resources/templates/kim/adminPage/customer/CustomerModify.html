@@ -65,6 +65,25 @@
 </form>
 
 <script>
+    document.querySelector('form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = new FormData(this);
+
+        fetch(this.action, {
+            method: this.method,
+            body: formData
+        }).then(response => {
+            if (response.ok, confirm('회원의 정보를 수정하시겠습니까?')) {
+                alert('수정하였습니다.')
+                window.history.back();
+            } else {
+                alert('수정 실패, 다시 시도해 주세요.');
+            }
+        }).catch(error => {
+            console.error('Error:', error);
+        });
+    });
+
     function deleteCustomer() {
         if (confirm('정말 이 회원을 강제 탈퇴처리 시키겠습니까?')) {
             const form = document.createElement('form');
@@ -78,6 +97,7 @@
             document.body.appendChild(form);
             form.submit();
         }
+
     }
 </script>
 </body>

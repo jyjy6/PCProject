@@ -5,61 +5,97 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #ffffff;
+            background-color: #efefef;
             margin: 0;
             padding: 20px;
         }
+
+
         h1 {
             color: #333;
         }
+
         form {
             margin-bottom: 20px;
         }
+
         input[type="text"] {
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            width: 200px;
+            width: 150px;
+            height: 3px;
         }
+
         button {
-            padding: 10px 15px;
+            padding: 4px 8px;
             border: none;
-            border-radius: 5%;
+            border-radius: 5px;
             background-color: gray;
             color: white;
             cursor: pointer;
+            text-decoration: none;
             margin-left: 10px;
+            width: 50px;
+            font-weight: bold;
         }
+
+        .btnSort {
+            width: 180px;
+        }
+
         button:hover {
             background-color: #4cae4c;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
             background-color: white;
         }
+
         th, td {
             padding: 12px;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
+
         th {
             background-color: #f2f2f2;
         }
+
         tr:hover {
             background-color: #f1f1f1;
         }
+
         a {
             text-decoration: none;
-            color: #007bff;
+            padding: 4px 8px;
+            border: none;
+            border-radius: 5px;
+            background-color: gray;
+            color: white;
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 1em;
+            font-weight: bold;
         }
+
+        .btnAdd, .btnUpdate, .btnBack {
+            padding: 5px 10px;
+            width: 50px;
+            font-size: 14px;
+        }
+
         a:hover {
-            text-decoration: underline;
+            background-color: #4cae4c;
         }
+
         .pagination {
             margin-top: 20px;
         }
+
         .pagination a {
             padding: 8px 12px;
             margin: 0 5px;
@@ -67,10 +103,12 @@
             border-radius: 4px;
             color: #007bff;
         }
+
         .pagination a.active {
             background-color: #007bff;
             color: white;
         }
+
         .pagination a:hover {
             background-color: #0056b3;
             color: white;
@@ -88,37 +126,44 @@
         <input type="hidden" name="page" th:value="${currentPage}"/>
         <button type="submit">필터</button>
     </form>
-    <br>
     <form method="get" th:action="@{/adminPage/ProductList}">
         <input type="hidden" name="vendor" th:value="${vendor}">
         <input type="hidden" name="regDate" th:value="${regDate}">
         <input type="hidden" name="price" th:value="${price}">
         <input type="hidden" name="stock" th:value="${stock}">
         <input type="hidden" name="page" th:value="${currentPage}"/>
-        <button type="submit" name="regDateSort" value="asc">등록일 오름차순 정렬</button>
-        <button type="submit" name="regDateSort" value="desc">등록일 내림차순 정렬</button>
+        <button class="btnSort" type="submit" name="regDateSort" value="asc">등록일 오름차순 정렬</button>
+        <button class="btnSort" type="submit" name="regDateSort" value="desc">등록일 내림차순 정렬</button>
     </form>
-    <br>
     <form method="get" th:action="@{/adminPage/ProductList}">
         <input type="hidden" name="vendor" th:value="${vendor}">
         <input type="hidden" name="regDate" th:value="${regDate}">
         <input type="hidden" name="stock" th:value="${stock}">
         <input type="hidden" name="page" th:value="${currentPage}"/>
-        <button type="submit" name="priceSort" value="asc">가격 오름차순 정렬</button>
-        <button type="submit" name="priceSort" value="desc">가격 내림차순 정렬</button>
+        <button class="btnSort" type="submit" name="priceSort" value="asc">가격 오름차순 정렬</button>
+        <button class="btnSort" type="submit" name="priceSort" value="desc">가격 내림차순 정렬</button>
     </form>
-    <br>
     <form method="get" th:action="@{/adminPage/ProductList}">
         <input type="hidden" name="vendor" th:value="${vendor}">
         <input type="hidden" name="regDate" th:value="${regDate}">
         <input type="hidden" name="price" th:value="${price}">
         <input type="hidden" name="page" th:value="${currentPage}"/>
-        <button type="submit" name="stockSort" value="asc">남은 재고 오름차순 정렬</button>
-        <button type="submit" name="stockSort" value="desc">남은 재고 내림차순 정렬</button>
+        <button class="btnSort" type="submit" name="stockSort" value="asc">남은 재고 오름차순 정렬</button>
+        <button class="btnSort" type="submit" name="stockSort" value="desc">남은 재고 내림차순 정렬</button>
     </form>
-    <br>
-    <a href="/adminPage/ProductWrite">제품 추가</a>
-    <a href="/adminPage/adminMain">돌아가기</a>
+    <a class="btnAdd" href="/adminPage/ProductWrite">제품 추가</a>
+    <a class="btnBack" href="/adminPage/adminMain">돌아가기</a>
+    <br><br><br>
+    <form method="get" th:action="@{/adminPage/ProductList}">
+        <label for="search">검색:</label>
+        <input type="text" id="search" name="search" th:value="${search}">
+        <input type="hidden" name="vendor" th:value="${vendor}">
+        <input type="hidden" name="regDate" th:value="${regDate}">
+        <input type="hidden" name="price" th:value="${price}">
+        <input type="hidden" name="stock" th:value="${stock}">
+        <input type="hidden" name="page" th:value="${currentPage}"/>
+        <button type="submit">검색</button>
+    </form>
     <br>
     <table>
         <tr>
@@ -129,8 +174,9 @@
             <th>regDate</th>
             <th>status</th>
             <th>stock</th>
-            <th>thumb</th>
-            <th>vendor</th>
+            <th style="text-align:center;">thumb</th>
+            <th style="text-align:center;">vendor</th>
+            <th style="text-align:center;">Action</th>
         </tr>
         <tr th:each="product : ${products}">
             <td th:text="${product.code}"></td>
@@ -143,7 +189,7 @@
             <td th:text="${product.thumb}"></td>
             <td th:text="${product.vendor}"></td>
             <td>
-                <button><a th:href="@{/adminPage/ProductModify(seq=${product.seq})}">수정</a></button>
+                <a class="btnUpdate" th:href="@{/adminPage/ProductModify(seq=${product.seq})}">수정</a>
                 <form th:action="@{/adminPage/ProductDelete}" method="post" style="display:inline;">
                     <input type="hidden" name="seq" th:value="${product.seq}"/>
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -152,14 +198,15 @@
             </td>
         </tr>
     </table>
-    <div>
+    <br>
+    <div style="text-align: center;">
         <span th:if="${totalPages > 1}">
             <span>페이지: </span>
-            <span th:each="page : ${#numbers.sequence(1, totalPages)}">
-                <a th:href="@{/adminPage/ProductList(page=${page - 1}, vendor=${vendor}, regDate=${regDate}, price=${price}, stock=${stock})}"
-                   th:text="${page}"
+            <span th:each="page : ${#numbers.sequence(0, totalPages - 1)}">
+                <a th:href="@{/adminPage/ProductList(page=${page}, vendor=${vendor}, regDate=${regDate}, price=${price}, stock=${stock}, regDateSort=${regDateSort}, priceSort=${priceSort}, stockSort=${stockSort})}"
+                   th:text="${page + 1}"
                    th:classappend="${page == currentPage} ? 'active' : ''"></a>
-                <span th:if="${page < totalPages}"> | </span>
+                <span th:if="${page < totalPages - 1}"> | </span>
             </span>
         </span>
     </div>

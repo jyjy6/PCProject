@@ -13,15 +13,15 @@ import java.time.LocalDateTime;
 @Repository
 public interface AdminProductRepository extends JpaRepository<Product, Integer> {
 
-    @Query("SELECT p FROM Product p WHERE "
-            + "(:vendor IS NULL OR p.vendor = :vendor) AND "
-            + "(:regDate IS NULL OR p.regDate >= :regDate) AND "
-            + "(:price IS NULL OR p.price = :price) AND "
-            + "(:stock IS NULL OR p.stock = :stock)")
-    Page<Product> findAllByCriteria(@Param("vendor") String vendor,
-                                    @Param("regDate") LocalDateTime regDate,
-                                    @Param("price") Integer price,
-                                    @Param("stock") Integer stock,
-                                    Pageable pageable);
-
+    @Query("SELECT p FROM Product p WHERE (:vendor IS NULL OR p.vendor = :vendor) " +
+            "AND (:regDate IS NULL OR p.regDate = :regDate) " +
+            "AND (:price IS NULL OR p.price = :price) " +
+            "AND (:stock IS NULL OR p.stock = :stock) " +
+            "AND (:search IS NULL OR LOWER(p.name) LIKE LOWER(CONCAT('%', :search, '%')))")
+    Page<Product> findByFilters(@Param("vendor") String vendor,
+                                @Param("regDate") LocalDateTime regDate,
+                                @Param("price") Integer price,
+                                @Param("stock") Integer stock,
+                                @Param("search") String search,
+                                Pageable pageable);
 }

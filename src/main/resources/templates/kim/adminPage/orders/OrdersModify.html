@@ -41,10 +41,30 @@
         <input type="text" id="username" th:field="*{username}" required/>
     </div>
     <div>
-        <button type="submit" onclick="return confirm('정말 수정하시겠습니까?');">Update</button>
+        <button type="submit">Update</button>
         <button type="button" onclick="history.back();">Cancel</button>
     </div>
 </form>
+<script>
+    document.querySelector('form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = new FormData(this);
+
+        fetch(this.action, {
+            method: this.method,
+            body: formData
+        }).then(response => {
+            if (response.ok, confirm('물품의 정보를 수정하시겠습니까?')) {
+                alert('수정하였습니다.')
+                window.history.back();
+            } else {
+                alert('수정 실패, 다시 시도해 주세요.');
+            }
+        }).catch(error => {
+            console.error('Error:', error);
+        });
+    });
+</script>
 </body>
 </html>
 

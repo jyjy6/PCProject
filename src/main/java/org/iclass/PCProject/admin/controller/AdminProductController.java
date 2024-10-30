@@ -62,21 +62,21 @@ public class AdminProductController {
         }
     }
 
-
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/ProductList")
     public String getProducts(@RequestParam(required = false) String vendor,
                               @RequestParam(required = false) String regDate,
                               @RequestParam(required = false) String price,
                               @RequestParam(required = false) String stock,
+                              @RequestParam(required = false) String search,
                               @RequestParam(defaultValue = "0") int page,
                               HttpServletRequest request,
                               Model model) {
 
         Pageable pageable = PageRequest.of(page, 10);
-
         Sort sort = Sort.unsorted();
 
+        // 정렬 로직
         if ("asc".equals(request.getParameter("regDateSort"))) {
             sort = sort.and(Sort.by("regDate").ascending());
         } else if ("desc".equals(request.getParameter("regDateSort"))) {
@@ -102,7 +102,8 @@ public class AdminProductController {
         Integer priceValue = parseInteger(price);
         Integer stockValue = parseStock(stock);
 
-        Page<ProductDTO> productsPage = adminProductService.getProducts(vendor, parsedRegDate, priceValue, stockValue, pageable);
+        // 검색어를 포함한 제품 조회
+        Page<ProductDTO> productsPage = adminProductService.getProducts(vendor, parsedRegDate, priceValue, stockValue, search, pageable);
 
         model.addAttribute("products", productsPage.getContent());
         model.addAttribute("totalPages", productsPage.getTotalPages());
@@ -111,9 +112,15 @@ public class AdminProductController {
         model.addAttribute("regDate", regDate);
         model.addAttribute("price", price);
         model.addAttribute("stock", stock);
+        model.addAttribute("search", search); // 검색어 모델에 추가
+        model.addAttribute("regDateSort", request.getParameter("regDateSort"));
+        model.addAttribute("priceSort", request.getParameter("priceSort"));
+        model.addAttribute("stockSort", request.getParameter("stockSort"));
+        System.out.println("Search term: " + search);
 
         return "kim/adminPage/product/ProductList";
     }
+
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/ProductWrite")

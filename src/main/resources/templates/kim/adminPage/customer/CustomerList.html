@@ -2,6 +2,121 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Customer List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #efefef;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            font-family: "Concert One", sans-serif;
+            font-weight: 700;
+            font-style: normal;
+            color: #333;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 200px;
+        }
+
+        button {
+            padding: 4px 8px;
+            border: none;
+            border-radius: 5%;
+            background-color: gray;
+            color: white;
+            cursor: pointer;
+            margin-left: 10px;
+
+        }
+
+        button:hover {
+            background-color: #4cae4c;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        a {
+            text-decoration: none;
+            padding: 4px 6px;
+            border: none;
+            border-radius: 5%;
+            background-color: gray;
+            color: white;
+            cursor: pointer;
+            margin-left: 10px;
+            font-weight: bold;
+        }
+
+        a:hover {
+            background-color: #4cae4c;
+        }
+
+        .btnAdd, .btnUpdate, .btnBack {
+            padding: 5px 10px;
+            width: 50px;
+            font-size: 14px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .btnFilter {
+            padding: 3px 4px;
+            width: 50px;
+            font-size: 13px;
+            border-radius: 5px;
+        }
+
+        .pagination {
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            padding: 8px 12px;
+            margin: 0 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            color: #007bff;
+        }
+
+        .pagination a.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .pagination a:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+    </style>
 </head>
 <body>
 <h1>Customer List</h1>
@@ -16,11 +131,11 @@
             <option value="2023">2023</option>
             <option value="2024">2024</option>
         </select>
-        <button type="submit">필터</button>
+        <button class="btnFilter" type="submit">필터</button>
     </form>
     <br>
-    <a href="/adminPage/CustomerWrite">신입회원 등록</a>
-    <a href="/adminPage/adminMain">돌아가기</a>
+    <a class="btnAdd" href="/adminPage/CustomerWrite">신입회원 등록</a>
+    <a class="btnBack" href="/adminPage/adminMain">돌아가기</a>
     <table>
         <tr>
             <th>username</th>
@@ -34,6 +149,7 @@
             <th>createdAt</th>
             <th>updatedAt</th>
             <th>role</th>
+            <th>Action</th>
         </tr>
         <tr th:each="member : ${members}">
             <td th:text="${member.username}"></td>
@@ -47,10 +163,11 @@
             <td th:text="${member.createdAt}"></td>
             <td th:text="${member.updatedAt}"></td>
             <td th:text="${member.role}"></td>
-            <td><a th:href="@{/adminPage/CustomerModify(id=${member.id})}">수정</a></td>
+            <td><a class="btnUpdate" th:href="@{/adminPage/CustomerModify(id=${member.id})}">수정</a></td>
         </tr>
     </table>
-    <div>
+    <br>
+    <div style="text-align: center;">
         <span th:if="${totalPages > 1}">
             <span>페이지: </span>
             <a th:if="${currentPage > 0}" th:href="@{/adminPage/CustomerList(page=0, year=${year})}">처음</a>

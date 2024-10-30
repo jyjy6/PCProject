@@ -2,23 +2,136 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Orders List</title>
+    <style>
+        #container {
+            width: 1400px;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #efefef;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 200px;
+        }
+
+        button {
+            padding: 4px 8px;
+            border: none;
+            border-radius: 5px;
+            background-color: gray;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            margin-left: 10px;
+            width: 50px;
+            font-weight: bold;
+        }
+
+        .btnSort {
+            width: 180px;
+        }
+
+        button:hover {
+            background-color: #4cae4c;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: white;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        a {
+            text-decoration: none;
+            padding: 4px 8px;
+            border: none;
+            border-radius: 5px;
+            background-color: gray;
+            color: white;
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 1em;
+        }
+
+        .btnAdd, .btnUpdate, .btnBack {
+            padding: 5px 10px;
+            width: 50px;
+            font-size: 14px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        a:hover {
+            background-color: #4cae4c;
+        }
+
+        .pagination {
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            padding: 8px 12px;
+            margin: 0 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            color: #007bff;
+        }
+
+        .pagination a.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .pagination a:hover {
+            background-color: #0056b3;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-<h1>Orders List</h1>
+    <div id="container">
+        <h1>Orders List</h1>
     <!-- 정렬 버튼들 -->
     <form method="get" th:action="@{/adminPage/OrdersList}">
-        <button type="submit" name="price" value="asc">결제가격 오름차순 정렬</button>
-        <button type="submit" name="price" value="desc">결제가격 내림차순 정렬</button>
+        <button class="btnSort" type="submit" name="price" value="asc">결제가격 오름차순 정렬</button>
+        <button class="btnSort" type="submit" name="price" value="desc">결제가격 내림차순 정렬</button>
     </form>
-    <br>
     <form method="get" th:action="@{/adminPage/OrdersList}">
-        <button type="submit" name="regdate" value="asc">등록일 오름차순 정렬</button>
-        <button type="submit" name="regdate" value="desc">등록일 내림차순 정렬</button>
+        <button class="btnSort" type="submit" name="regdate" value="asc">등록일 오름차순 정렬</button>
+        <button class="btnSort" type="submit" name="regdate" value="desc">등록일 내림차순 정렬</button>
     </form>
-    <br>
-    <a href="/adminPage/OrdersWrite">추가</a>
-    <a href="/adminPage/adminMain">돌아가기</a>
-
+    <a class="btnAdd" href="/adminPage/OrdersWrite">추가</a>
+    <a class="btnBack" href="/adminPage/adminMain">돌아가기</a>
     <table>
         <tr>
             <th>code</th>
@@ -28,7 +141,7 @@
             <th>stslogis</th>
             <th>vendor</th>
             <th>username</th>
-            <th>actions</th>
+            <th>Action</th>
         </tr>
         <tr th:each="sales_history : ${sales_historys}">
             <td th:text="${sales_history.code}"></td>
@@ -46,7 +159,7 @@
             <td th:text="${sales_history.vendor}"></td>
             <td th:text="${sales_history.username}"></td>
             <td>
-                <a th:href="@{/adminPage/OrdersModify(seq=${sales_history.seq})}">수정</a>
+                <a class="btnUpdate" th:href="@{/adminPage/OrdersModify(seq=${sales_history.seq})}">수정</a>
                 <form th:action="@{/adminPage/OrdersDelete}" method="post" style="display:inline;">
                     <input type="hidden" name="seq" th:value="${sales_history.seq}"/>
                     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -55,8 +168,9 @@
             </td>
         </tr>
     </table>
+    <br>
     <!-- 페이지네이션 추가 -->
-    <div>
+    <div style="text-align: center;">
         <span th:if="${totalPages > 1}">
             <span>페이지: </span>
             <a th:if="${currentPage > 0}" th:href="@{/adminPage/OrdersList(page=0, price=${param.price}, regdate=${param.regdate})}">처음</a>
@@ -71,6 +185,7 @@
             <a th:if="${currentPage < totalPages - 1}" th:href="@{/adminPage/OrdersList(page=${currentPage + 1}, price=${param.price}, regdate=${param.regdate})}">다음</a>
             <a th:if="${currentPage < totalPages - 1}" th:href="@{/adminPage/OrdersList(page=${totalPages - 1}, price=${param.price}, regdate=${param.regdate})}">끝</a>
         </span>
+    </div>
     </div>
 </body>
 </html>
