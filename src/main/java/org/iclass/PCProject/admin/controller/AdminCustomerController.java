@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/adminPage")
@@ -29,7 +30,7 @@ public class AdminCustomerController {
     public String customerList(Model model,
                                @RequestParam(required = false) String year,
                                @RequestParam(defaultValue = "0") int page) {
-        Pageable pageable = PageRequest.of(page, 20);
+        Pageable pageable = PageRequest.of(page, 10);
         Page<MemberDTO> memberPage;
 
         if (year != null && !year.isEmpty()) {
@@ -44,6 +45,15 @@ public class AdminCustomerController {
         model.addAttribute("year", year);
 
         return "kim/adminPage/customer/CustomerList";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/CustomerSearch")
+    public String searchMembers(@RequestParam String search, Model model) {
+        List<Member> members = adminCustomerService.findByFilters(search);
+        model.addAttribute("members", members);
+        model.addAttribute("search", search);
+        return "kim/adminPage/customer/CustomerSearch";
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

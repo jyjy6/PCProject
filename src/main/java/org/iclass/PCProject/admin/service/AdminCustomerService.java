@@ -38,8 +38,9 @@ public class AdminCustomerService {
         memberRepository.save(member);
     }
 
-    public void deleteCustomer(Long id) {
-        memberRepository.deleteById(id);
+
+    public List<Member> findByFilters(String search) {
+        return adminMemberRepository.findByUsernameContainingIgnoreCase(search);
     }
 
     public Page<MemberDTO> getAllMemberList(Pageable pageable) {
@@ -65,5 +66,9 @@ public class AdminCustomerService {
             dto.setUpdatedAt(member.getUpdatedAt());
             dto.setRole(member.getRole());
             return dto;
-        }
+    }
+
+    public void deleteCustomer(Long id) {
+        memberRepository.deleteById(id);
+    }
 }

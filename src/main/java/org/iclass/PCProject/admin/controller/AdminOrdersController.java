@@ -25,17 +25,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdminOrdersController {
 
-    private final AdminOrdersService salesHistoryService;
+    private final AdminOrdersService adminOrdersService;
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/OrdersList")
-        public String getOrders(@RequestParam(defaultValue = "0") int page,
-                                @RequestParam(required = false) String price,
-                                @RequestParam(required = false) String regdate,
-                                Model model) {
+    public String getOrders(@RequestParam(defaultValue = "0") int page,
+                            @RequestParam(required = false) String price,
+                            @RequestParam(required = false) String regdate,
+                            Model model) {
 
         // Pageable 및 Sort 설정
-        Pageable pageable = PageRequest.of(page, 20); // 20개씩
+        Pageable pageable = PageRequest.of(page, 10);
         Sort sort = Sort.unsorted();
 
         // 가격 정렬 설정
@@ -53,7 +53,7 @@ public class AdminOrdersController {
         }
 
         // 서비스 호출
-        Page<SalesHistory> salesHistoryPage = salesHistoryService.getOrders(pageable, sort);
+        Page<SalesHistory> salesHistoryPage = adminOrdersService.getOrders(pageable, sort);
 
         // 모델에 추가
         model.addAttribute("sales_historys", salesHistoryPage.getContent());
@@ -61,6 +61,21 @@ public class AdminOrdersController {
         model.addAttribute("currentPage", page);
 
         return "kim/adminPage/orders/OrdersList";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/OrdersSearch")
+    public String searchOrders(@RequestParam String searchField,
+                               @RequestParam String searchValue,
+                               @RequestParam(defaultValue = "0") int page,
+                               Model model) {
+        Page<SalesHistory> salesHistoryPage = adminOrdersService.searchOrders(searchField, searchValue, PageRequest.of(page, 10));
+        model.addAttribute("sales_historys", salesHistoryPage.getContent());
+        model.addAttribute("totalPages", salesHistoryPage.getTotalPages());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("searchField", searchField);
+        model.addAttribute("searchValue", searchValue);
+        return "kim/adminPage/orders/OrdersSearch";
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -73,7 +88,7 @@ public class AdminOrdersController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/OrdersWrite")
     public String createOrders(@ModelAttribute SalesHistoryDto salesHistoryDto) {
-        salesHistoryService.createOrders(salesHistoryDto);
+        adminOrdersService.createOrders(salesHistoryDto);
         return "redirect:/adminPage/OrdersList";
     }
 
@@ -81,7 +96,7 @@ public class AdminOrdersController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/OrdersModify")
     public String updateOrdersForm(@RequestParam int seq, Model model) {
-        SalesHistory order = salesHistoryService.findById(seq);
+        SalesHistory order = adminOrdersService.findById(seq);
         model.addAttribute("sales_history", SalesHistoryDto.toDto(order));
         return "kim/adminPage/orders/OrdersModify";
 
@@ -96,7 +111,7 @@ public class AdminOrdersController {
         LocalDateTime parsedDate = LocalDateTime.parse(regdate, formatter);
 
         salesHistory.setRegdate(parsedDate);
-        salesHistoryService.updateOrders(salesHistory);
+        adminOrdersService.updateOrders(salesHistory);
         return "redirect:/adminPage/OrdersList";
     }
 
@@ -104,14 +119,14 @@ public class AdminOrdersController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/OrdersDelete")
     public String deleteOredersForm(@RequestParam("seq") int seq, Model model) {
-        model.addAttribute("orders", salesHistoryService.findById(seq));
+        model.addAttribute("orders", adminOrdersService.findById(seq));
         return "kim/adminPage/orders/OrdersDelete";
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/OrdersDelete")
     public String removeOrders(@RequestParam("seq") int seq) {
-        salesHistoryService.deleteOrders(seq);
+        adminOrdersService.deleteOrders(seq);
         return "redirect:/adminPage/OrdersList";
     }
 

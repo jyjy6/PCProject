@@ -56,9 +56,13 @@ public class AdminProductService {
         return dto;
     }
 
-    public Page<ProductDTO> getProducts(String vendor, LocalDateTime regDate, Integer price, Integer stock, String search, Pageable pageable) {
-        Page<Product> productsPage = adminProductRepository.findByFilters(vendor, regDate, price, stock, search, pageable);
-        return productsPage.map(this::convertToDTO);
+    public Page<ProductDTO> getProducts(String vendor, LocalDateTime regDate, Integer price, Integer stock, Pageable pageable) {
+        return adminProductRepository.findAllByCriteria(vendor, regDate, price, stock, pageable)
+                .map(this::convertToDTO);
+    }
+
+    public List<Product> findByFilters(String search) {
+        return adminProductRepository.findByCodeContainingIgnoreCase(search); // code로 검색
     }
 
     public void createProduct(ProductDTO productDTO) {

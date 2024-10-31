@@ -6,15 +6,17 @@
         #container {
             width: 1400px;
         }
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #efefef;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-        }
+         body {
+             font-family: Arial, sans-serif;
+             background-color: #f4f7f9;
+             margin: 0;
+             padding: 20px;
+         }
 
         h1 {
+            font-family: "Concert One", sans-serif;
+            font-weight: 700;
+            font-style: normal;
             color: #333;
         }
 
@@ -26,24 +28,19 @@
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            width: 200px;
+            width: 150px;
+            height: 1px;
         }
 
         button {
             padding: 4px 8px;
             border: none;
-            border-radius: 5px;
+            border-radius: 5%;
             background-color: gray;
             color: white;
             cursor: pointer;
-            text-decoration: none;
             margin-left: 10px;
-            width: 50px;
-            font-weight: bold;
-        }
 
-        .btnSort {
-            width: 180px;
         }
 
         button:hover {
@@ -54,7 +51,9 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
-            background-color: white;
+            background-color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
         }
 
         th, td {
@@ -64,35 +63,61 @@
         }
 
         th {
-            background-color: #f2f2f2;
+            background-color: #007bff;
+            color: white;
         }
 
+        td {
+            background-color: #f9f9f9;
+        }
+
+
         tr:hover {
-            background-color: #f1f1f1;
+            background-color: #e0f7fa;
         }
 
         a {
             text-decoration: none;
-            padding: 4px 8px;
+            padding: 4px 6px;
             border: none;
-            border-radius: 5px;
+            border-radius: 5%;
             background-color: gray;
             color: white;
             cursor: pointer;
             margin-left: 10px;
-            font-size: 1em;
-        }
-
-        .btnAdd, .btnUpdate, .btnBack {
-            padding: 5px 10px;
-            width: 50px;
-            font-size: 14px;
-            border-radius: 5px;
             font-weight: bold;
         }
 
         a:hover {
             background-color: #4cae4c;
+        }
+
+        .btnAdd, .btnUpdate, .btnBack {
+            padding: 5px 7px;
+            width: 50px;
+            font-size: 14px;
+            font-weight: normal;
+        }
+
+        .form-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .form-container form {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+        }
+
+        .form-container label {
+            margin-right: 5px;
+        }
+
+        .btnSort {
+            margin-right: 15px;
         }
 
         .pagination {
@@ -121,7 +146,19 @@
 <body>
     <div id="container">
         <h1>Orders List</h1>
-    <!-- 정렬 버튼들 -->
+        <form method="get" th:action="@{/adminPage/OrdersSearch}" style="margin-right: 30px;">
+            <select name="searchField" th:value="${searchField}">
+                <option value="">검색할 항목 선택</option>
+                <option value="username">username</option>
+                <option value="code">code</option>
+                <option value="stslogis">stslogis</option>
+            </select>
+            <input type="text" name="searchValue" placeholder="검색 값" th:value="${searchValue}">
+            <button type="submit">검색</button>
+        </form>
+        <br>
+        <div class="form-container">
+            <!-- 정렬 버튼들 -->
     <form method="get" th:action="@{/adminPage/OrdersList}">
         <button class="btnSort" type="submit" name="price" value="asc">결제가격 오름차순 정렬</button>
         <button class="btnSort" type="submit" name="price" value="desc">결제가격 내림차순 정렬</button>
@@ -130,8 +167,10 @@
         <button class="btnSort" type="submit" name="regdate" value="asc">등록일 오름차순 정렬</button>
         <button class="btnSort" type="submit" name="regdate" value="desc">등록일 내림차순 정렬</button>
     </form>
+        </div>
     <a class="btnAdd" href="/adminPage/OrdersWrite">추가</a>
     <a class="btnBack" href="/adminPage/adminMain">돌아가기</a>
+        <br><br><br>
     <table>
         <tr>
             <th>code</th>

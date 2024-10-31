@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Customer List</title>
+    <title>Customer Search Results</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -41,23 +41,6 @@
 
         button:hover {
             background-color: #4cae4c;
-        }
-
-        #form-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        #form-container form {
-            display: flex;
-            align-items: center;
-            margin-right: 20px;
-        }
-
-        #form-container label {
-            margin-right: 5px;
         }
 
         table {
@@ -103,18 +86,11 @@
             background-color: #4cae4c;
         }
 
-        .btnAdd, .btnUpdate, .btnBack {
+        .btnUpdate, .btnBack {
             padding: 4px 8px;
             width: 50px;
             font-size: 14px;
             font-weight: normal;
-        }
-
-        .btnFilter {
-            padding: 3px 4px;
-            width: 50px;
-            font-size: 13px;
-            border-radius: 5px;
         }
 
         .pagination {
@@ -142,31 +118,14 @@
 </head>
 <body>
     <h1>Customer List</h1>
-    <div id="form-container">
     <form method="get" th:action="@{/adminPage/CustomerSearch}">
         <label for="search">검색:</label>
         <input type="text" id="search" name="search" th:value="${search}">
-        <input type="hidden" name="page" th:value="${currentPage}"/>
         <button type="submit">검색</button>
+        <a class="btnBack" href="/adminPage/CustomerList">목록으로 돌아가기</a>
     </form>
+
     <br>
-    <form method="get" th:action="@{/adminPage/CustomerList}">
-        <label for="year">가입 년도:</label>
-            <select id="year" name="year">
-                <option value="">모두</option>
-                <option value="2019">2019</option>
-                <option value="2020">2020</option>
-                <option value="2021">2021</option>
-                <option value="2022">2022</option>
-                <option value="2023">2023</option>
-                <option value="2024">2024</option>
-            </select>
-        <button class="btnFilter" type="submit">필터</button>
-    </form>
-    </div>
-    <a class="btnAdd" href="/adminPage/CustomerWrite">신입회원 등록</a>
-    <a class="btnBack" href="/adminPage/adminMain">돌아가기</a>
-    <br><br>
     <table>
         <tr>
             <th>username</th>
@@ -195,6 +154,9 @@
             <td th:text="${member.updatedAt}"></td>
             <td th:text="${member.role}"></td>
             <td><a class="btnUpdate" th:href="@{/adminPage/CustomerModify(id=${member.id})}">수정</a></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(members)}">
+            <td colspan="10">검색 결과가 없습니다.</td>
         </tr>
     </table>
     <br>
