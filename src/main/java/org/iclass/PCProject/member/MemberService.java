@@ -43,26 +43,24 @@ public class MemberService {
 
     public Member modifyUser(Member member, Authentication auth) {
         String username = auth.getName();
-        if(!username.equals(member.getUsername())){
+        if (!username.equals(member.getUsername())) {
             throw new IllegalArgumentException("아이디는 수정할 수 없습니다.");
         }
         Member editTargetMember = memberRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("Member not found"));
         member.setId(editTargetMember.getId());
         member.setRole(editTargetMember.getRole());
 
-        // 비밀번호 처리 (이전 설명에서 했던 방법을 적용)
         if (member.getPassword() != null && !member.getPassword().isEmpty()) {
             member.setPassword(passwordEncoder.encode(member.getPassword()));
         } else {
             member.setPassword(editTargetMember.getPassword());
         }
-        // 사용자 저장
         return memberRepository.save(member);
     }
 
-    public MemberDTO memberInfo(Authentication auth){
-        var userId = ((CustomUserDetails)auth.getPrincipal()).getId();
-        Member member = memberRepository.findById(userId).orElseThrow(()->new RuntimeException("그런 아이디 없음"));
+    public MemberDTO memberInfo(Authentication auth) {
+        var userId = ((CustomUserDetails) auth.getPrincipal()).getId();
+        Member member = memberRepository.findById(userId).orElseThrow(() -> new RuntimeException("그런 아이디 없음"));
 
         MemberDTO userInfo = MemberDTO.builder()
                 .id(member.getId())
@@ -83,7 +81,7 @@ public class MemberService {
         return userInfo;
     }
 
-    public ResponseEntity<String> validatePw(@RequestBody Map<String, String> requestBody){
+    public ResponseEntity<String> validatePw(@RequestBody Map<String, String> requestBody) {
         String id = requestBody.get("username"); // id 추출
         String pw = requestBody.get("password"); // pw 추출
 
@@ -104,7 +102,7 @@ public class MemberService {
 
     public ResponseEntity<String> deleteMember(String username, Authentication auth) {
         // 인증된 사용자 이름 가져오기
-        String authUsername = ((CustomUserDetails)auth.getPrincipal()).getUsername();
+        String authUsername = ((CustomUserDetails) auth.getPrincipal()).getUsername();
         // 인증된 사용자 이름으로 회원 조회
         Member member = memberRepository.findByUsername(authUsername)
                 .orElseThrow(() -> new NoSuchElementException("해당 아이디가 존재하지 않습니다."));
