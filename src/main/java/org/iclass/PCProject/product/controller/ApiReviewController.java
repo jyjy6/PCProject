@@ -35,7 +35,6 @@ public class ApiReviewController {
             String username = memberService.memberInfo(auth).getUsername();
             ProductDTO dto = productService.getProductBySeq(seq);
             reviewService.addReview(map, dto, username);
-            System.out.println(map);
 
             return ResponseEntity.ok().build();
         }

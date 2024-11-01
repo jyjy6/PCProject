@@ -29,7 +29,6 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService productService;
-    private final ProductDetailService detailService;
     private final MemberService memberService;
     private final CartService cartService;
     private final ProductPaymentService paymentService;
@@ -136,21 +135,22 @@ public class ProductController {
     }
 
     @PostMapping("/purchase_products")
-    public String purchaseProducts(Authentication auth,
+    public String purchaseProducts(Authentication auth, RedirectAttributes redirectAttributes,
                                    @RequestParam("pSeq") List<Integer> pSeq,
                                    @RequestParam(value = "qty", required = false) Integer qty) {
-
-        if(pSeq.size()==1 && qty !=null ){
-            String username = memberService.memberInfo(auth).getUsername();
-            cartService.addItem(pSeq.get(0), qty, username);
-        }
 
         if (auth != null) {
             String username = memberService.memberInfo(auth).getUsername();
             paymentService.addItems(username, pSeq);
             cartService.removeItems(pSeq, username);
         } else {
-            return "redirect:/home";
+            redirectAttributes.addFlashAttribute("message", "로그인이 필요한 서비스입니다.");
+            return "redirect:/";
+        }
+
+        if(pSeq.size() == 1 && qty != null ){
+            String username = memberService.memberInfo(auth).getUsername();
+            cartService.addItem(pSeq.get(0), qty, username);
         }
 
         return "redirect:/purchase_products";
