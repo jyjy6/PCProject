@@ -44,7 +44,7 @@
     </div>
 
 
-    <img style="cursor:pointer;" src="/imgs/delivery.PNG" style="width:100%; display:block; margin:0 auto;">
+    <img src="/imgs/delivery.PNG" style="width:100%; display:block; margin:0 auto;">
 
 
 
@@ -89,50 +89,50 @@
 
 
         function allDay() {
-        // 전체 기간의 시작일을 특정 날짜로 설정 (예: 사이트 개설일)
-        const startDate = '2010-01-01'; // 시작일을 원하는 날짜로 설정
-        const today = new Date().toISOString().split('T')[0]; // 오늘 날짜
+            // 전체 기간의 시작일을 특정 날짜로 설정 (예: 사이트 개설일)
+            const startDate = '2010-01-01'; // 시작일을 원하는 날짜로 설정
+            const today = new Date().toISOString().split('T')[0]; // 오늘 날짜
 
-        document.getElementById('startDate').value = startDate;
-        document.getElementById('endDate').value = today;
-    }
+            document.getElementById('startDate').value = startDate;
+            document.getElementById('endDate').value = today;
+        }
 
-    // 오늘 날짜로 설정
-    function setToday() {
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('startDate').value = today;
-        document.getElementById('endDate').value = today;
-    }
+        // 오늘 날짜로 설정
+        function setToday() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('startDate').value = today;
+            document.getElementById('endDate').value = today;
+        }
 
-    // 1주일 전으로 설정
-    function setWeek() {
-        const today = new Date();
-        const oneWeekAgo = new Date(today);
-        oneWeekAgo.setDate(today.getDate() - 7);
+        // 1주일 전으로 설정
+        function setWeek() {
+            const today = new Date();
+            const oneWeekAgo = new Date(today);
+            oneWeekAgo.setDate(today.getDate() - 7);
 
-        document.getElementById('startDate').value = oneWeekAgo.toISOString().split('T')[0];
-        document.getElementById('endDate').value = today.toISOString().split('T')[0];
-    }
+            document.getElementById('startDate').value = oneWeekAgo.toISOString().split('T')[0];
+            document.getElementById('endDate').value = today.toISOString().split('T')[0];
+        }
 
-    // 1개월 전으로 설정
-    function setMonth() {
-        const today = new Date();
-        const oneMonthAgo = new Date(today);
-        oneMonthAgo.setMonth(today.getMonth() - 1);
+        // 1개월 전으로 설정
+        function setMonth() {
+            const today = new Date();
+            const oneMonthAgo = new Date(today);
+            oneMonthAgo.setMonth(today.getMonth() - 1);
 
-        document.getElementById('startDate').value = oneMonthAgo.toISOString().split('T')[0];
-        document.getElementById('endDate').value = today.toISOString().split('T')[0];
-    }
+            document.getElementById('startDate').value = oneMonthAgo.toISOString().split('T')[0];
+            document.getElementById('endDate').value = today.toISOString().split('T')[0];
+        }
 
-    // 3개월 전으로 설정
-    function set3Months() {
-        const today = new Date();
-        const threeMonthsAgo = new Date(today);
-        threeMonthsAgo.setMonth(today.getMonth() - 3);
+        // 3개월 전으로 설정
+        function set3Months() {
+            const today = new Date();
+            const threeMonthsAgo = new Date(today);
+            threeMonthsAgo.setMonth(today.getMonth() - 3);
 
-        document.getElementById('startDate').value = threeMonthsAgo.toISOString().split('T')[0];
-        document.getElementById('endDate').value = today.toISOString().split('T')[0];
-    }
+            document.getElementById('startDate').value = threeMonthsAgo.toISOString().split('T')[0];
+            document.getElementById('endDate').value = today.toISOString().split('T')[0];
+        }
     </script>
 
     <style>

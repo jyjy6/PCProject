@@ -35,7 +35,6 @@ public class MemberController {
     private final StatisticsService statisticsService;
 
 
-    @PreAuthorize("isAnonymous()")
     @PostMapping("/sign-up")
     public ResponseEntity<String> registerUser(@RequestBody Member member) {
         try {
@@ -45,7 +44,7 @@ public class MemberController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-    @PreAuthorize("isAnonymous()")
+
     @GetMapping("/sign-up")
     public String signUpPage() {
         return "jung/signup";
@@ -69,6 +68,7 @@ public class MemberController {
         // 이 코드는 PathVariable을 통해 데이터 바인딩해서
 //         <div th:replace="~{jung/mypage/__${id}__ :: content}"></div> 이 값을 유동적으로 바꿈
         model.addAttribute("id", id);
+
 
         //유저 id를 auth정보에서 추출
         String username = ((CustomUserDetails) auth.getPrincipal()).getUsername();
@@ -122,18 +122,19 @@ public class MemberController {
                     statusCounts[status] += 1; // 해당 상태 카운트 증가
                 }
             }
+
             // 모델에 상태별 카운트 추가
             model.addAttribute("orderCompletedCount", statusCounts[0]);
             model.addAttribute("paymentCompletedCount", statusCounts[1]);
             model.addAttribute("shippingCount", statusCounts[2]);
             model.addAttribute("deliveredCount", statusCounts[3]);
+
         }
 
         return "jung/mypage/mypage"; // 주 템플릿 경로
     }
 
 
-    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/member/modify")
     public String modify(Authentication auth,
                          HttpSession session,  // HttpSession을 매개변수로 추가
@@ -160,14 +161,13 @@ public class MemberController {
     }
 
 
-    @PreAuthorize("hasRole('ROLE_USER')")
+
     @GetMapping("/member/validate")
     public String validate(Authentication auth,
                            Model model){
         // ROLE_OAuth 인 경우 바로 수정페이지로 리다이렉트
         boolean hasOAuthRole = auth.getAuthorities().stream()
                 .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_OAuth"));
-
         if (hasOAuthRole) {
             return "redirect:/member/modify"; // ROLE_OAuth인 경우 리다이렉트
         }
@@ -177,8 +177,6 @@ public class MemberController {
         return "jung/memberValidatePage";
     }
 
-
-    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/member/withdraw")
     public String withdraw(Authentication auth,
                            Model model){
