@@ -98,13 +98,13 @@ public class MemberController {
             // 기본값 설정 (전체 조회용)
             List<SalesHistory> purchaseList;
 
+            System.out.println("포인트1");
             if (startDate == null) {
                 startDate = LocalDate.of(2000, 1, 1);
             }
             if (endDate == null) {
                 endDate = LocalDate.now(); // 오늘 날짜로 설정
             }
-
             LocalDateTime startDateTime = startDate.atStartOfDay();
             LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
 
@@ -115,6 +115,7 @@ public class MemberController {
             // 각 상태별 주문 개수 초기화
             int[] statusCounts = new int[4]; // 0: 주문완료, 1: 결제완료, 2: 배송중, 3: 배송완료
 
+            System.out.println("포인트2");
             // 각 상태별 개수 세기
             for (SalesHistory purchase : purchaseList) {
                 int status = purchase.getStslogis(); // stslogis 값 가져오기
@@ -127,8 +128,10 @@ public class MemberController {
             model.addAttribute("paymentCompletedCount", statusCounts[1]);
             model.addAttribute("shippingCount", statusCounts[2]);
             model.addAttribute("deliveredCount", statusCounts[3]);
+            System.out.println("포인트3");
         }
 
+        System.out.println("포인트4");
         return "jung/mypage/mypage"; // 주 템플릿 경로
     }
 
