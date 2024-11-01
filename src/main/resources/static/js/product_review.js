@@ -33,7 +33,7 @@ function review() {
         }
 
         let btnStr = '<button class="write_review_btn">리뷰작성</button>'
-        detailArea.innerHTML = '<ul class="review_list" style="list-style-type: none;">' + str + '</ul>' + btnStr
+        detailArea.innerHTML = '<ul class="review_list">' + str + '</ul>' + btnStr
 
         document.querySelector('.write_review_btn').addEventListener('click', () => {
             if (!username) {
