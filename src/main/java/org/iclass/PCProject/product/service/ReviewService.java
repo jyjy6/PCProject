@@ -5,17 +5,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.iclass.PCProject.product.dto.ProductDTO;
 import org.iclass.PCProject.product.dto.ReviewDTO;
-import org.iclass.PCProject.product.entity.Product;
 import org.iclass.PCProject.product.entity.Review;
-import org.iclass.PCProject.product.repository.ProductRepository;
 import org.iclass.PCProject.product.repository.ReviewRepository;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
