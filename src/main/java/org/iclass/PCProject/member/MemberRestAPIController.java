@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,7 @@ public class MemberRestAPIController {
     private final MemberService memberService;
 
 
+    @PreAuthorize("isAnonymous()")
     @PostMapping("/sign-up")
     public ResponseEntity<String> registerUser(@RequestBody Member member) {
         try {
@@ -40,6 +42,7 @@ public class MemberRestAPIController {
         return ResponseEntity.ok(exists);
     }
 
+    @PreAuthorize("isAnonymous()")
     @PutMapping("/modify")
     public ResponseEntity<String> modifyUser(@RequestBody Member member,
                                              Authentication auth) {
@@ -51,6 +54,12 @@ public class MemberRestAPIController {
         }
     }
 
+    //이 코드는 아무생각없이 그냥 member테이블의 row하나를 삭제하게끔 돼있는데
+    // 이러면 동일아이디 재가입 시 예전주문내역이 출력되고 대 참사가 날 수 있음.
+    // 1. 아이디 삭제 직전, 탈퇴유저 테이블을 만들어서 username을 저장한다음 회원가입시 유효성 검사에 추가하거나
+    // 2. deletemapping을하지말고 그냥 유저비밀번호, 권한을 바꿔버려서 접근제어를 한다던가 방법을 선택할 수 있음.
+    // 확장성 좋은 코드를 본인이 골라서 리팩토링하면 좋을듯
+    @PreAuthorize("hasRole('ROLE_USER')")
     @DeleteMapping("/withdraw")
     public ResponseEntity<String> deleteUser(@RequestBody Map<String, String> requestBody,
                                              Authentication auth) {

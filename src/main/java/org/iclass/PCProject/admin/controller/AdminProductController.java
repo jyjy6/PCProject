@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.iclass.PCProject.admin.service.AdminProductService;
 import org.iclass.PCProject.product.dto.ProductDTO;
+import org.iclass.PCProject.product.entity.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,8 +14,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
+import java.util.List;
 
 @Controller
 @Slf4j
@@ -62,7 +65,6 @@ public class AdminProductController {
         }
     }
 
-
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/ProductList")
     public String getProducts(@RequestParam(required = false) String vendor,
@@ -95,7 +97,6 @@ public class AdminProductController {
             sort = sort.and(Sort.by("stock").descending());
         }
 
-        // Pageable에 정렬 추가
         pageable = PageRequest.of(page, 10, sort);
 
         LocalDateTime parsedRegDate = parseRegDate(regDate);
@@ -111,8 +112,20 @@ public class AdminProductController {
         model.addAttribute("regDate", regDate);
         model.addAttribute("price", price);
         model.addAttribute("stock", stock);
+        model.addAttribute("regDateSort", request.getParameter("regDateSort"));
+        model.addAttribute("priceSort", request.getParameter("priceSort"));
+        model.addAttribute("stockSort", request.getParameter("stockSort"));
 
         return "kim/adminPage/product/ProductList";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/ProductSearch")
+    public String searchProducts(@RequestParam String search, Model model) {
+        List<Product> products = adminProductService.findByFilters(search);
+        model.addAttribute("products", products);
+        model.addAttribute("search", search);
+        return "kim/adminPage/product/ProductSearch";
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

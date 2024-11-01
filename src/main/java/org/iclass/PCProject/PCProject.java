@@ -13,5 +13,4 @@ public class PCProject {
 		SpringApplication.run(PCProject.class, args);
 		System.out.println("안녕하세요");
 	}
-
 }

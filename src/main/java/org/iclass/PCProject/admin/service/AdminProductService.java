@@ -41,11 +41,6 @@ public class AdminProductService {
         return dto;
     }
 
-    public Page<ProductDTO> getProducts(String vendor, LocalDateTime regDate, Integer price, Integer stock, Pageable pageable) {
-        return adminProductRepository.findAllByCriteria(vendor, regDate, price, stock, pageable)
-                .map(this::convertToDTO);
-    }
-
     private ProductDTO convertToDTO(Product product) {
         ProductDTO dto = new ProductDTO();
         dto.setSeq(product.getSeq());
@@ -59,6 +54,15 @@ public class AdminProductService {
         dto.setThumb(product.getThumb());
         dto.setVendor(product.getVendor());
         return dto;
+    }
+
+    public Page<ProductDTO> getProducts(String vendor, LocalDateTime regDate, Integer price, Integer stock, Pageable pageable) {
+        return adminProductRepository.findAllByCriteria(vendor, regDate, price, stock, pageable)
+                .map(this::convertToDTO);
+    }
+
+    public List<Product> findByFilters(String search) {
+        return adminProductRepository.findByCodeContainingIgnoreCase(search); // code로 검색
     }
 
     public void createProduct(ProductDTO productDTO) {

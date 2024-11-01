@@ -35,6 +35,7 @@ public class MemberController {
     private final StatisticsService statisticsService;
 
 
+    @PreAuthorize("isAnonymous()")
     @PostMapping("/sign-up")
     public ResponseEntity<String> registerUser(@RequestBody Member member) {
         try {
@@ -44,7 +45,7 @@ public class MemberController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
-
+    @PreAuthorize("isAnonymous()")
     @GetMapping("/sign-up")
     public String signUpPage() {
         return "jung/signup";
@@ -135,6 +136,7 @@ public class MemberController {
     }
 
 
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/member/modify")
     public String modify(Authentication auth,
                          HttpSession session,  // HttpSession을 매개변수로 추가
@@ -161,7 +163,7 @@ public class MemberController {
     }
 
 
-
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/member/validate")
     public String validate(Authentication auth,
                            Model model){
@@ -177,6 +179,8 @@ public class MemberController {
         return "jung/memberValidatePage";
     }
 
+
+    @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/member/withdraw")
     public String withdraw(Authentication auth,
                            Model model){

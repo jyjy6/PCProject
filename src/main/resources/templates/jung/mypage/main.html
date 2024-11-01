@@ -6,6 +6,9 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+
+    </style>
 </head>
 <body>
 <!--주문현황-->
@@ -15,7 +18,7 @@
         <div class="order-status-container">
             <div class="order-status" data-status="주문완료" data-stslogis="0">
                 <div class="status-icon-wrapper">
-                    <img src="https://image5.compuzone.co.kr/img/images/mypage21/orderS2.png" alt="주문완료" class="status-icon">
+                    <img src="https://image5.compuzone.co.kr/img/images/mypage21/orderS2.png" alt="주문완료" class="status-icon" style="cursor: pointer">
                     <span class="badge" th:text="${orderCompletedCount}">0</span> <!-- 주문완료 카운트 -->
                 </div>
                 <p>주문완료</p>
@@ -24,7 +27,7 @@
 
             <div class="order-status" data-status="결제완료" data-stslogis="1">
                 <div class="status-icon-wrapper">
-                    <img src="https://image5.compuzone.co.kr/img/images/mypage21/orderS3.png" alt="결제완료" class="status-icon">
+                    <img src="https://image5.compuzone.co.kr/img/images/mypage21/orderS3.png" alt="결제완료" class="status-icon" style="cursor: pointer">
                     <span class="badge" th:text="${paymentCompletedCount}">0</span> <!-- 결제완료 카운트 -->
                 </div>
                 <p>결제완료</p>
@@ -32,7 +35,7 @@
 
             <div class="order-status" data-status="배송중" data-stslogis="2">
                 <div class="status-icon-wrapper">
-                    <img src="https://image5.compuzone.co.kr/img/images/mypage21/orderS5.png" alt="배송중" class="status-icon">
+                    <img src="https://image5.compuzone.co.kr/img/images/mypage21/orderS5.png" alt="배송중" class="status-icon" style="cursor: pointer">
                     <span class="badge" th:text="${shippingCount}">0</span> <!-- 배송중 카운트 -->
                 </div>
                 <p>배송중</p>
@@ -40,14 +43,14 @@
 
             <div class="order-status" data-status="배송완료" data-stslogis="3">
                 <div class="status-icon-wrapper">
-                    <img src="https://image5.compuzone.co.kr/img/images/mypage21/orderS7.png" alt="배송완료" class="status-icon">
+                    <img src="https://image5.compuzone.co.kr/img/images/mypage21/orderS7.png" alt="배송완료" class="status-icon" style="cursor: pointer">
                     <span class="badge" th:text="${deliveredCount}">0</span> <!-- 배송완료 카운트 -->
                 </div>
                 <p>배송완료</p>
             </div>
             <div class="order-status" data-status="주문취소" data-stslogis="4">
                 <div class="status-icon-wrapper">
-                    <img src="https://image5.compuzone.co.kr/img/images/mypage21/orderS3.png" alt="주문취소" class="status-icon">
+                    <img src="https://image5.compuzone.co.kr/img/images/mypage21/orderS3.png" alt="주문취소" class="status-icon" style="cursor: pointer">
                     <span class="badge">0</span>
                 </div>
                 <p>주문취소</p>
@@ -57,7 +60,7 @@
         <!-- 주문 현황 끝 -->
 
         <!-- 모달 -->
-        <div class="modal" id="orderModal" tabindex="-1" role="dialog" style="cursor:pointer">
+        <div class="modal" id="orderModal" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -67,7 +70,7 @@
                         <ul id="orderStatusList" style="padding:0;"></ul> <!-- 여기에 주문 내역이 표시됩니다. -->
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                        <button type="button" class="btn btn-secondary" id="modal-close" data-dismiss="modal">닫기</button>
                     </div>
                 </div>
             </div>
@@ -118,6 +121,11 @@
 
                     // 모달 열기
                     $('#orderModal').modal('show');
+                    $('#modal-close').on('click', function() {
+                        $('#orderModal').modal('hide');
+                    });
+
+
                 });
             });
         </script>
@@ -134,6 +142,8 @@
                 </div>
                 <a href="/mypage/qna"><button class="btn btn-primary">보기</button></a>
             </div>
+        <!--구매 후기는 일부러 남겨둠. 심심하신분 구매후기 건수 데이터바인딩, Review테이블에서 username에따른 db정보 끌고오고,
+        목록으로 만들고 로컬호스트/product/detail/[SEQ값] 넣어서 링크나 걸어주면 좋은 연습이 되지 않을까요-->
             <div class="info-card">
                 <div class="info-content">
                     <h4>구매후기</h4>
@@ -152,6 +162,11 @@
         </div>
 
     </div>
+<!-- jQuery 먼저 로드 -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap JS 로드 -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
 </body>
 </html>
 

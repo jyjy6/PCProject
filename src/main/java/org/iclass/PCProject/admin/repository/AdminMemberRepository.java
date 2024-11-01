@@ -8,9 +8,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface AdminMemberRepository extends JpaRepository<Member, Long> {
 
-    @Query("SELECT m FROM Member m WHERE YEAR(m.createdAt) = :year")
+    @Query("SELECT m FROM Member m WHERE YEAR(m.createdAt) = :year ORDER BY m.createdAt DESC")
     Page<Member> findByCreatedAtYear(@Param("year") int year, Pageable pageable);
+
+    List<Member> findByUsernameContainingIgnoreCase(String username);
+
 }

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Orders Search Result</title>
+  <style>
+
+    #container {
+      width: 1400px;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f7f9;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      font-family: "Concert One", sans-serif;
+      font-weight: 700;
+      font-style: normal;
+      color: #333;
+    }
+
+    form {
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      width: 150px;
+      height: 2px;
+    }
+
+    button {
+      padding: 4px 8px;
+      border: none;
+      border-radius: 5%;
+      background-color: gray;
+      color: white;
+      cursor: pointer;
+      margin-left: 10px;
+      font-weight: bold;
+
+    }
+
+    button:hover {
+      background-color: #4cae4c;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background-color: #ffffff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+
+    td {
+      background-color: #f9f9f9;
+    }
+
+    tr:hover {
+      background-color: #e0f7fa;
+    }
+
+    a {
+      text-decoration: none;
+      padding: 5px 6px;
+      border: none;
+      border-radius: 5%;
+      background-color: #6f6f6f;
+      color: white;
+      cursor: pointer;
+      margin-left: 10px;
+      font-weight: normal;
+      font-size: 0.9em;
+    }
+
+    a:hover {
+      background-color: #4cae4c;
+    }
+
+    .pagination {
+      margin-top: 20px;
+    }
+
+    .pagination a {
+      padding: 8px 12px;
+      margin: 0 5px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      color: #ffffff;
+    }
+
+    .pagination a.active {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .pagination a:hover {
+      background-color: #0056b3;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+  <h1>Orders List</h1>
+    <form method="get" th:action="@{/adminPage/OrdersSearch}">
+      <select name="searchField">
+        <option value="">검색할 항목 선택</option>
+        <option value="username">username</option>
+        <option value="code">code</option>
+        <option value="stslogis">stslogis</option>
+      </select>
+      <input type="text" name="searchValue" placeholder="검색 값" th:value="${searchValue}">
+      <button type="submit">검색</button>
+      <a class="btnBack" href="/adminPage/OrdersList">목록으로 돌아가기</a>
+    </form>
+    <table>
+      <tr>
+        <th>code</th>
+        <th>count</th>
+        <th>price</th>
+        <th>regDate</th>
+        <th>stslogis</th>
+        <th>vendor</th>
+        <th>username</th>
+        <th>Action</th>
+      </tr>
+      <tr th:each="sales_history : ${sales_historys}">
+        <td th:text="${sales_history.code}"></td>
+        <td th:text="${sales_history.count}"></td>
+        <td th:text="${sales_history.price}"></td>
+        <td th:text="${sales_history.regdate}"></td>
+        <td>
+          <span th:switch="${sales_history.stslogis}">
+            <span th:case="0">결제완료</span>
+            <span th:case="1">배송준비</span>
+            <span th:case="2">배송중</span>
+            <span th:case="3">배송완료</span>
+          </span>
+        </td>
+        <td th:text="${sales_history.vendor}"></td>
+        <td th:text="${sales_history.username}"></td>
+        <td>
+          <a th:href="@{/adminPage/OrdersModify(seq=${sales_history.seq})}">수정</a>
+          <form th:action="@{/adminPage/OrdersDelete}" method="post" style="display:inline;">
+            <input type="hidden" name="seq" th:value="${sales_history.seq}"/>
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            <button type="submit" onclick="return confirm('정말 삭제하시겠습니까?');">삭제</button>
+          </form>
+        </td>
+      </tr>
+      <tr th:if="${#lists.isEmpty(sales_historys)}">
+        <td colspan="10">검색 결과가 없습니다.</td>
+      </tr>
+    </table>
+    <br>
+    <div class="pagination" style="text-align: center;">
+      <span th:if="${totalPages > 1}">
+        <span>페이지: </span>
+        <a th:if="${currentPage > 0}" th:href="@{/adminPage/OrdersSearch(searchField=${searchField}, searchValue=${searchValue}, page=0)}">처음</a>
+        <a th:if="${currentPage > 0}" th:href="@{/adminPage/OrdersSearch(searchField=${searchField}, searchValue=${searchValue}, page=${currentPage - 1})}">이전</a>
+        <span th:each="page : ${#numbers.sequence(0, totalPages - 1)}"
+              th:if="${page >= currentPage - 3 && page <= currentPage + 3}">
+          <a th:href="@{/adminPage/OrdersSearch(searchField=${searchField}, searchValue=${searchValue}, page=${page})}"
+             th:text="${page + 1}"
+             th:classappend="${page == currentPage} ? 'active' : ''"></a>
+          <span th:if="${page < totalPages - 1}"> | </span>
+        </span>
+        <a th:if="${currentPage < totalPages - 1}" th:href="@{/adminPage/OrdersSearch(searchField=${searchField}, searchValue=${searchValue}, page=${currentPage + 1})}">다음</a>
+        <a th:if="${currentPage < totalPages - 1}" th:href="@{/adminPage/OrdersSearch(searchField=${searchField}, searchValue=${searchValue}, page=${totalPages - 1})}">끝</a>
+      </span>
+    </div>
+  </div>
+</body>
+</html>

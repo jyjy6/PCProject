@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 public interface AdminProductRepository extends JpaRepository<Product, Integer> {
@@ -23,5 +24,7 @@ public interface AdminProductRepository extends JpaRepository<Product, Integer> 
                                     @Param("price") Integer price,
                                     @Param("stock") Integer stock,
                                     Pageable pageable);
+
+    List<Product> findByCodeContainingIgnoreCase(String code);
 
 }
