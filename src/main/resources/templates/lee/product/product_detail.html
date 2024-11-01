@@ -6,7 +6,7 @@
     <script src="https://example.com/fontawesome/v6.6.0/js/all.js" data-auto-a11y="true"></script>
     <script th:inline="javascript">
         let message = [[${message}]]
-        if(message != null) alert(message)
+        if(message) alert(message)
         message = null
     </script>
     <style>
@@ -120,6 +120,8 @@
             display: flex;
             width: 300px;
             padding: 30px;
+            justify-content: center;
+            align-items: center;
             text-align: center;
             font-size: 1.5em;
             letter-spacing: 5px;
@@ -202,6 +204,197 @@
             font-size: 16px; /* 평점 정보 크기 */
         }
 
+        /* 리뷰 목록 스타일 */
+        .review_list {
+            list-style-type: none;
+            padding: 0;
+            margin: 20px 0;
+            max-width: 600px;
+        }
+
+        .review_list li {
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* '리뷰 없음' 메시지 스타일 */
+        .no-reviews {
+            text-align: center;
+            color: #888;
+            font-size: 1rem;
+            margin: 20px 0;
+        }
+
+        /* 작성자, 내용, 날짜, 평점 스타일 */
+        .username, .content, .regDate, .score {
+            margin: 5px 0;
+        }
+
+        .username {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .regDate {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .score {
+            font-size: 1rem;
+            color: #FFA500; /* 별점 색상 */
+        }
+
+        /* 부모 요소에 중앙 정렬 */
+        .detail_area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 auto;
+        }
+
+        /* 리뷰 목록 스타일 */
+        .review_list {
+            list-style-type: none; !important;
+            padding: 0;
+            margin: 20px 0;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        .review_list li {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* '리뷰 없음' 메시지 스타일 */
+        .no-reviews {
+            text-align: center;
+            color: #888;
+            font-size: 1rem;
+            margin: 20px 0;
+        }
+
+        /* 작성자, 내용, 날짜, 평점 스타일 */
+        .username, .content, .regDate, .score {
+            margin: 5px 0;
+            text-align: center;
+        }
+
+        .username {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .regDate {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .score {
+            font-size: 1rem;
+            color: #FFA500; /* 별점 색상 */
+        }
+
+        /* 리뷰 작성 버튼 스타일 */
+        .write_review_btn {
+            display: block;
+            margin: 10px auto;
+            padding: 8px 16px;
+            font-size: 1rem;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .write_review_btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* 리뷰 작성 폼 스타일 */
+        textarea.content {
+            width: 100%;
+            max-width: 500px;
+            height: 80px;
+            margin: 10px 0;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none;
+        }
+
+        /* 별점 스타일 */
+        .rating {
+            display: flex;
+            gap: 5px;
+            justify-content: center;
+        }
+
+        .star {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #ddd;
+        }
+
+        .star.selected,
+        .star:hover {
+            color: #FFA500;
+        }
+
+        /* 별점 정보 텍스트 */
+        .rating-info {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #555;
+            text-align: center;
+        }
+
+        /* 리뷰 완료 및 취소 버튼 스타일 */
+        .submit_review_btn, .cancel_review_btn {
+            margin: 10px 5px;
+            padding: 8px 16px;
+            font-size: 1rem;
+            color: white;
+            background-color: #28a745;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .cancel_review_btn {
+            background-color: #dc3545;
+        }
+
+        .submit_review_btn:hover {
+            background-color: #218838;
+        }
+
+        .cancel_review_btn:hover {
+            background-color: #c82333;
+        }
+
+        /* 삭제 버튼 스타일 */
+        .delete_btn {
+            margin-top: 10px;
+            padding: 5px 10px;
+            font-size: 0.9rem;
+            color: white;
+            background-color: #dc3545;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .delete_btn:hover {
+            background-color: #c82333;
+        }
     </style>
 </head>
 <body>
@@ -221,7 +414,8 @@
         <hr>
         <div>
             <p class="p1 product_comment">상품평</p>
-            <p class="p2 comment_val">[[${avgScore}]]</p>
+            <p class="p2 comment_val" th:if="${avgScore == 0.0}">리뷰 대기 중</p>
+            <p class="p2 comment_val" th:unless="${avgScore == 0.0}">[[${avgScore}]]</p>
         </div>
         <hr>
         <div>
@@ -267,6 +461,7 @@
         <p><a href="../qna/add">Q&A</a></p>
     </div>
     <div class="detail_area"></div>
+    <div th:replace="~{footer :: footer}"></div>
 </div>
 <script></script>
 <script th:inline="javascript">
