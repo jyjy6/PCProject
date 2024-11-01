@@ -136,6 +136,13 @@ public class ProductController {
     public String purchaseProducts(Authentication auth, RedirectAttributes redirectAttributes,
                                    @RequestParam("pSeq") List<Integer> pSeq,
                                    @RequestParam(value = "qty", required = false) Integer qty) {
+        if(pSeq.size() == 1 && qty != null && auth!=null){
+            String username = memberService.memberInfo(auth).getUsername();
+            cartService.addItem(pSeq.get(0), qty, username);
+        } else {
+            redirectAttributes.addFlashAttribute("message", "로그인이 필요한 서비스입니다.");
+            return "redirect:/";
+        }
 
         if (auth != null) {
             String username = memberService.memberInfo(auth).getUsername();
@@ -146,10 +153,7 @@ public class ProductController {
             return "redirect:/";
         }
 
-        if(pSeq.size() == 1 && qty != null ){
-            String username = memberService.memberInfo(auth).getUsername();
-            cartService.addItem(pSeq.get(0), qty, username);
-        }
+
 
         return "redirect:/purchase_products";
     }
