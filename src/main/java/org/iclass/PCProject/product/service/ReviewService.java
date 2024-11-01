@@ -11,6 +11,7 @@ import org.iclass.PCProject.product.repository.ProductRepository;
 import org.iclass.PCProject.product.repository.ReviewRepository;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,6 @@ import java.util.stream.Collectors;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
-    private final ProductRepository productRepository;
 
     public List<ReviewDTO> getReviews(int pSeq) {
         List<Review> list = reviewRepository.findAllBypSeqOrderByRegDateDesc(pSeq);
@@ -42,4 +42,19 @@ public class ReviewService {
         reviewRepository.save(reviewDTO.toEntity());
     }
 
+    public double getAvgScore(int pSeq) {
+
+        double avgScore = 0;
+        List<Review> list = reviewRepository.findAllBypSeqOrderByRegDateDesc(pSeq);
+        for(Review entity : list) {
+            avgScore += entity.getScore();
+        }
+
+        if(list.size() > 0) avgScore = avgScore / list.size();
+        else avgScore = 0.0;
+
+        DecimalFormat df = new DecimalFormat("#.00");
+        String formattedValue = df.format(avgScore);
+        return Double.parseDouble(formattedValue);
+    }
 }
