@@ -46,18 +46,18 @@ public class SecurityConfig {
                     .loginPage("/login")
                     .loginProcessingUrl("/login")
                     .successHandler((request, response, authentication) -> {
-                        // 로그인 성공 처리
+                        response.setContentType("application/json");
+                        response.setCharacterEncoding("UTF-8");
                         response.setStatus(HttpServletResponse.SC_OK);
-                        response.getWriter().write("로그인 성공");
-                        response.sendRedirect("/");
+                        response.getWriter().write("{\"message\": \"success\", \"redirectUrl\": \"/\"}");
                     })
                     .failureHandler((request, response, exception) -> {
-                        // 로그인 실패 처리
-                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                        response.setContentType("text/plain;charset=UTF-8");
-                        response.getWriter().write(exception.getMessage());
-                        request.getSession(false);
-                    })
+                    // 로그인 실패 처리
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.setContentType("text/plain;charset=UTF-8");
+                    response.getWriter().write(exception.getMessage());
+                    request.getSession(false);
+                })
                     .permitAll() // 로그인 페이지는 인증 없이 접근 가능
                 )
                 .oauth2Login(oauth2 -> oauth2

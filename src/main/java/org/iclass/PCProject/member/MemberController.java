@@ -70,7 +70,6 @@ public class MemberController {
 //         <div th:replace="~{jung/mypage/__${id}__ :: content}"></div> 이 값을 유동적으로 바꿈
         model.addAttribute("id", id);
 
-
         //유저 id를 auth정보에서 추출
         String username = ((CustomUserDetails) auth.getPrincipal()).getUsername();
 
@@ -123,13 +122,11 @@ public class MemberController {
                     statusCounts[status] += 1; // 해당 상태 카운트 증가
                 }
             }
-
             // 모델에 상태별 카운트 추가
             model.addAttribute("orderCompletedCount", statusCounts[0]);
             model.addAttribute("paymentCompletedCount", statusCounts[1]);
             model.addAttribute("shippingCount", statusCounts[2]);
             model.addAttribute("deliveredCount", statusCounts[3]);
-
         }
 
         return "jung/mypage/mypage"; // 주 템플릿 경로
@@ -170,6 +167,7 @@ public class MemberController {
         // ROLE_OAuth 인 경우 바로 수정페이지로 리다이렉트
         boolean hasOAuthRole = auth.getAuthorities().stream()
                 .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_OAuth"));
+
         if (hasOAuthRole) {
             return "redirect:/member/modify"; // ROLE_OAuth인 경우 리다이렉트
         }
