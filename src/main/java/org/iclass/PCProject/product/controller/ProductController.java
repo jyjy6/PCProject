@@ -9,10 +9,7 @@ import org.iclass.PCProject.member.MemberService;
 import org.iclass.PCProject.product.dto.CartDTO;
 import org.iclass.PCProject.product.dto.ProductDTO;
 import org.iclass.PCProject.product.dto.ProductPaymentDTO;
-import org.iclass.PCProject.product.service.CartService;
-import org.iclass.PCProject.product.service.ProductDetailService;
-import org.iclass.PCProject.product.service.ProductPaymentService;
-import org.iclass.PCProject.product.service.ProductService;
+import org.iclass.PCProject.product.service.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +29,7 @@ public class ProductController {
     private final MemberService memberService;
     private final CartService cartService;
     private final ProductPaymentService paymentService;
+    private final ReviewService reviewService;
 
     @GetMapping(value = {"/", "/삼성", "/lg", "/hp", "/asus", "/acer"})
     public String home(Model model, HttpServletRequest request) {
@@ -51,7 +49,7 @@ public class ProductController {
 
         model.addAttribute("product", productService.getProductBySeq(seq));
 //        model.addAttribute("detailImgs", detailService.getProductDetail(seq));
-        model.addAttribute("avgScore", productService.getAvgScore(seq));
+        model.addAttribute("avgScore", reviewService.getAvgScore(seq));
 
         if (auth != null) {
             model.addAttribute("username", memberService.memberInfo(auth).getUsername());

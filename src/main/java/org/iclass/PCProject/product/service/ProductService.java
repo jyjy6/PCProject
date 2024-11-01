@@ -55,17 +55,4 @@ public class ProductService {
         return dto;
     }
 
-    public double getAvgScore(int pSeq) {
-
-        double avgScore = 0;
-        List<Review> list = reviewRepository.findAllBypSeqOrderByRegDateDesc(pSeq);
-        for(Review entity : list) {
-            avgScore += entity.getScore();
-        }
-
-        if(list.size() > 0) avgScore = avgScore / list.size();
-        else avgScore = 0.0;
-
-        return avgScore;
-    }
 }
